@@ -22,6 +22,8 @@
 #                      `promo` and `blog` use the tracks of the same name. Exported, so the
 #                      skill's ledger.py and deliver.py use it too
 #   STUDIO_LIMIT       timeout(1) duration, e.g. 3h          STUDIO_BUDGET   USD cap, e.g. 25
+#   STUDIO_SKILL       the skill's command name (default video-studio; installed as a Claude
+#                      Code plugin it is faceless-video-studio:video-studio)
 #   STUDIO_LOCK        lock file (default: /tmp/video-studio-<uid>.lock)
 #   STUDIO_LOCK_WAIT   seconds to wait for the lock (default 7200)
 #   STUDIO_DATE        YYYY-MM-DD: make up a missed day's video
@@ -84,7 +86,7 @@ START_LINE=$(( $( [ -f "$LOG" ] && wc -l < "$LOG" || echo 0 ) + 1 ))
 
   echo "[$(date -u '+%Y-%m-%d %H:%M:%S')Z] video-studio start: $ARGS (track ${TRACK:-default}, ${FORMAT:-?}, limit $LIMIT, \$$BUDGET)"
   cd "$STUDIO_ROOT" || exit 1
-  flock -w "$WAIT" -E 75 "$LOCK" timeout "$LIMIT" claude -p "/video-studio $ARGS" \
+  flock -w "$WAIT" -E 75 "$LOCK" timeout "$LIMIT" claude -p "/${STUDIO_SKILL:-video-studio} $ARGS" \
     --permission-mode acceptEdits \
     --allowedTools "Read,Write,Edit,Glob,Grep,WebSearch,WebFetch,Skill,Task,TodoWrite,Bash" \
     --disallowedTools "Bash(git push:*),Bash(rm -rf:*),Bash(curl:*),Bash(wget:*),Bash(sudo:*),Bash(crontab:*),Bash(ssh:*),Bash(scp:*)" \

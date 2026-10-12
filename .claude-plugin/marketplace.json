@@ -1,0 +1,18 @@
+{
+  "name": "faceless-video-studio",
+  "description": "A Claude Code skill that researches, scripts, voices and renders a finished explainer video every day.",
+  "owner": {
+    "name": "Cybiqon AI Solutions",
+    "url": "https://cybiqon.in"
+  },
+  "plugins": [
+    {
+      "name": "faceless-video-studio",
+      "source": "./",
+      "description": "Research, script, HeyGen voice clone, HyperFrames render and 38 pass/fail gates: one finished faceless video a day.",
+      "homepage": "https://github.com/cybiqon-ai/faceless-video-studio",
+      "license": "MIT",
+      "skills": ["./skill/video-studio"]
+    }
+  ]
+}

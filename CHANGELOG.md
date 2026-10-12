@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.1 — 2026-10-12
+
+- Installable as a Claude Code plugin: `claude plugin marketplace add cybiqon-ai/faceless-video-studio`,
+  then `claude plugin install faceless-video-studio@faceless-video-studio`. `/video-studio setup`
+  now scaffolds a new studio itself; `install.sh --studio-only` and `STUDIO_SKILL` support plugin installs.
+- Blog explainers are 16:9 (1920×1080, 90–150 s): they are embedded in the post itself.
+- README: a demo GIF; the full demo video and a social preview image are on the v1.0.1 release.
+
 ## 1.0.0 — 2026-10-12
 
 First public release, extracted from the studio Cybiqon has run daily since 8 October 2026.

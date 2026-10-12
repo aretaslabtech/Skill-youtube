@@ -3,6 +3,7 @@
 #
 #   ./install.sh ~/my-studio                 # skill → ~/.claude/skills/video-studio, studio → ~/my-studio
 #   ./install.sh ~/my-studio --project DIR   # skill → DIR/.claude/skills/video-studio instead
+#   ./install.sh ~/my-studio --studio-only   # only create the studio (the skill came as a plugin)
 #   ./install.sh --check                     # only check the prerequisites
 #
 # Safe to re-run: it never overwrites your config, brand or .env, and it only replaces a
@@ -15,12 +16,13 @@ ok()   { printf '  \033[32m✓\033[0m %s\n' "$1"; }
 bad()  { printf '  \033[31m✗\033[0m %s\n' "$1"; MISSING=1; }
 note() { printf '  · %s\n' "$1"; }
 
-STUDIO=""; PROJECT=""; CHECK_ONLY=0
+STUDIO=""; PROJECT=""; CHECK_ONLY=0; STUDIO_ONLY=0
 while [ $# -gt 0 ]; do
   case "$1" in
     --project) PROJECT="${2:?--project needs a directory}"; shift 2 ;;
     --check) CHECK_ONLY=1; shift ;;
-    -h|--help) sed -n '2,9p' "$0"; exit 0 ;;
+    --studio-only) STUDIO_ONLY=1; shift ;;
+    -h|--help) sed -n '2,10p' "$0"; exit 0 ;;
     *) STUDIO="$1"; shift ;;
   esac
 done
@@ -49,6 +51,7 @@ if [ -z "$STUDIO" ]; then
   echo; echo "Usage: ./install.sh <studio-folder> [--project DIR]"; exit 2
 fi
 
+if [ "$STUDIO_ONLY" = 1 ]; then echo; echo "Skill"; note "skipped (--studio-only)"; else
 echo; echo "Skill"
 DEST_ROOT="${PROJECT:+$PROJECT/.claude/skills}"; DEST_ROOT="${DEST_ROOT:-$HOME/.claude/skills}"
 DEST="$DEST_ROOT/video-studio"
@@ -59,6 +62,7 @@ elif [ -e "$DEST" ]; then
   echo "  $DEST already exists and isn't a link into this repo. Move it away and re-run."; exit 1
 else
   ln -s "$SKILL" "$DEST"; ok "linked $DEST → $SKILL"
+fi
 fi
 
 echo; echo "Studio"

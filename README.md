@@ -9,6 +9,10 @@ AI slop before it ships.**
 
 No camera. No avatar. No editing timeline. You review an MP4 in the morning and post it.
 
+<a href="https://github.com/cybiqon-ai/faceless-video-studio/releases/download/v1.0.1/demo.mp4"><img src="docs/assets/demo.gif" width="800" alt="A 15-second highlight: a real blog-explainer video the studio made, a wall of contact sheets from 14 videos in 9 different looks, seven hand-drawn animation styles, and the repo URL."></a>
+
+<sub>Real output: a blog explainer the studio made on 12 Oct 2026, contact sheets from its first 14 videos, and the demo pieces of the seven animate styles it ships with. ▶ <a href="https://github.com/cybiqon-ai/faceless-video-studio/releases/download/v1.0.1/demo.mp4">Watch the 40-second version with sound</a> (the voice is a HeyGen clone).</sub>
+
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 ![Claude Code skill](https://img.shields.io/badge/Claude%20Code-skill-cc785c)
 ![HyperFrames](https://img.shields.io/badge/renderer-HyperFrames-0b0f14)
@@ -88,8 +92,16 @@ claude plugin install hyperframes@hyperframes
 npx skills add heygen-com/hyperframes
 ```
 
-**2. Clone this repo and run the installer.** It checks your tools, links the skill into
-`~/.claude/skills/video-studio`, and creates a studio folder from `studio.example/`:
+**2. Install this skill.** Either as a Claude Code plugin (one command, auto-updates):
+
+```bash
+claude plugin marketplace add cybiqon-ai/faceless-video-studio
+claude plugin install faceless-video-studio@faceless-video-studio
+mkdir ~/my-studio   # your studio folder; step 5's setup fills it
+```
+
+…or clone it and run the installer, which checks your tools, links the skill into
+`~/.claude/skills/video-studio` and creates the studio folder from `studio.example/`:
 
 ```bash
 git clone https://github.com/cybiqon-ai/faceless-video-studio.git
@@ -97,7 +109,11 @@ cd faceless-video-studio
 ./install.sh ~/my-studio
 ```
 
-**3. Add your HeyGen key** to `~/my-studio/.env` (created with mode 600, gitignored):
+As a plugin the command is `/faceless-video-studio:video-studio`; below it's written
+`/video-studio`.
+
+**3. Add your HeyGen key** to `~/my-studio/.env` (mode 600, gitignored; with the plugin,
+run step 5's setup once first and it creates the file):
 
 ```bash
 HEYGEN_API_KEY=<your HeyGen API key>
@@ -151,6 +167,8 @@ PATH=/home/USER/.nvm/versions/node/v22.11.0/bin:/home/USER/.local/bin:/usr/local
 ```
 
 Cron has a short `PATH`: set it to wherever `claude`, `node` and `npx` live (`which claude node`).
+With the plugin install, add `STUDIO_SKILL=faceless-video-studio:video-studio` and call the
+`bin/run.sh` from a clone of this repo.
 
 ## What it costs
 

@@ -75,9 +75,13 @@ project file, or commit it. `<media-use>` below is the folder
      report the words per second. Above ~2.2 words/s, keep the default per-sentence 0.75
      speed rather than slowing whole lines.
 5. `npx hyperframes doctor`. Report ✗ lines; only FFmpeg and HeyGen are required.
-6. If `brand/` is missing, copy the skill's placeholder brand and say which lines to edit:
-   the accent and handle in `brand-core.md`, the audience and products in `pillars.md`, and
-   `products.json`.
+6. **Scaffold the studio if it's new** (a plugin install has no `install.sh` step). The
+   starter files ship with the skill at `$SKILL_DIR/../../studio.example/`. For each of
+   `config.json`, `brand/` and `gitignore` (→ `.gitignore`) that doesn't exist in the
+   studio, copy it in; copy `env.example` → `.env` only if `.env` doesn't exist, then
+   `chmod 600 .env`. Never overwrite an existing file. Create `videos/`, `voice/` and
+   `logs/`. Then say which lines to edit: the accent and handle in `brand/brand-core.md`,
+   the audience and products in `brand/pillars.md`, and `brand/products.json`.
 
 ## Mode: daily (the overnight run)
 
