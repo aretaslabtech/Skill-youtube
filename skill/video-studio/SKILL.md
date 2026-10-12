@@ -408,7 +408,7 @@ delivered, make a **9:16 companion** of 60–90 s:
 - **Source:** the published post and its own cited sources.
 - **Footage:** the real source page captured in a browser at 2×, with a highlighter drawn
   on the exact sentences being discussed (rectangles read from the DOM, never guessed).
-- **Content:** 60–120 s, 9:16, script-voice for a smart 12-year-old. Every claim comes
+- **Content:** 90–150 s, **16:9 (1920×1080, never 9:16)** because the video is embedded in the post itself, and an embedded vertical video looks out of place next to the landscape ones. Script-voice for a smart 12-year-old. Every claim comes
   from the post's own cited sources, re-verified (A19). Where the post and its primary
   source disagree, the primary source wins.
 - **Look:** a different family each day (look-check).

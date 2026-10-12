@@ -65,7 +65,7 @@ DEFAULTS = {
         "build": {"format": "short", "aspect": "1080x1920", "length": "60-90s"},
         "tech-blog": {"format": "short", "aspect": "1080x1920", "length": "60-90s"},
         "companion": {"format": "companion", "aspect": "1080x1920", "length": "60-90s"},
-        "blog-explainer": {"format": "short", "aspect": "1080x1920", "length": "60-120s"},
+        "blog-explainer": {"format": "blog-explainer", "aspect": "1920x1080", "length": "90-150s"},  # 16:9: the video is embedded in the post
         "product": {"format": "short", "aspect": "1080x1920", "length": "30-50s"},
         "service": {"format": "short", "aspect": "1080x1920", "length": "30-50s"},
         "longform-ai": {"format": "longform", "aspect": "1920x1080", "length": "4-8min"},

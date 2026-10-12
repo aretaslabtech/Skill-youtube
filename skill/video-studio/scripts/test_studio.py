@@ -148,6 +148,8 @@ class Rotation(unittest.TestCase):
         self.assertIsNone(ledger.today_plan(date(2026, 10, 13), "promo")["pillar"])     # Tue: no promo
         self.assertIn(ledger.today_plan(date(2026, 10, 15), "promo")["pillar"], ("product", "service"))
         self.assertEqual(ledger.today_plan(date(2026, 10, 13), "blog")["pillar"], "blog-explainer")
+        # The blog video is embedded in the post, so it is 16:9.
+        self.assertEqual(ledger.today_plan(date(2026, 10, 13), "blog")["aspect"], "1920x1080")
         self.assertTrue(ledger.today_plan(date(2026, 10, 14))["companion"])            # Wed long-form
 
     def test_unknown_track_fails_loudly(self):

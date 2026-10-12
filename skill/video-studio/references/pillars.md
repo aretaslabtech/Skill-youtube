@@ -84,7 +84,7 @@ organizer, a QR generator.
 - **Rules:** claims follow the **primary source** (the lab's announcement, the paper),
   never a write-up of it. Where they disagree, the primary source wins.
 
-## blog-explainer — explain one written post, 60–120 s
+## blog-explainer — explain one written post, 90–150 s, 16:9 (it is embedded in the post)
 
 - **Footage:** the real source page, captured in a browser at 2× with a highlighter drawn on
   the exact sentences being discussed (read the rectangles from the DOM, never guess them).
