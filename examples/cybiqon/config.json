@@ -1,0 +1,62 @@
+{
+  "timezone": "Asia/Kolkata",
+  "next_day_from_hour": 18,
+  "voice": {
+    "provider": "heygen",
+    "voice_id": "",
+    "speed": 0.75,
+    "gap": 0.35
+  },
+  "default_track": "itspyguru",
+  "tracks": {
+    "itspyguru": {
+      "days": [
+        "mon",
+        "tue",
+        "wed",
+        "thu",
+        "fri",
+        "sat",
+        "sun"
+      ],
+      "rotation": {
+        "mon": "ai-term",
+        "tue": "python",
+        "wed": "longform-ai",
+        "thu": "build",
+        "fri": "tech-blog",
+        "sat": "either:ai-term|python",
+        "sun": "longform-sd"
+      }
+    },
+    "promo": {
+      "days": [
+        "mon",
+        "thu",
+        "sat"
+      ],
+      "rotation": "promo"
+    },
+    "blog": {
+      "days": [
+        "mon",
+        "tue",
+        "wed",
+        "thu",
+        "fri",
+        "sat",
+        "sun"
+      ],
+      "rotation": "blog-explainer"
+    }
+  },
+  "variety": {
+    "look_family_gap": 6,
+    "signature_gap": 5
+  },
+  "plugins": {
+    "links": null,
+    "notify": null,
+    "planner": null
+  }
+}

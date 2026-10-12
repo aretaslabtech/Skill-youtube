@@ -1,0 +1,45 @@
+# Reports counts, not a status: a green check that ran nothing is the failure this prevents.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install FFmpeg (the voice and fill gates decode audio and video)
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+      - name: Unit tests (against a throwaway studio, with an empty HOME)
+        working-directory: skill/video-studio/scripts
+        run: |
+          HOME="$(mktemp -d)" python -m unittest -v 2>&1 | tee test.out
+          echo "tests run: $(grep -oE '^Ran [0-9]+' test.out)"
+          grep -q '^OK' test.out
+      - name: Shell scripts parse
+        run: |
+          for f in install.sh bin/run.sh scripts/leak_check.sh skill/video-studio/scripts/*.sh; do bash -n "$f" && echo "ok $f"; done
+
+  leaks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Leak check (secrets, personal paths, account ids)
+        run: scripts/leak_check.sh
+      - name: gitleaks over the full history
+        run: docker run --rm -v "$PWD:/repo" zricethezav/gitleaks:v8.21.2 detect --source /repo --no-banner --redact -v

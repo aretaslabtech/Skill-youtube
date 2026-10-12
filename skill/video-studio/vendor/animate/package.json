@@ -1,0 +1,9 @@
+{
+  "name": "animate-vendored",
+  "private": true,
+  "description": "Runtime dependency for the vendored cth9191/animate engine (see VENDORED.md). Install with: npm install",
+  "license": "MIT",
+  "dependencies": {
+    "playwright": "^1.64.0"
+  }
+}

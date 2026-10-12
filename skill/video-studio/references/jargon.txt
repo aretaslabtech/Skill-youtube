@@ -1,0 +1,83 @@
+# Words a smart 12-year-old wouldn't use without a definition (one per line, lowercase).
+# script_lint.py flags any of these spoken before a definition marker in the same or the
+# previous sentence. Add to it whenever a review finds a new one. Multi-word entries OK.
+token
+tokens
+tokenizer
+logit
+logits
+softmax
+probability
+probabilities
+distribution
+sampling
+sample
+parameter
+parameters
+weights
+model weights
+vector
+vectors
+embedding
+embeddings
+api
+latency
+algorithm
+algorithms
+neural network
+transformer
+inference
+training
+fine-tuning
+fine-tune
+dataset
+gpu
+cpu
+llm
+llms
+gpt-2
+gpt
+context window
+prompt engineering
+hallucination
+temperature
+top-p
+top-k
+deterministic
+stochastic
+entropy
+gradient
+backpropagation
+attention
+benchmark
+quantization
+rag
+retrieval
+vector database
+cache
+caching
+hash
+hashing
+recursion
+recursive
+asynchronous
+async
+thread
+threads
+concurrency
+gil
+interpreter
+compiler
+runtime
+syntax
+function
+variable
+divide
+divides
+exponential
+logarithm
+percentile
+batch
+batching
+server
+servers

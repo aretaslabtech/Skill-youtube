@@ -1,0 +1,63 @@
+{
+  "products": {
+    "llmbytes": {
+      "name": "LLMBytes",
+      "url": "https://play.google.com/store/apps/details?id=com.cybiqon.llmbytes",
+      "web": "https://llmbytes.dev"
+    },
+    "lumina": {
+      "name": "Lumina: The Lightkeeper's Path",
+      "url": "https://play.google.com/store/apps/details?id=com.cybiqon.lumina"
+    },
+    "orbitone": {
+      "name": "Orbitone",
+      "url": "https://play.google.com/store/apps/details?id=com.cybiqon.orbitone"
+    },
+    "chitrayatra": {
+      "name": "ChitraYatra",
+      "url": "https://play.google.com/store/apps/details?id=com.cybiqon.chitrayatra"
+    },
+    "mapwit": {
+      "name": "MapWit",
+      "url": "https://chromewebstore.google.com/detail/pdpjbbgabmnoncnlkalmffgahpdihllc"
+    },
+    "page-arcade": {
+      "name": "Page Arcade",
+      "url": "https://chromewebstore.google.com/detail/inefhhclfkojgjjncaajopdhbabjkfbf"
+    }
+  },
+  "services": {
+    "custom-websites": {
+      "name": "Custom websites",
+      "url": "https://cybiqon.in/services/custom-websites"
+    },
+    "ai-agents": {
+      "name": "AI agents",
+      "url": "https://cybiqon.in/services/ai-agents"
+    },
+    "whatsapp-automation": {
+      "name": "WhatsApp automation",
+      "url": "https://cybiqon.in/services/whatsapp-automation"
+    },
+    "android-apps": {
+      "name": "Android apps",
+      "url": "https://cybiqon.in/services/android-apps"
+    },
+    "admin-panels": {
+      "name": "Admin panels",
+      "url": "https://cybiqon.in/services/admin-panels"
+    },
+    "chrome-extensions": {
+      "name": "Chrome extensions",
+      "url": "https://cybiqon.in/services/chrome-extensions"
+    },
+    "web-scraping": {
+      "name": "Web scraping",
+      "url": "https://cybiqon.in/services/web-scraping"
+    }
+  },
+  "contact": {
+    "label": "Contact",
+    "url": "https://cybiqon.in/contact"
+  }
+}

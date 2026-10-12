@@ -1,0 +1,18 @@
+# Secrets
+.env
+.env.*
+
+# Heavy media: renders, voice takes, captured footage, raw frames
+videos/*/hf/renders/
+videos/*/hf/assets/
+videos/*/hf/snapshots/
+videos/*/hf/node_modules/
+videos/*/research/voice-takes/
+*.mp4
+*.webm
+*.wav
+*.mp3
+voice/
+
+# Run logs (they can quote tool output)
+logs/

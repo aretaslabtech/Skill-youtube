@@ -1,0 +1,153 @@
+<!--
+  Caption skin "boxed-word" (video-studio asset; copy to <project>/.hyperframes/caption-skin.html).
+
+  Same contract as glow-word.html (captions.mjs fills GROUPS / DURATION / size and the
+  data-brand-tokens :root block). Token vocab used: --cap-ink · --cap-canvas · --cap-accent ·
+  --font-display · --font-body. Hooks: .caption-group / .caption-word + .is-active / .is-spoken,
+  root data-composition-id="captions", timeline window.__timelines["captions"].
+
+  Visual: punchy. League Gothic (bundled, condensed, 400 only), uppercase, no card. Upcoming
+  words are dim; the active word sits inside a SOLID accent box (square corners) with near-black
+  type, popping 0.92 → 1; spoken words settle to ink. Wants a BRIGHT accent (green #00D890,
+  yellow, orange, coral): the box text is a near-black tinted toward the accent. Do not pair it
+  with a dark accent (cobalt, indigo) — use underline-bar or band-karaoke there.
+
+  Placement: 9:16 captions pinned to y 1440–1600, x 64–850 (organic layout, platform-specs.md §1: the visual fills y 440–1440 and the scene continues below the captions);
+  16:9 captions in y 880–1000 (content keeps y ≤ 860).
+-->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+
+<!-- captions.mjs injects the project's :root tokens here -->
+<style data-brand-tokens></style>
+
+<style>
+  #captions-root { position: absolute; inset: 0; pointer-events: none; }
+  .caption-layer { position: absolute; inset: 0; z-index: 20; pointer-events: none; }
+  .caption-stage {
+    position: absolute; left: 0; right: 0;
+    top: var(--cap-band-top, 900px); height: var(--cap-band-height, 180px);
+    display: flex; align-items: center; justify-content: center;
+  }
+  /* 9:16 — the studio's safe caption band, not the engine's bottom band */
+  @media (max-aspect-ratio: 9/16) {
+    .caption-stage { top: 1440px; height: 160px; left: 64px; right: 230px; }
+  }
+  .caption-group {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0;
+  }
+  .caption-pill { max-width: 100%; padding: 0; background: none; }
+  .caption-line {
+    display: flex; flex-wrap: wrap; justify-content: center; align-items: center;
+    gap: 0.1em 0.22em;
+    font-family: "League Gothic", "Oswald", var(--font-display, "Archivo Black"), sans-serif;
+    font-weight: 400;
+    font-size: 92px;
+    line-height: 1.02;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    text-align: center;
+  }
+  /* 16:9 long-form — captions in y 880–1000, content keeps y ≤ 860 */
+  @media (min-aspect-ratio: 16/10) {
+    .caption-stage { top: 880px; height: 120px; left: 96px; right: 96px; }
+    .caption-line { font-size: 72px; }
+  }
+  .caption-word {
+    display: inline-block;
+    padding: 0.02em 0.14em 0;
+    color: color-mix(in srgb, var(--cap-ink, #F2F2EC) 40%, var(--cap-canvas, #111311));
+    background: transparent;
+    transform-origin: 50% 60%;
+  }
+  .caption-word.is-active {
+    color: color-mix(in srgb, var(--cap-accent, #00D890) 14%, #0A0B0A);
+    background: var(--cap-accent, #00D890);
+  }
+  .caption-word.is-spoken { color: var(--cap-ink, #F2F2EC); background: transparent; }
+  .caption-word.cap-num { font-family: var(--font-body, "JetBrains Mono"), monospace; letter-spacing: 0; }
+</style>
+
+<div
+  id="captions-root"
+  data-composition-id="captions"
+  data-timeline-locked
+  data-start="0"
+  data-duration="0"
+  data-fps="30"
+  data-width="0"
+  data-height="0"
+>
+  <div class="caption-layer" aria-hidden="true">
+    <div id="caption-stage" class="caption-stage"></div>
+  </div>
+</div>
+
+<script>
+  // captions.mjs injects the engine's scene-aware groups + real duration here.
+  var GROUPS = [];
+  var DURATION = 0;
+
+  (function () {
+    var stage = document.getElementById("caption-stage");
+
+    GROUPS.forEach(function (group, g) {
+      var groupEl = document.createElement("div");
+      groupEl.className = "caption-group";
+      groupEl.id = "caption-group-" + g;
+      var pill = document.createElement("div");
+      pill.className = "caption-pill";
+      var line = document.createElement("div");
+      line.className = "caption-line";
+      (group.words || []).forEach(function (w, i) {
+        var span = document.createElement("span");
+        span.className = "caption-word";
+        span.id = "caption-word-" + g + "-" + i;
+        span.textContent = String(w.text);
+        line.appendChild(span);
+      });
+      pill.appendChild(line);
+      groupEl.appendChild(pill);
+      stage.appendChild(groupEl);
+    });
+
+    window.__timelines = window.__timelines || {};
+    var tl = gsap.timeline({ paused: true });
+
+    GROUPS.forEach(function (group, g) {
+      var groupEl = document.getElementById("caption-group-" + g);
+      var words = group.words || [];
+      var next = GROUPS[g + 1];
+      var isLast = g === GROUPS.length - 1;
+      var start = Math.max(0, Number(group.start));
+      var end = isLast ? DURATION : Math.min(Number(next.start), Number(group.end) + 0.3);
+      if (end <= start) end = start + 0.01;
+
+      tl.set(groupEl, { opacity: 1 }, start);
+      tl.set(groupEl, { opacity: 0 }, end);
+
+      // 3-state karaoke via className SETS — seek-safe (never tl.call).
+      words.forEach(function (w, i) {
+        var el = document.getElementById("caption-word-" + g + "-" + i);
+        var at = Math.max(start, Number(w.start));
+        tl.set(el, { className: "caption-word" }, start);
+        tl.set(el, { className: "caption-word is-active" }, at);
+        // the box punches in on the active word (no overshoot: visual-design.md bans bouncy easing)
+        tl.fromTo(el, { scale: 0.92 }, { scale: 1, duration: 0.14, ease: "power3.out" }, at);
+        if (i + 1 < words.length) {
+          var nextAt = Math.max(start, Number(words[i + 1].start));
+          tl.set(el, { className: "caption-word is-spoken" }, nextAt);
+        }
+      });
+      if (words.length) {
+        var lastEl = document.getElementById("caption-word-" + g + "-" + (words.length - 1));
+        var lastSpoken = Math.min(end, Number(words[words.length - 1].end) + 0.1);
+        tl.set(lastEl, { className: "caption-word is-spoken" }, lastSpoken);
+      }
+    });
+
+    tl.to({}, { duration: DURATION }, 0);
+    window.__timelines["captions"] = tl;
+  })();
+</script>

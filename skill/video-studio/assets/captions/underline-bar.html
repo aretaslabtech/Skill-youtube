@@ -1,0 +1,158 @@
+<!--
+  Caption skin "underline-bar" (video-studio asset; copy to <project>/.hyperframes/caption-skin.html).
+
+  Same contract as glow-word.html (captions.mjs fills GROUPS / DURATION / size and the
+  data-brand-tokens :root block). Token vocab used: --cap-ink · --cap-canvas · --cap-accent ·
+  --font-display · --font-body. Hooks: .caption-group / .caption-word + .is-active / .is-spoken,
+  root data-composition-id="captions", timeline window.__timelines["captions"].
+
+  Visual: editorial. Type follows --font-display (a serif on paper looks, a sans elsewhere),
+  sentence case, regular weight — no card. Upcoming words are faint ink; the active word turns
+  full ink and a thick accent bar wipes in under it left → right (background-size tween, seek-
+  safe fromTo); spoken words keep full ink and drop the bar, so only one bar shows at a time.
+  The bar is the brand-green moment: set the project's accent token to #00D890 when you use this
+  skin (the fallback is #00D890), even if the look's other accent is a different hue.
+
+  Placement: 9:16 captions pinned to y 1440–1600, x 64–850 (organic layout, platform-specs.md §1: the visual fills y 440–1440 and the scene continues below the captions);
+  16:9 captions in y 880–1000 (content keeps y ≤ 860).
+-->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+
+<!-- captions.mjs injects the project's :root tokens here -->
+<style data-brand-tokens></style>
+
+<style>
+  #captions-root { position: absolute; inset: 0; pointer-events: none; }
+  .caption-layer { position: absolute; inset: 0; z-index: 20; pointer-events: none; }
+  .caption-stage {
+    position: absolute; left: 0; right: 0;
+    top: var(--cap-band-top, 900px); height: var(--cap-band-height, 180px);
+    display: flex; align-items: center; justify-content: center;
+  }
+  /* 9:16 — the studio's safe caption band, not the engine's bottom band */
+  @media (max-aspect-ratio: 9/16) {
+    .caption-stage { top: 1440px; height: 160px; left: 64px; right: 230px; }
+  }
+  .caption-group {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0;
+  }
+  .caption-pill { max-width: 100%; padding: 0; background: none; }
+  .caption-line {
+    display: flex; flex-wrap: wrap; justify-content: center;
+    gap: 0.12em 0.26em;
+    font-family: var(--font-display, "Source Serif 4"), Georgia, serif;
+    font-weight: 500;
+    font-size: 60px;
+    line-height: 1.22;
+    letter-spacing: -0.015em;
+    text-align: center;
+  }
+  /* 16:9 long-form — captions in y 880–1000, content keeps y ≤ 860 */
+  @media (min-aspect-ratio: 16/10) {
+    .caption-stage { top: 880px; height: 120px; left: 96px; right: 96px; }
+    .caption-line { font-size: 50px; }
+  }
+  .caption-word {
+    display: inline-block;
+    padding-bottom: 0.12em;
+    color: color-mix(in srgb, var(--cap-ink, #1A1A17) 34%, var(--cap-canvas, #EFE7D4));
+    /* the bar: an accent-filled background strip at the baseline, width driven by GSAP */
+    background-image: linear-gradient(var(--cap-accent, #00D890), var(--cap-accent, #00D890));
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 0% 0.13em;
+  }
+  .caption-word.is-active { color: var(--cap-ink, #1A1A17); }
+  .caption-word.is-spoken { color: var(--cap-ink, #1A1A17); background-image: none; }
+  .caption-word.cap-num {
+    font-family: var(--font-body, "JetBrains Mono"), monospace;
+    font-variant-numeric: tabular-nums; letter-spacing: 0;
+  }
+</style>
+
+<div
+  id="captions-root"
+  data-composition-id="captions"
+  data-timeline-locked
+  data-start="0"
+  data-duration="0"
+  data-fps="30"
+  data-width="0"
+  data-height="0"
+>
+  <div class="caption-layer" aria-hidden="true">
+    <div id="caption-stage" class="caption-stage"></div>
+  </div>
+</div>
+
+<script>
+  // captions.mjs injects the engine's scene-aware groups + real duration here.
+  var GROUPS = [];
+  var DURATION = 0;
+
+  (function () {
+    var stage = document.getElementById("caption-stage");
+
+    GROUPS.forEach(function (group, g) {
+      var groupEl = document.createElement("div");
+      groupEl.className = "caption-group";
+      groupEl.id = "caption-group-" + g;
+      var pill = document.createElement("div");
+      pill.className = "caption-pill";
+      var line = document.createElement("div");
+      line.className = "caption-line";
+      (group.words || []).forEach(function (w, i) {
+        var span = document.createElement("span");
+        span.className = "caption-word";
+        span.id = "caption-word-" + g + "-" + i;
+        span.textContent = String(w.text);
+        line.appendChild(span);
+      });
+      pill.appendChild(line);
+      groupEl.appendChild(pill);
+      stage.appendChild(groupEl);
+    });
+
+    window.__timelines = window.__timelines || {};
+    var tl = gsap.timeline({ paused: true });
+
+    GROUPS.forEach(function (group, g) {
+      var groupEl = document.getElementById("caption-group-" + g);
+      var words = group.words || [];
+      var next = GROUPS[g + 1];
+      var isLast = g === GROUPS.length - 1;
+      var start = Math.max(0, Number(group.start));
+      var end = isLast ? DURATION : Math.min(Number(next.start), Number(group.end) + 0.3);
+      if (end <= start) end = start + 0.01;
+
+      tl.set(groupEl, { opacity: 1 }, start);
+      tl.set(groupEl, { opacity: 0 }, end);
+
+      // 3-state karaoke via className SETS — seek-safe (never tl.call).
+      words.forEach(function (w, i) {
+        var el = document.getElementById("caption-word-" + g + "-" + i);
+        var at = Math.max(start, Number(w.start));
+        tl.set(el, { className: "caption-word" }, start);
+        tl.set(el, { className: "caption-word is-active" }, at);
+        // the bar wipes in under the active word (explicit from-state → correct under reverse seek)
+        var wipe = Math.max(0.08, Math.min(0.22, Number(w.end) - Number(w.start)));
+        tl.fromTo(el, { backgroundSize: "0% 0.13em" },
+          { backgroundSize: "100% 0.13em", duration: wipe, ease: "power2.out" }, at);
+        if (i + 1 < words.length) {
+          var nextAt = Math.max(start, Number(words[i + 1].start));
+          tl.set(el, { className: "caption-word is-spoken" }, nextAt);
+        }
+      });
+      if (words.length) {
+        var lastEl = document.getElementById("caption-word-" + g + "-" + (words.length - 1));
+        var lastSpoken = Math.min(end, Number(words[words.length - 1].end) + 0.1);
+        tl.set(lastEl, { className: "caption-word is-spoken" }, lastSpoken);
+      }
+    });
+
+    tl.to({}, { duration: DURATION }, 0);
+    window.__timelines["captions"] = tl;
+  })();
+</script>

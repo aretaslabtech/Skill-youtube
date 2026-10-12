@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+
+# Node (the animate engine's Playwright)
+node_modules/
+
+# Never commit a studio's secrets, media or logs here
+.env
+.env.*
+!studio.example/env.example
+*.mp4
+*.webm
+*.wav
+*.mp3
+logs/
+ledger.json
+
+# OS / editors
+.DS_Store
+.idea/
+.vscode/
