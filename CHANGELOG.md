@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Looks: `blueprint` and `whiteboard` gain craft, sound and pitfall notes adapted from
+  [lemo-opuscar](https://github.com/lemomo-ai/lemo-opuscar) (MIT): drafting order and zoom-scaled
+  line weights for blueprint; the board as a map, multiply ink, deadline-timed strokes and the sheen for whiteboard.
+
 ## 1.0.1 — 2026-10-12
 
 - Installable as a Claude Code plugin: `claude plugin marketplace add cybiqon-ai/faceless-video-studio`,

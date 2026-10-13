@@ -112,7 +112,27 @@ re-pinned to y 1440–1600. The engine's default band sits under the Shorts UI.
 - **Texture:** the grid, plus slow `sine-wave-loop` breathing on the drawing's crosshair marks.
 - **Caption skin:** `band-karaoke` (the band in ground blue reads as the sheet's title strip).
 - **Registry:** `dynamic-grid`, `svg-line-draw-loader`, `grid-card-assemble`, `outline-draw`.
-- **Never:** filled cards, drop shadows, rounded "app" UI, more than one moving flow at a time.
+- **Craft** *(adapted from lemo-opuscar's Blueprint style, MIT)*:
+  - **Drafting order**, one layer per beat: centre lines → outlines → detail → hatching →
+    dimensions → part balloons → labels. Each stroke draws by arc length with a small glowing nib at its head.
+  - **Four line weights** (outline 3.2, detail 2.0, thin 1.25, hair 0.9 px at zoom 1). In a
+    `viewport-change` zoom, scale stroke width by **zoom^0.65**, not zoom: close-ups don't turn into
+    sausages and wides don't vanish.
+  - **Real conventions:** centre lines long-short, hidden edges short dashes, 45° hatching (8–14 px
+    apart) for anything cut open, numbered balloons on leader lines. Fill every box with ground blue
+    before stroking its outline, so overlaps occlude cleanly.
+  - **Live annotations:** a dimension line measures a moving part and its number changes (latency,
+    queue depth, replicas). "FIG. 1" struck through and rewritten "FIG. 2 · WITH CACHE" is the transition between versions.
+  - **The title block tells the story.** STATUS reads DRAFT, and the verdict stamp lands **once**:
+    green `✓ SCALES`, or redline `REJECTED` for the naive design. Keep the title block clear of the caption band.
+- **Sound:** a technical-pen scratch per stroke (length = stroke length), a soft paper slap on a
+  cut, part clicks for the exploded view, one rubber-stamp thump on the verdict. Music is mechanical
+  and contrapuntal (harpsichord, pizzicato, music box), ducked well under the voice. Leave the
+  biggest reveal with no voice over it.
+- **Pitfalls:** the main figure near the frame edge (keep ≥ 10 % margin at every zoom you'll use);
+  explode parts **sideways**, never up into the header; line widths that don't scale with zoom.
+- **Never:** filled cards, drop shadows, rounded "app" UI, more than one moving flow at a time,
+  3D rendering (oblique and isometric projection are fine).
 - **Signature moment:** the full system draws in white, then one green packet travels the whole path.
 
 ## 4. bold-poster
@@ -206,6 +226,29 @@ re-pinned to y 1440–1600. The engine's default band sits under the Shorts UI.
 - **Texture:** a faint ghost of earlier erased diagrams; `hw-boil` jitter on held drawings.
 - **Caption skin:** `underline-bar`. Set `--font-display` to the hand, and the green bar reads as a marker swipe.
 - **Registry:** `whiteboard-ink`, `hw-arrow`, `hw-pipeline`, `vox-annotate`, `hw-boil`.
+- **Craft** *(adapted from lemo-opuscar's Whiteboard style, MIT)*:
+  - **The board is a map.** Each idea gets its own region, and distance on the board is distance in
+    the argument. Returning to an earlier region is a free callback. No cuts on the board; if a
+    cut is unavoidable it is a whip pan.
+  - **Real marker, not animated text:** ink at ~0.94 opacity with `mix-blend-mode: multiply`, so
+    overlaps darken; a slight low-frequency wobble along each stroke; circles start at an angle and
+    **overlap past closure**; boxes are four strokes with small corner overshoot.
+  - **Every stroke eases slow-fast-slow** and is given a **deadline**, not a speed: a label takes
+    0.3–0.8 s, a title about 3 s, and **a term finishes writing on the word** the voice says it.
+  - **A glossy sheen:** one soft diagonal white band (10–16 %) drifting at ~0.35× the camera
+    speed. That one detail sells "whiteboard" over "white page".
+  - **Colour has a job for the whole video:** ink = things and structure, blue = signals and
+    process, green = the one thing that matters. One green mark per region.
+  - **No hands, no cursor.** If a pen shows at all it floats, with a soft shadow that grows as it lifts.
+- **Moves to pick from:** writing a formula term by term as it's spoken; the pen draws the line the
+  camera then rides to the next region; an eraser wipes a trail backwards to mean "undo"; two pens
+  drawing two quantities at once for a comparison; a faint ghost of an earlier diagram turning out to matter.
+- **Sound:** a felt-on-gloss hiss per stroke whose length follows the stroke, an occasional
+  dry-erase squeak on a long stroke, a cap click when a section ends. Music is light: solo piano,
+  brushed jazz trio, marimba and pizzicato. Foley sits about 11 dB under the voice.
+- **Pitfalls:** labels half cut off by a push-in; full stops that vanish (draw sub-width marks as
+  dots); erasing across a label you meant to keep; one pen with too many jobs drifting late
+  (give overlapping drawings their own deadline).
 - **Never:** typeset headlines, clean vector icons, drop shadows, more than 3 marker colours.
 - **Signature moment:** the camera pulls out to show the whole board drawn, and green circles the one idea that ties it together.
 
