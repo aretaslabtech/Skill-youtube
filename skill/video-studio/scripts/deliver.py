@@ -325,6 +325,16 @@ def main(argv: list[str]) -> int:
                 print(f"Planner: marked {p.mark_made(today.isoformat(), post, msg)} item(s) made")
         except Exception as e:  # noqa: BLE001
             print(f"  ! planner: {e}")
+    # Keep the final render with the archive plugin; a failure is reported, never fatal.
+    try:
+        a = sc.plugin("archive")
+        if a:
+            print(f"Archive: {a.store(video, post, revision)}")
+    except Exception as e:  # noqa: BLE001
+        print(f"  ! archive: {e}")
+        n = notifier()
+        if n:
+            n.send(f"⚠️ archive failed for {esc(post['slug'])}: {esc(str(e))[:300]}")
     print(f"Rendered: {post['slug']} {post.get('duration_s', '?')}s {size_mb:.1f}MB msg {msg} parts={parts}")
     return 0
 

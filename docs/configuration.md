@@ -111,7 +111,7 @@ requires. The agent never writes a URL itself; POST.json texts that contain one 
 
 ## Plugins
 
-Three optional Python files, named in `config.json` → `plugins` (paths relative to the
+Four optional Python files, named in `config.json` → `plugins` (paths relative to the
 studio). Each replaces a built-in. They are how a studio connects private systems without
 forking the skill.
 
@@ -120,10 +120,11 @@ forking the skill.
 | `links` | `validate(post) -> list[str]`, `links(post, campaign) -> dict[label, url]` | `brand/products.json` link building |
 | `notify` | `send(text) -> dict`, `send_video(path, caption, duration) -> dict`, `UPLOAD_LIMIT` (bytes) | `telegram.py` (e.g. Slack, email, your own bot) |
 | `planner` | `topic(day, track, pillar, slot) -> str \| None`, `mark_made(day, post, message_id) -> int`, optional `context(day, track) -> dict` | none: lets a content calendar choose topics and get marked "made" |
+| `archive` | `store(video, post, revision) -> str` | none: keeps each delivered video's final render somewhere else (cloud storage, a NAS); a revision should replace, not add |
 
 `send` and `send_video` return `{"ok": True, "message_id": ...}` or
 `{"ok": False, "error": "..."}` and must never raise. Planner failures are logged and never
-stop a run.
+stop a run. An `archive` failure is logged and sent as a notice; the delivery still counts.
 
 A minimal `notify` plugin that posts to a Slack webhook:
 
@@ -149,8 +150,9 @@ def send_video(path, caption="", duration=None):
 "plugins": { "notify": "plugins/slack.py" }
 ```
 
-Our own studio uses all three: links built by our product catalogue, delivery through the
-company's Telegram bot, and a content planner that schedules topics.
+Our own studio uses all four: links built by our product catalogue, delivery through the
+company's Telegram bot, a content planner that schedules topics, and an archive of final renders
+in Google Drive.
 
 ## Environment variables
 

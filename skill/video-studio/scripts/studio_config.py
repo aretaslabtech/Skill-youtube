@@ -24,6 +24,8 @@ STUDIO_ROOT). Each one replaces a built-in:
            or the post kit saved next to the video when Telegram isn't configured
   planner  topic(day_iso, track, pillar, slot) -> str|None;
            mark_made(day_iso, post, message_id) -> int. default: none
+  archive  store(video, post, revision) -> str: the final render kept elsewhere after delivery;
+           a revision replaces it. default: none
 """
 import copy
 import importlib.util
