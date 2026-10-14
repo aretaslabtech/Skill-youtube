@@ -1,83 +1,61 @@
-# Words a smart 12-year-old wouldn't use without a definition (one per line, lowercase).
-# script_lint.py flags any of these spoken before a definition marker in the same or the
-# previous sentence. Add to it whenever a review finds a new one. Multi-word entries OK.
-token
-tokens
-tokenizer
+# Terms a final-year CS student might NOT know (one per line, lowercase; multi-word OK).
+# script_lint.py flags one spoken before it is defined: a marker ("which means", "short for")
+# in the same or a neighbouring sentence, or a gloss right after it ("epoll, one thread
+# watching many sockets"). Keep the gloss to one clause of 8 words or fewer.
+#
+# Never add the basics the viewer already knows (script-voice.md "Known terms"): variable,
+# function, loop, list, dict, class, API, JSON, HTTP, database, SQL, cache, server, Git,
+# terminal, LLM, prompt, token, model, test, thread, async, hash, recursion, GPU, latency.
+# Add a term here whenever a new-to-me judge (A16) or a viewer has to look one up.
 logit
 logits
 softmax
-probability
-probabilities
-distribution
-sampling
-sample
-parameter
-parameters
-weights
-model weights
-vector
-vectors
-embedding
-embeddings
-api
-latency
-algorithm
-algorithms
-neural network
-transformer
-inference
-training
-fine-tuning
-fine-tune
-dataset
-gpu
-cpu
-llm
-llms
-gpt-2
-gpt
-context window
-prompt engineering
-hallucination
-temperature
 top-p
 top-k
-deterministic
-stochastic
-entropy
-gradient
-backpropagation
-attention
-benchmark
+nucleus sampling
 quantization
-rag
-retrieval
-vector database
-cache
-caching
-hash
-hashing
-recursion
-recursive
-asynchronous
-async
-thread
-threads
-concurrency
+kv cache
+kv-cache
+speculative decoding
+attention head
+mixture of experts
+moe
+lora
+rlhf
+distillation
+perplexity
+beam search
+epoll
+kqueue
+io_uring
+syscall
+mvcc
+write-ahead log
+wal
+b-tree
+lsm tree
+lsm-tree
+raft
+paxos
+quorum
+crdt
+crdts
+vector clock
+bloom filter
+consistent hashing
+idempotency key
+backpressure
+head-of-line blocking
+tail latency
+p99
+copy-on-write
+memory-mapped
+mmap
+jit
+bytecode
 gil
-interpreter
-compiler
-runtime
-syntax
-function
-variable
-divide
-divides
-exponential
-logarithm
-percentile
-batch
-batching
-server
-servers
+free-threaded
+refcount
+reference counting
+tail call
+monomorphization

@@ -8,7 +8,7 @@ each product's footage lives in.
 
 - **YouTube @itspyguru** (the `itspyguru` track): about 20k subscribers, people learning
   Python. Known for explainers and how-tos, so **no interview questions**. Teaching Shorts
-  run 60–90 s at ≤ 2 words/s; long-form deep dives on Wednesday (AI) and Sunday (system
+  run 35–60 s for developers who already code, with a ~1 s pause after every sentence; long-form deep dives on Wednesday (AI) and Sunday (system
   design or Python).
 - **Instagram / Facebook / YouTube @cybiqonai** (the `promo` track, Mon/Thu/Sat): product
   and service promos for people who would use the product or buy the service.

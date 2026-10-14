@@ -51,7 +51,7 @@ Source: [yihui-dev/awesome-opus5-5-videos](https://github.com/yihui-dev/awesome-
 
 **What we take**
 - The whole look is now the `marker-on-paper` family (Anton + Caveat embedded via `@font-face`).
-- **Visual rhythm**: a new visual idea every 1.5–2 s *while narration stays ≤ 2 words/s*.
+- **Visual rhythm**: a new visual idea every 1.5–2 s *while narration keeps its paced sentences*.
 - **A sound on every hit**: every slam, draw-on and landing gets an SFX in the cue sheet.
 - **Loudness re-measured after the AAC encode**, not before (our §6 loudnorm step; verify with a
   second `ffmpeg -af ebur128` pass on `renders/video.mp4`).

@@ -13,8 +13,11 @@ are in **`brand/pillars.md`** in your studio (`studio_config.brand_file("pillars
 it together with the pillar's section below.
 
 **Defaults that came from watching real viewers:**
-- **Teaching Shorts run 60–90 s at ≤ 2 words/s.** A 44-second Short with nine beats was
-  judged "too fast, too much content"; a learner needs time to take in each step.
+- **Teaching Shorts run 35–60 s (75 s cap), for a developer who already codes**
+  (`craft/script-voice.md`). Sentence 1 names the subject plus a tension; every Short leaves
+  an artifact worth saving. Pauses between sentences follow the studio's config; the length
+  comes from cutting sentences, not rushing. (An earlier 60–90 s, beginner-level default
+  read as "childish", and 67 % of viewers swiped away in 3 s.)
 - **Two long-form videos a week** go deeper than a Short can.
 - **No interview-question format** by default: explainers and how-tos travel further.
 
@@ -34,21 +37,20 @@ Pick what's **confusing or new this week**, not what's evergreen-and-saturated.
 
 ---
 
-## ai-term — one AI term through one simple example, 60–90 s
+## ai-term — one AI term through the model's real behaviour, 35–60 s
 
 Examples: RAG, embeddings, tokens, context window, MCP, agents, fine-tuning vs prompting,
 quantization, temperature, hallucination, distillation, attention, vector search.
 
-- **Arc:** a question the viewer can't answer → **one everyday example**, with the jargon
-  withheld → the example *is* the mechanism → name the term → one real use → where the
-  analogy breaks (one line) → takeaway. **Follow `craft/script-voice.md`'s spine**
-  (foundation → problem → one analogy that *is* the mechanism → …), written for a smart
-  12-year-old.
+- **Arc:** the model's real behaviour first (actual output, real numbers: "same prompt,
+  temperature 0 vs 1.5") → the name → the mechanism in one or two true sentences → when it
+  matters in real code (the setting, the flag, the decision rule) → the artifact. Follow
+  `craft/script-voice.md`: written for a developer, no kids' analogy.
 - **Rules:**
   - Numbers on screen come from running something (`research/solution.py`, e.g. a real
     tokenizer count or a real cosine similarity), or from a cited source.
 
-## python — what's new in Python, or one Python concept, 60–90 s
+## python — a Python mistake, gotcha or new feature, 35–60 s
 
 Examples:
 - 3.13/3.14 features: free-threaded build, the new REPL, template strings, deferred
@@ -56,31 +58,31 @@ Examples:
 - concepts: the GIL, generators, decorators, async, context managers, `__slots__`, the
   walrus, `match`.
 
-- **Arc:** the surprising behaviour or the new feature's result first → the old way →
-  what changed / why it works → a real run → when to use it → takeaway.
+- **Arc:** mistake → run it (real output) → why → fix (code on screen), or the new
+  feature's result first → the old way → a real run → when to use it.
 - **Rules:**
   - Every snippet is run on the stated Python version, and the output pasted from
     `run.txt`.
   - Name the version on screen.
   - "New" claims cite the official "What's New" page.
 
-## build — build a small thing in Python, step by step, 60–90 s
+## build — build a small thing in Python, 35–60 s
 
 Examples: a CLI in 20 lines, a web scraper, a mini RAG over a PDF, a Telegram bot, a file
 organizer, a QR generator.
 
-- **Arc:** the finished thing working (result first) → 3–4 build steps, each showing the
-  code that changed and its visible effect → it runs → the one idea that made it work.
+- **Arc:** the finished thing working (result first) → the 3 decisions that mattered,
+  each showing the code that changed and its visible effect → it runs.
 - **Rules:**
   - The project is **actually built and run** in `research/` (pin the versions).
   - Every step on screen is a real state of that code; the final run's output is
     real.
   - At most ~8 lines of code on screen at once; cut to the lines that changed.
 
-## tech-blog — the week's biggest AI or tech story, explained simply, 60–90 s
+## tech-blog — the week's biggest AI or tech story, for developers, 35–60 s
 
-- **Arc:** what happened, in one plain sentence → why a normal person should care → the
-  one mechanism behind it → what is still unknown → takeaway.
+- **Arc:** stake hook (named company, system, number) → the named people and systems →
+  how it actually worked → what a developer should do about it (the artifact).
 - **Rules:** claims follow the **primary source** (the lab's announcement, the paper),
   never a write-up of it. Where they disagree, the primary source wins.
 
@@ -149,7 +151,7 @@ UI, launch films). Always prefer them over anything generated.
 - System design diagrams follow the ByteByteGo rule: a fixed structure (≤ 7 boxes per
   frame) with one moving flow.
 
-## companion — the long-form's best idea as a 9:16 Short, 60–90 s
+## companion — the long-form's best idea as a 9:16 Short, 35–60 s
 
 Made on long-form days after the long-form is delivered: its own hook, the same research and
 look family, the full gates, and an ending that points to the long version.
@@ -157,4 +159,4 @@ look family, the full gates, and an ending that points to the long version.
 ## build-story (optional) — how you built something
 
 If you write about your own work (a blog, release notes, a post-mortem), one true finding
-with numbers makes a strong 60–90 s Short. The CTA is the product or the write-up.
+with numbers makes a strong 35–60 s Short. The CTA is the product or the write-up.

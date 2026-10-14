@@ -128,12 +128,17 @@ must be resumable from its folder.
 - Fill every section.
 - Hooks come from `references/craft/hooks.md`: write 3 and score them.
 - The story spine comes from `references/craft/retention-and-story.md`.
-- **The script follows `references/craft/script-voice.md` first.** The viewer is a smart
-  12-year-old who has used ChatGPT and never coded ("explain it like to a 5-year-old, but
-  not too easy, using a proper example"). Use its spine: foundation → problem → one
-  everyday analogy that *is* the mechanism → watch it work → turn the knob with a spoken
-  "because" → name the term → where the analogy breaks → one real use → takeaway. Every
-  term is defined in the same breath. Then `teaching-formats.md` for the visual vocabulary.
+- **The script follows `references/craft/script-voice.md` first.** The viewer is a
+  developer or CS student who already codes: never define the basics (function, API,
+  cache, token…), and gloss only terms beyond a CS student in ≤ 8 words. Sentence 1 is
+  ≤ 14 words and names the concrete subject plus a tension (a template from
+  `references/craft/hooks.md`), with the proof on screen by 1.5 s. Use the pillar's
+  template (mistake → run it → why → fix, and so on). Every Short carries at least one
+  artifact to save (a command, code line, number or rule, spoken and on screen), ≥ 3 named
+  real things per 30 s, and a rehook every 10–15 s. Real output beats analogy; an analogy is
+  at most one sentence, followed by the real term. End on the payoff, no recap. Then
+  `teaching-formats.md` for the visual vocabulary. (The earlier "smart 12-year-old" rule was
+  retired in Oct 2026: viewers found it childish, and 67 % swiped away in 3 s.)
 - Write `hf/SCRIPT.md` early and run `python3 $SKILL_DIR/scripts/script_lint.py <SCRIPT.md>`
   until it passes (rubric A18). Paste the output into PLAN §10 with the line `A18: PASS`.
 - **Look research — every video looks different** (two videos in a row from one template
@@ -162,26 +167,30 @@ must be resumable from its folder.
 - Pick 2–4 motion rules from the `hyperframes-animation` skill's `rules-index.md`, and
   search the registry before inventing any named look:
   `npx hyperframes catalog --query "<look>" --json`.
-- **Pacing beats density.** The first Short crammed 9 beats into 44 s and was "too fast".
-  Teaching videos run 60–90 s at ≤ 2.0 words/s, with a short breath (0.4–0.8 s) after
-  every key reveal. Choose fewer, bigger steps over more steps. When in doubt, cut a beat,
-  not the pauses.
+- **Short, dense, paused.** A teaching Short runs **35–60 s, 75 s at most**. The pause
+  between sentences comes from `config.json` "pacing" and "voice.gap" (some channels want a
+  full pause after every sentence); speech inside a sentence stays brisk. Fit the length by
+  cutting sentences, never by shrinking the pauses: fewer, denser sentences. Optional A/B:
+  render a second variant with 0.35 s breaths (`voice_build.py --gap 0.35`) to test pace
+  against the pause style (`script-voice.md` "Length and pace").
 - **Long-form plans** carry, in PLAN.md: a `prerequisites` line, a 3–5 chapter map with
   one recap line per chapter, and a beat-by-beat storyboard per chapter (expect 25–45
-  frames at 6–12 s each, about 2.0 words/s). Every chapter gets its own consistent stage.
+  frames at 6–12 s each). Every chapter gets its own consistent stage.
 - Then run **Gate A** (`references/quality-rubric.md`), including A14–A18 and the
-  **teach-back review** (A16): one reviewer sub-agent playing a 12-year-old gets *only*
-  the narration, then a separate judge sub-agent grades it. Do this before any audio is
-  generated. Never grade your own review; write `A16: PASS (judge)` only when the judge
-  says PASS. `deliver.py` refuses a video without these pass lines.
+  **new-to-me review** (A16): one reviewer sub-agent playing a mid-level developer gets
+  *only* the narration and on-screen text, and must name a concrete fact it didn't know and
+  who it would send the video to. A separate judge sub-agent grades it. Do this before any
+  audio is generated. Never grade your own review; write `A16: PASS (judge)` only when the
+  judge says PASS. `deliver.py` refuses a video without these pass lines.
 - **Also run A19, the expert accuracy review:** a separate expert sub-agent flags anything
-  false, misleading or overclaiming in the simplified script, each with a simple, true
-  fix. Write `A19: PASS (expert)` only on its PASS. The beginner must understand it
-  (A16) **and** an expert must agree it's true (A19).
-- **Also run A20, the cold-viewer hook test:** the hook is the viewer's own question
-  in their words, then the visible proof by 3 s (`references/craft/hooks.md`). A fresh
-  sub-agent sees only the first 3 s and must name who it's for and what problem it's
-  about. Write `A20: PASS (cold viewer)` only on its PASS.
+  false, misleading or overclaiming, each with a true fix. Write `A19: PASS (expert)` only
+  on its PASS. A developer must learn something (A16) **and** an expert must agree it's
+  true (A19).
+- **Also run A20, the cold-viewer hook test:** sentence 1 names the concrete subject plus
+  a tension, and the proof is visible by 1.5 s (`references/craft/hooks.md`). A fresh
+  sub-agent playing a developer scrolling Reels sees only the first 3 s and must name the
+  subject, the tension and what it expects to learn, and say it would keep watching. Write
+  `A20: PASS (cold viewer)` only on its PASS.
   On a hard fail, rewrite once; on a second failure, go back to step 1 with a different
   topic.
 
@@ -217,7 +226,8 @@ must be resumable from its folder.
    - Pass `--voice <config voice.voice_id>` to its audio step.
    - Load the HeyGen key as above.
    - **Voice with `python3 $SKILL_DIR/scripts/voice_build.py <video-dir>`** (one take per
-     sentence at 0.75 speed, 0.35 s breaths, ≤ 2.2 words/s). It writes the
+     sentence at config `voice.speed`, with config `voice.gap` breaths between a line's
+     sentences). It writes the
      `assets/voice/NN.wav` and `NN.words.json` files, which the audio step's
      `sync-durations` reads. It must end on `Voice: … every take trimmed on silence`.
      **Never trim a take on TTS word timestamps, and never write a per-video voice
@@ -254,10 +264,10 @@ must be resumable from its folder.
 6. If a workflow step needs something missing (credential, tool), stop the run and say
    exactly what. Never silently drop voice, captions or music.
 7. **Lessons from the first runs. Apply them every time:**
-   - **Holds — a breath, not dead air** (a 2 s gap "between two sentences" felt 1 s too
-     long). `sync-durations` ends each frame exactly on its last word. Add at most
-     **0.2–0.6 s** to a frame whose payoff needs a beat. Silence between lines must stay
-     ≤ 0.7 s, with one ≤ 1.2 s payoff beat allowed (B16). If a frame's animation needs more
+   - **Pauses, not dead air.** `sync-durations` ends each frame exactly on its last word.
+     The gap between lines matches the studio's sentence pause (config `pacing.max_gap`;
+     0.7 s by default, about 1 s for a channel that pauses after every sentence), with one
+     longer payoff beat up to `pacing.payoff_gap` (B16). A 2 s gap felt too long. If a frame's animation needs more
      time than its narration, **shorten the animation, or add a spoken line**, never padded
      silence (padding once left 3–5 s gaps). Run `python3 $SKILL_DIR/scripts/gap_check.py hf/`
      after padding and again after assembly; it must PASS. Never shorten a frame below its
@@ -383,7 +393,7 @@ The modes below map to tracks of the same name by default.
 
 ## Mode: daily — long-form days also make a companion
 On long-form days (`ledger.py today` → `"companion": true`), after the long-form is
-delivered, make a **9:16 companion** of 60–90 s:
+delivered, make a **9:16 companion** of 35–60 s:
 - **Folder:** `videos/<date>-<slug>-short/`, pillar `companion`, format `companion`, the same
   track.
 - **Content:** the long-form's single best idea, with its own hook and the same
@@ -412,7 +422,7 @@ delivered, make a **9:16 companion** of 60–90 s:
 - **Source:** the published post and its own cited sources.
 - **Footage:** the real source page captured in a browser at 2×, with a highlighter drawn
   on the exact sentences being discussed (rectangles read from the DOM, never guessed).
-- **Content:** 90–150 s, **16:9 (1920×1080, never 9:16)** because the video is embedded in the post itself, and an embedded vertical video looks out of place next to the landscape ones. Script-voice for a smart 12-year-old. Every claim comes
+- **Content:** 90–150 s, **16:9 (1920×1080, never 9:16)** because the video is embedded in the post itself, and an embedded vertical video looks out of place next to the landscape ones. Script-voice as for every teaching video (a developer who already codes; `craft/script-voice.md`). Every claim comes
   from the post's own cited sources, re-verified (A19). Where the post and its primary
   source disagree, the primary source wins.
 - **Look:** a different family each day (look-check).

@@ -6,9 +6,11 @@ the two kinds of retention graph, and where a CTA can go without costing the cur
 
 ## Word budget first
 
-> **Override from review:** the first Short (97 words in 44 s) was "too fast, too
-> much content". **Use ≤ 2.0 words/s and 60–90 s for teaching videos.** The 2.6 words/s
-> figure below is the research ceiling, not our target.
+> **Override (Oct 2026):** teaching Shorts run **35–60 s, 75 s cap**, with the studio's
+> configured pause between sentences (`config.json` "pacing"; some channels pause ~1 s after
+> every sentence). Speech inside a sentence stays brisk. Fit the length by cutting
+> sentences, never the pauses. Top tech Shorts speak at 2.8–3.9 words/s; a slow 60–90 s
+> beginner pace lost 67 % of viewers in 3 s (`script-voice.md` "Length and pace").
 
 Narration runs at **~2.6 words/s** (≈ 156 wpm — brisk-conversational; Guo et al.'s 6.9 M-session
 edX study found fast, enthusiastic delivery more engaging than slow, formal delivery).
@@ -38,8 +40,8 @@ For 30 s: compress Build to 2 steps. For 60 s: 4 steps plus one "twist" (an edge
 wrong-answer path) at ~60 % to re-open the gap before the payoff.
 
 **Length choice.** Third-party data clusters the best Short completion at 15–45 s (tutorials
-25–40 s, story 30–45 s); but learners need more time: our default is 60–90 s for teaching (rubric A8, after a
-44 s Short was judged "too fast") and 30–50 s for product. Shorts may run up to 3 min, but a Short over 1 min
+25–40 s, story 30–45 s); our default is 35–60 s for teaching (rubric A8, 75 s cap; the
+winning tech Shorts we studied run 45–60 s) and 30–50 s for product. Shorts may run up to 3 min, but a Short over 1 min
 with any Content ID claim is blocked globally — keep licensed music out of anything > 60 s.
 
 ## Long-form spine (3–6 min, 16:9)
@@ -137,10 +139,12 @@ The loop is a design decision, not luck.
 
 | Pillar | Spine |
 |---|---|
-| ai-term / python | Question the viewer can't answer → one concrete example (no jargon) → the example *is* the mechanism → name the term → one real use → where it breaks → takeaway |
-| build | The finished thing running → 3–4 build steps (changed lines + visible effect) → it runs → the one idea that made it work |
+| python | Mistake (subject + tension) → run it (real output) → why → fix, code on screen → send-shaped CTA |
+| ai-term | The model's real behaviour (actual output, real numbers) → the name → the mechanism in 1–2 true sentences → when it matters in code → the artifact |
+| tech-blog | Stake hook (named company or system) → who and what → how it worked → what to do |
+| build | The finished thing running → the 3 decisions that mattered (changed lines + visible effect) → it runs |
 | longform-ai / longform-sd | Cold open → promise → map → 3–5 chapters (hook → build → payoff → one-line recap) → biggest payoff at ~70% → full-map recap → one CTA |
-| (one-example concept) | Question → concrete example (no jargon) → the example *is* the mechanism → name the term → where it's used → where the analogy breaks (1 line) |
+| (long-form intuition chapter) | Question → concrete example → the example *is* the mechanism → name the term → where it's used → where the analogy breaks (1 line) |
 | product | Moment of magic → the pain it removes → 2–3 real moments → one real number → store CTA |
 | service | Owner's pain in their words → before/after split → how it works in 3 steps → proof (real work) → one CTA (e.g. message us) |
 | build-story | The number (stake) → what we tried → what broke → what we learned (one sentence) → what's next |

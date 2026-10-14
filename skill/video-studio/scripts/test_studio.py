@@ -135,9 +135,9 @@ class Rotation(unittest.TestCase):
             p = ledger.today_plan(d)
             self.assertEqual((p["format"], p["aspect"]), ("longform", "1920x1080"))
 
-    def test_shorts_are_vertical_and_teaching_runs_past_a_minute(self):
+    def test_shorts_are_vertical_and_teaching_runs_35_to_60s(self):
         p = ledger.today_plan(date(2026, 10, 12))  # Mon
-        self.assertEqual((p["pillar"], p["aspect"], p["length"]), ("ai-term", "1080x1920", "60-90s"))
+        self.assertEqual((p["pillar"], p["aspect"], p["length"]), ("ai-term", "1080x1920", "35-60s"))
 
     def test_promo_slots_alternate_product_and_service(self):
         days = [date(2026, 10, 12), date(2026, 10, 15), date(2026, 10, 17), date(2026, 10, 19)]  # Mon Thu Sat Mon
@@ -183,7 +183,7 @@ class Repeats(unittest.TestCase):
 
     def test_long_stored_topic_still_catches_a_short_repeat(self):
         entries = [{"date": "2026-10-11", "slug": "too-many-requests",
-                    "topic": "Rate limiting for a smart 12-year-old: why ChatGPT says 'too many requests', the token bucket, buckets per person"}]
+                    "topic": "Rate limiting: why ChatGPT says 'too many requests', the token bucket, buckets per person"}]
         self.assertIsNotNone(ledger.check("x", "Rate limiting why ChatGPT says too many requests", entries, date(2026, 11, 1)))
 
     def test_same_day_companion_is_not_a_repeat(self):

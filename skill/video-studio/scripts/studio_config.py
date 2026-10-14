@@ -45,6 +45,10 @@ DEFAULTS = {
     # keyed off tomorrow's weekday (an overnight cron makes "tomorrow's" video).
     "next_day_from_hour": 18,
     "voice": {"provider": "heygen", "voice_id": "", "speed": 0.75, "gap": 0.35},
+    # Silence between sentences (rubric A8/B16). gap_check.py fails any gap over max_gap, except
+    # one payoff beat up to payoff_gap. A channel that wants a pause after every sentence sets
+    # max_gap ~1.3 and voice.gap ~0.8 (with a matching gap between lines in the composition).
+    "pacing": {"max_gap": 0.7, "payoff_gap": 1.2},
     "default_track": "daily",
     "tracks": {
         # One teaching video a day. A slot is a pillar name, "promo" (alternates product and
@@ -62,11 +66,11 @@ DEFAULTS = {
         "blog": {"days": list(WEEKDAYS), "rotation": "blog-explainer"},
     },
     "pillars": {
-        "ai-term": {"format": "short", "aspect": "1080x1920", "length": "60-90s"},
-        "python": {"format": "short", "aspect": "1080x1920", "length": "60-90s"},
-        "build": {"format": "short", "aspect": "1080x1920", "length": "60-90s"},
-        "tech-blog": {"format": "short", "aspect": "1080x1920", "length": "60-90s"},
-        "companion": {"format": "companion", "aspect": "1080x1920", "length": "60-90s"},
+        "ai-term": {"format": "short", "aspect": "1080x1920", "length": "35-60s"},
+        "python": {"format": "short", "aspect": "1080x1920", "length": "35-60s"},
+        "build": {"format": "short", "aspect": "1080x1920", "length": "35-60s"},
+        "tech-blog": {"format": "short", "aspect": "1080x1920", "length": "35-60s"},
+        "companion": {"format": "companion", "aspect": "1080x1920", "length": "35-60s"},
         "blog-explainer": {"format": "blog-explainer", "aspect": "1920x1080", "length": "90-150s"},  # 16:9: the video is embedded in the post
         "product": {"format": "short", "aspect": "1080x1920", "length": "30-50s"},
         "service": {"format": "short", "aspect": "1080x1920", "length": "30-50s"},

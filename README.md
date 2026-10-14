@@ -60,11 +60,12 @@ flowchart LR
    refuses any topic close to a video you have ever made.
 2. **Research.** Every fact gets a source URL. Teaching videos run their code first, and only
    the real output goes on screen.
-3. **Plan.** Three hooks scored out of 12, a word-budgeted script for "a smart 12-year-old",
-   and a look chosen from the least recently used families.
+3. **Plan.** Three hooks from a library of 20 real-Short templates, scored out of 12; a
+   35–60 s script for developers who already code, with an artifact worth saving; and a
+   look chosen from the least recently used families.
 4. **Gate A — before any money is spent on voice.** A linter, then three fresh sub-agents: a
-   12-year-old who explains it back (with a separate judge), an expert who flags anything
-   false, and a cold viewer who sees only the first three seconds.
+   mid-level developer who must name something new it learned (with a separate judge), an
+   expert who flags anything false, and a cold viewer who sees only the first three seconds.
 5. **Voice.** One HeyGen take per sentence, trimmed on the real sound (never on TTS
    timestamps, which run late and cut words), with a hash manifest.
 6. **Frames.** One sub-agent per beat builds HTML + GSAP in parallel; HyperFrames assembles.
@@ -196,12 +197,12 @@ the frame fill (B18) itself:
 
 | Gate | Rule | The failure behind it |
 |---|---|---|
-| **A8** | ≤ 2.0 words/s, a breath after every reveal | The first Short: 97 words in 44 s, "too fast" |
-| **A14–A16, A18** | Written for a smart 12-year-old; linted; explained back to a separate judge | A script that "considers the viewer as an expert" |
+| **A8** | 35–60 s, the configured pause after sentences kept; cut sentences, not pauses | The first Short: 97 words in 44 s, "too fast"; later, 60–90 s beginner pacing lost 67 % in 3 s |
+| **A14–A16, A18** | Written for developers who already code; ≥ 1 artifact and 3 specifics per 30 s; linted; a mid-level developer must learn something new | First "the script considers the viewer as an expert", then the beginner rewrite: "too childish… I didn't get anything useful" |
 | **A19** | An expert agent flags anything false | Three simplifications that had become untrue |
-| **A2, A20** | The hook is the viewer's own question, proven on screen by 3 s | "The hook doesn't make sense" |
+| **A2, A20** | Sentence 1 names the concrete subject plus a tension, proven on screen by 1.5 s | "The hook doesn't make sense"; then 67 % swiping away in 3 s |
 | **B11, B13** | Footage fills the frame; no two videos look like one template | "Quite similar… it will soon be noticed as AI generated" |
-| **B16, B17** | No silence over 0.7 s; every voice line starts and ends on silence | Gaps of 3–5 s; a third of sentences losing their first word |
+| **B16, B17** | No silence over the configured pause (0.7 s default); every voice line starts and ends on silence | Gaps of 3–5 s; a third of sentences losing their first word |
 | **B18** | A Short fills its frame to the bottom edge | An empty bottom 40% on every Short |
 
 All 38, with what each checks: [docs/gates.md](docs/gates.md). The rubric the agent works

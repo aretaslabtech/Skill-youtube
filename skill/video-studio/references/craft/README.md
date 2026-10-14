@@ -2,13 +2,13 @@
 
 | File | Covers | Read at |
 |---|---|---|
-| `hooks.md` | Hook taxonomy, verbal/text/visual alignment, hook killers, 12 worked hooks, the 0–12 scoring table | PLAN §hooks (Gate A2–A3) |
+| `hooks.md` | The three-part hook (subject + tension, proof by 1.5 s, open loop), a 20-template library from real Shorts, taxonomy, hook killers, the 0–12 scoring table | PLAN §hooks (Gate A2–A3) |
 | `retention-and-story.md` | Word budgets, Short and long-form spines with timings, open loops, pacing, reading Shorts vs long-form graphs, loop endings, CTA placement | PLAN §spine/script |
 | `teaching-formats.md` | Mayer applied, worked-example walkthrough, one-example explainers, animated-code and data-structure vocabulary, 3B1B/Fireship/ByteByteGo, Two Sum and embeddings beat sheets | teaching pillars, storyboard |
 | `visual-design.md` | Moodboard-in-words, colour proportions, banding, type sizes, 9:16/16:9 grids, motion that explains, series identity, covers, anti-slop checklist | PLAN §moodboard, Gate B |
 | `product-promo.md` | Magic→problem→proof→CTA, real-footage rules, platform ad research, Play/Chrome store rules, small-business service Reels, chat-app CTAs | product and service days |
 | `platform-specs.md` | Safe-zone pixels, Shorts/Reels/FB specs, encoding, hashtags, related video, trial reels, caption style, posting times | build, render, POST.json |
-| `script-voice.md` | The fixed viewer (a smart 12-year-old), the script spine, defining every term, no idioms, length | PLAN §script (Gate A14–A18) |
+| `script-voice.md` | The fixed viewer (a developer who already codes), known terms never defined, the artifact and specifics rules, the hook, per-pillar templates, length | PLAN §script (Gate A14–A18) |
 | `video-engines.md` | animate and Manim as second engines, HyperFrames adapters, candidates not installed | Build, signature beats |
 | `recording-and-lighting.md` | Window/one-light/3-point setups, phone settings, framing, home VO recording, the HeyGen clone sample and script | filming yourself, `setup` |
 

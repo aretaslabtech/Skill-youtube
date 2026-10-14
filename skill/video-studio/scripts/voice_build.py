@@ -11,7 +11,7 @@ breath. Writes `hf/assets/voice/NN.wav` + `NN.words.json`, one per script line (
 HyperFrames' `audio.mjs sync-durations` reads). Takes are cached in `research/voice-takes/`, so a rerun costs no TTS.
 
 Why per sentence: a clone voiced a whole line at a time at speed 0.9 measured ~3 words/s;
-per sentence at 0.75 with short breaths lands at ≤ 2.2 words/s with gaps ≤ 0.7 s (B16).
+per sentence at 0.75, with the configured breath (voice.gap) between sentences, keeps gaps inside B16's limit.
 
 Why trim on the audio, not on the word timings: HeyGen's first-word timestamp runs ~0.2 s
 late, and viewers reported words being cut off. Trimming

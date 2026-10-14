@@ -19,25 +19,25 @@ reviewer's or linter's PASS. B17 and B18 it measures itself, from the files.
 | Gate | Checks | Hard |
 |---|---|---|
 | A1 | One idea: the message is one sentence, and every beat serves it | ✔ |
-| A2 | The hook is the viewer's own question, proven by something visible by 3 s | ✔ |
+| A2 | Sentence 1 is ≤ 14 words and names the concrete subject plus a tension; proof on screen by 1.5 s; no branding before 3 s | ✔ |
 | A3 | Three hooks of different types were written and scored out of 12; the best scores ≥ 8 | ✔ |
 | A4 | Every fact and on-screen number has a source in `research/sources.md` | ✔ |
 | A5 | Code was run; the output on screen is pasted from the real run | teaching videos |
 | A6 | Every beat has a visual that explains (a state change, a comparison, a real screen) | ✔ |
 | A7 | On-screen text ≤ 6 words per beat, never the sentence being spoken | ✔ |
-| A8 | Narration ≤ 2.0 words/s, with a 0.4–0.8 s hold after each key reveal | ✔ |
-| A9 | Something new every 3–4 s on a Short; a re-hook every 45–75 s on long-form | |
-| A10 | The payoff lands in the last third, not in the hook | |
+| A8 | A teaching Short runs 35–60 s (75 s cap); the configured pause between sentences is kept, and length comes from cutting sentences | ✔ |
+| A9 | Something new on screen every 3–4 s and a spoken rehook every 10–15 s on a Short; a re-hook every 45–75 s on long-form | Shorts |
+| A10 | The payoff lands in the last third, not in the hook; it ends on the payoff, no recap | |
 | A11 | One specific call to action | ✔ |
 | A12 | Real assets first; nothing faked | ✔ |
 | A13 | Not a repeat of any earlier video (`ledger.py check`) | ✔ |
-| A14 | The viewer is fixed: a smart 12-year-old who has used ChatGPT and never coded | ✔ |
-| A15 | Every term is defined in the same breath it is used | ✔ |
-| A16 🔒 | Teach-back: a fresh agent hears only the narration and explains it back; a separate judge grades it | ✔ |
+| A14 | The viewer is fixed: a developer or CS student who already codes; known terms are never defined | ✔ |
+| A15 | At least one artifact to save (spoken and on screen), ≥ 3 named real things per 30 s, terms beyond a CS student glossed in ≤ 8 words | ✔ |
+| A16 🔒 | New to me: a fresh agent playing a mid-level developer must name a concrete thing it learned and who it would send the video to; a separate judge grades it | ✔ |
 | A17 | Long-form chapters end on a one-line recap | long-form |
-| A18 🔒 | `script_lint.py`: no sentence over 18 words, reading grade ≤ 7, ≤ 1 spoken number per 10 s, no jargon before its definition, no idioms | ✔ |
-| A19 🔒 | Expert review: a fresh agent flags anything false or misleading, each with a fix as simple and true | ✔ |
-| A20 🔒 | Cold viewer: a fresh agent sees only the first 3 s and must say who it's for and what problem it's about | ✔ |
+| A18 🔒 | `script_lint.py`: hook ≤ 14 words naming a concrete subject with no banned opener, no sentence over 20 words, ≥ 3 named specifics per 30 s, no hard term before its gloss, no idioms | ✔ |
+| A19 🔒 | Expert review: a fresh agent flags anything false or misleading, each with a fix as short and true | ✔ |
+| A20 🔒 | Cold viewer: a fresh agent playing a developer scrolling Reels sees only the first 3 s and must name the subject, the tension and what it expects to learn | ✔ |
 
 ## Gate B — the build
 

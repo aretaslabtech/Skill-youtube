@@ -2,6 +2,24 @@
 
 ## Unreleased
 
+- **Script rules rewritten for developers.** The "smart 12-year-old who never coded" viewer
+  overcorrected: viewers called the scripts childish, and 67 % swiped away in the first 3 s.
+  Based on research into top tech Shorts, the viewer is now a developer or CS student who
+  already codes, and known terms are never defined. Every Short carries at least one artifact
+  worth saving and ≥ 3 named specifics per 30 s, and runs 35–60 s (75 s cap).
+  `craft/script-voice.md` has per-pillar templates.
+- **Hooks:** sentence 1 is ≤ 14 words and names the concrete subject plus a tension, with the
+  proof on screen by 1.5 s and a rehook every 10–15 s. `craft/hooks.md` gains a 20-template
+  library from real Shorts. A20's cold viewer plays a developer scrolling Reels.
+- **A16** is now a new-to-me review: a mid-level developer must name a concrete thing it
+  learned and who it would send the video to.
+- **`script_lint.py` (A18):** a hook check (length, banned openers, a concrete subject), 20-word
+  sentences, ≥ 3 specifics per 30 s (a documented heuristic; `backticked` screen terms count),
+  and `jargon.txt` narrowed to terms beyond a CS student. The reading-grade and
+  number-density caps are dropped.
+- **Pacing is configurable:** `config.json` "pacing" (`max_gap`, `payoff_gap`) sets the B16
+  limits that `gap_check.py` reads, for channels that want a pause after every sentence.
+
 - Looks: `blueprint` and `whiteboard` gain craft, sound and pitfall notes adapted from
   [lemo-opuscar](https://github.com/lemomo-ai/lemo-opuscar) (MIT): drafting order and zoom-scaled
   line weights for blueprint; the board as a map, multiply ink, deadline-timed strokes and the sheen for whiteboard.

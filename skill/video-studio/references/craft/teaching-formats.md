@@ -59,9 +59,10 @@ from `run.txt`. Show the edge case (empty input, duplicates) in long-form only.
 
 ## Format B — a hard idea through one simple example
 
-> **Superseded for scripting by `script-voice.md`** (10 Oct 2026): it adds the missing
-> foundation, problem and because-lines, and makes the analogy carry the mechanism instead
-> of illustrating the input. Keep this section for its visual ideas only.
+> **Not for Shorts scripts** (Oct 2026). `script-voice.md` now puts real output first and
+> allows an analogy of one sentence at most; developers found an analogy-led Short
+> childish. Use this format only inside a long-form chapter that needs an intuition, and
+> keep the section for its visual ideas.
 
 1. **Ask** a question the viewer can't answer (gap).
 2. **One everyday example** — concrete, specific, culturally neutral or local-everyday for

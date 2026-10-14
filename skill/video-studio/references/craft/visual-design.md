@@ -214,7 +214,7 @@ allowed for ≤ 1 in 3 cuts.
 *Check:* give a fresh sub-agent the contact sheet and the caption text only; it must retell the takeaway.
 
 **(e) Visual rhythm** (ik-builds-585923, gdgtify-929495). A **new visual idea every 1.5–2 s** (a draw-on, a
-state change, a camera move) while narration stays **≤ 2.0 words/s**: the eye gets fed, the ear doesn't get
+state change, a camera move) while narration keeps its paced sentences: the eye gets fed, the ear doesn't get
 rushed. At least **one deliberate ~400 ms absolute stillness** (nothing moves, captions hold) just before the
 payoff. Cues key to **phrase starts** from the TTS timings, not to a beat grid (tetsu-tetsu333-576886).
 *Check:* the storyboard lists idea timestamps (no gap > 2.5 s outside the payoff hold) and marks the stillness.

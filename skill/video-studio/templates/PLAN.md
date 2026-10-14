@@ -7,7 +7,7 @@ format: <short | longform | companion>
 aspect: <1080x1920 | 1920x1080>
 length: <e.g. 45s>
 message: "<the ONE sentence the viewer leaves with>"
-audience: "<who exactly, what they already know>"
+audience: "<which developers exactly (the base viewer is fixed: a developer who already codes)>"
 product: <brand/products.json "products" key or null>
 service: <brand/products.json "services" key or null>
 voice: <HeyGen voice id>
@@ -22,8 +22,8 @@ voice: <HeyGen voice id>
 <The facts the video stands on, each with a [n] pointing to research/sources.md. For teaching: the
 verified solution, its real output (from research/run.txt), complexity, and the edge cases tried.>
 
-## 3. Hooks (their question, then the proof — craft/hooks.md; 3 different types, score /12, best ≥ 8)
-| # | Line 1: the viewer's question, in their words | Proof visible by 3 s (the comparison) | On-screen text | Score | Why |
+## 3. Hooks (subject + tension, then the proof — craft/hooks.md; 3 different types from the library, score /12, best ≥ 8)
+| # | Sentence 1 (≤ 14 words: concrete subject + tension) | Proof visible by 1.5 s | On-screen text | Score | Why |
 |---|---|---|---|---|---|
 | 1 | | | | /12 | |
 | 2 | | | | /12 | |
@@ -57,14 +57,18 @@ verified solution, its real output (from research/run.txt), complexity, and the 
 | … | | | | | |
 | end card | | | | | |
 
-## 7. Script (for a smart 12-year-old — craft/script-voice.md)
-- **Foundation (what it does at all, 1 sentence):**
-- **Problem (a situation the viewer has lived):**
-- **The one analogy that IS the mechanism (kept all the way through):**
-- **Terms and their same-breath definitions:** <term → spoken definition>
-- **Where the analogy breaks (1 line):**
+## 7. Script (for a developer who already codes — craft/script-voice.md)
+- **Pillar template:** <from script-voice.md "Templates per pillar">
+- **The new-to-me fact (what a mid-level developer didn't know):**
+- **Artifact(s) to save (spoken + on screen ≥ 2 s, in `backticks`):**
+- **Named specifics (≥ 3 per 30 s, each sourced):**
+- **Rehooks (every 10–15 s):** <time → line>
+- **Terms beyond a CS student, with their ≤ 8-word gloss:** <term → gloss, or "none">
 
-<Then the narration only, as read by the voice; it must match the storyboard. Word count: N (budget: length × 2.0, and each key reveal gets a 0.4–0.8 s breath, never more than 0.7 s of dead air between lines (B16)).>
+<Then the narration only, as read by the voice; it must match the storyboard. Length 35–60 s
+(75 s cap) including the studio's sentence pauses (config "pacing"): N sentences × pause + speech
+≤ the target. Cut sentences to fit; never shorten the pauses. Ends on the payoff or the
+artifact, no recap.>
 
 ## 8. Assets
 <path — what it is — which beat. Real screenshots/clips first. Generated images: the prompt and why a real asset couldn't do it.>
@@ -81,9 +85,9 @@ verified solution, its real output (from research/run.txt), complexity, and the 
 ### script_lint (A18)
 <paste `script_lint.py` output; then the line `A18: PASS` once it passes>
 
-### Teach-back review (A16)
-- **3 "why" questions + model answers** (written before the review):
-- **Reviewer JSON** (12-year-old persona, narration only):
+### New-to-me review (A16)
+- **The new-to-me fact + the planner's expected answer** (written before the review):
+- **Reviewer JSON** (mid-level developer persona, narration + on-screen text only):
 - **Judge JSON** (verdict, P0/P1/P2):
 - **Fixes, and the re-run if any:**
 - `A16: PASS (judge)` ← only if the judge said PASS
@@ -91,7 +95,7 @@ verified solution, its real output (from research/run.txt), complexity, and the 
 ### Cold-viewer hook test (A20)
 - **Input given** (first 2 lines, 3-s on-screen text, 3-s frame description — nothing else):
 - **Cold viewer JSON:**
-- **Match vs `audience` / `message`:**
+- **Match vs the subject, tension and `message`:**
 - `A20: PASS (cold viewer)` ← only on a PASS
 
 ### Expert accuracy review (A19)

@@ -2,15 +2,17 @@
 """
 gap_check.py — rubric B16, "no dead air".
 
-  python3 gap_check.py <hf-project-dir> [--max 0.7] [--payoff 1.2] [--json]
+  python3 gap_check.py <hf-project-dir> [--max S] [--payoff S] [--json]
 
 Measures the real silence between consecutive voice lines in the assembled timeline:
 
   gap = (next line's start + its first word's start) − (this line's start + its last word's end)
 
 Line starts come from `index.html` (`<audio src="assets/voice/NN.wav" data-start=…>`), and word
-timings from `audio_meta.json`. Exits 1 if any gap is over --max (default 0.7 s), except a
-single gap up to --payoff (default 1.2 s), the one deliberate beat a video may keep.
+timings from `audio_meta.json`. Exits 1 if any gap is over --max, except a single gap up to
+--payoff, the one deliberate beat a video may keep. Defaults come from config.json "pacing"
+(max_gap 0.7 s, payoff_gap 1.2 s unless the studio sets its own, e.g. a pause after every
+sentence).
 
 Why: padded frames left 2–5 s gaps between sentences, and even 2 s felt about 1 s too long. Run it after `audio.mjs sync-durations`, after any hold padding, and after assembly.
 """
@@ -62,13 +64,24 @@ def judge(gs: list[dict], max_gap: float = 0.7, payoff: float = 1.2) -> dict:
             "longest": max((g["gap"] for g in gs), default=0.0), "count": len(gs)}
 
 
+def _pacing(hf: Path) -> dict:
+    """config.json "pacing" for the studio this project lives in (<studio>/videos/<v>/hf)."""
+    try:
+        import studio_config
+        studio_config.adopt_root_from(hf.resolve().parent)
+        return {"max_gap": 0.7, "payoff_gap": 1.2, **studio_config.load().get("pacing", {})}
+    except (ImportError, SystemExit):
+        return {"max_gap": 0.7, "payoff_gap": 1.2}
+
+
 def main(argv: list[str]) -> int:
     if not argv:
         print(__doc__)
         return 2
     hf = Path(argv[0])
-    max_gap = float(argv[argv.index("--max") + 1]) if "--max" in argv else 0.7
-    payoff = float(argv[argv.index("--payoff") + 1]) if "--payoff" in argv else 1.2
+    pacing = _pacing(hf)
+    max_gap = float(argv[argv.index("--max") + 1]) if "--max" in argv else pacing["max_gap"]
+    payoff = float(argv[argv.index("--payoff") + 1]) if "--payoff" in argv else pacing["payoff_gap"]
     try:
         meta = json.loads((hf / "audio_meta.json").read_text())
         index = (hf / "index.html").read_text()

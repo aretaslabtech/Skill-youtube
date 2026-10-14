@@ -34,7 +34,8 @@ my-studio/
 | `timezone` | IANA name (`Asia/Kolkata`, `America/New_York`). Decides the delivery date and weekday |
 | `next_day_from_hour` | A run started at or after this local hour makes *tomorrow's* video, so an 11 pm cron delivers a video for the next morning |
 | `voice.voice_id` | Your HeyGen voice. `HEYGEN_VOICE_ID` in `.env` overrides it |
-| `voice.speed`, `voice.gap` | TTS speed per sentence and the breath between sentences. 0.75 and 0.35 s land near 2 words/s for a clone that speaks fast |
+| `voice.speed`, `voice.gap` | TTS speed per sentence and the breath between a line's sentences. 0.75 and 0.35 s suit a clone that speaks fast |
+| `pacing.max_gap`, `pacing.payoff_gap` | Rubric B16: the longest silence allowed between voice lines, and the one longer payoff beat. Defaults 0.7 s and 1.2 s. For a pause of about 1 s after every sentence, set `max_gap` ≈ 1.3 and `voice.gap` ≈ 0.8 |
 | `default_track` | The track `/video-studio daily` uses |
 | `variety.look_family_gap` | A look family can't repeat within this many videos |
 | `variety.signature_gap` | A signature beat can't repeat within this many videos |

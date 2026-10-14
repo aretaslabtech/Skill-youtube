@@ -1,109 +1,143 @@
-# Script voice: explain it to a smart 12-year-old
+# Script voice: teach a developer something they'll save
 
-**Review feedback** on an LLM-temperature Short: "the visuals & frames of this
-video was very good… but what's bad was the script itself; the script considers the viewer
-as an expert, which is wrong. The script should be like you are explaining to a 5 year old,
-but not too easy, using proper example. Also explain any other term if it's there in the
-script."
+**Why this file changed (Oct 2026).** The first rule here was "explain it to a smart
+12-year-old who has never coded". It fixed one expert-only script, then overcorrected: the
+next scripts defined every term and built the video around an everyday analogy. Review
+feedback: "the script itself is too childish. In the end I didn't get anything useful." On
+Instagram, 67 % of viewers skipped in the first 3 s and the average watch was 8 s. Research
+on what top tech Shorts actually say (Fireship, ByteByteGo, b001, 3Blue1Brown and others) found
+the opposite pattern. They name the real thing in the first sentence, use real tools and
+numbers without defining the basics, leave one artifact worth saving, and rarely use an analogy.
+That research is the basis for this file.
 
 This file overrides any audience line a PLAN might otherwise choose. `scripts/script_lint.py`
-checks the mechanical parts. The review in rubric A16 checks whether a viewer actually
-understands.
+checks the mechanical parts (A18). The new-to-me judge (A16) checks the value, and the
+cold-viewer test (A20) checks the hook.
 
 ## The viewer (fixed, the same for every teaching video)
 
-> **A smart 12-year-old who has used ChatGPT and never written code.** Curious, quick,
-> English is often their second language, watching on a phone.
+> **A working developer or CS student who writes code every week and has used ChatGPT or
+> Copilot.** Watching on a phone, deciding in under 2 seconds whether to stay. English may be
+> their second language, so the sentences are plain, but the content is not dumbed down.
 
-Developers enjoy a clear beginner explanation; a beginner can't use an expert one. If a
-sentence only makes sense to someone who already knows the topic, it fails.
+### Known terms: never define these
+
+variable, function, loop, list, dict, class, object, string, API, JSON, HTTP, URL, request,
+database, SQL, index, cache, server, client, Git, commit, terminal, command, library,
+package, framework, bug, test, deploy, LLM, ChatGPT, prompt, token, model, context window,
+thread, async, hash, recursion, CPU, GPU, RAM, latency, memory, file, Docker, cloud.
+
+Defining one of these tells the viewer the video isn't for them.
+
+### Terms beyond a CS student: one clause, right there
+
+A term a final-year CS student might not know (`references/jargon.txt`: epoll, MVCC,
+write-ahead log, softmax, KV cache…) gets **one clause of ≤ 8 words**, said right after it
+and ideally shown on screen: "epoll, one thread watching every socket". Or cut it. Never
+stack two new terms in one sentence.
+
+## The value (what makes it save-worthy)
+
+1. **One artifact, at least.** A command, a code line, a config line, a function name, a real
+   number with its unit, or a decision rule ("use X when Y"). It's **spoken and on screen
+   for ≥ 2 s**, and in `backticks` in SCRIPT.md's screen notes, so the lint counts it. A list
+   video carries 3–5 artifacts.
+2. **Specific, every few seconds.** At least **3 named real things per 30 s**: tools,
+   functions, companies, versions, dates, measured numbers. Every one is sourced in research
+   (A4, A19). "A popular database" fails; "Postgres 17" passes.
+3. **Real over analogy.** Show the real output, the real code or the real system. An analogy
+   is optional, **one sentence at most, and the very next sentence names the real thing**.
+   It is never the spine of the video.
+4. **Something new to a mid-level developer.** If the payoff is what a developer already knew
+   before pressing play ("caches make things fast"), the video fails A16. Go one level
+   deeper: the surprising number, the production failure, the flag nobody uses.
+
+## The hook (the first 3 s decide everything)
+
+- **Sentence 1 is ≤ 14 words, names the concrete subject** (a language, tool, company, number
+  or line of code) **plus a tension**: a mistake, a surprise, a stake or a contradiction.
+  Use a template from `hooks.md`. Examples: "Python's `lstrip` just deleted half your
+  filename." / "Redis runs on one thread and still does 100,000 requests a second." /
+  "This one line in CLAUDE.md stopped my agent rewriting whole files."
+- **No warm-up.** No "have you ever", "imagine", "in this video", "today we", no greeting, no
+  definition, no analogy, no riddle.
+- **Proof on screen by 1.5 s**: the code, the output, the number or the diagram, readable
+  with the sound off. No logo, title card or brand sting before 3 s.
+- **Rehook every 10–15 s.** Use "but", "here's the catch", "the third one is the weird one",
+  or a question the next line answers.
 
 ## The voice
 
-- A friendly older sibling at the kitchen table, not a lecturer and not "developer to
-  developer".
-- Say "you" and "we", and use contractions ("it's", "you'll", "don't").
-- Short sentences: ≤ 15 words spoken, never over 18 (enforced by the lint).
-- Stay concrete: name the actual thing ("the word *tea*"), not a category ("the
-  highest-probability token").
-- **No idioms or slang:** long shot, flatter odds, under the hood, at the end of the day,
-  ballpark, game-changer, no-brainer, deep dive. Many viewers speak English as a second language, so say
-  it plainly.
-- One small moment of warmth or humour per video: a callback, a sound word
-  ("plink!"), or a tiny joke about the example. It mustn't be a pun on jargon.
+- One developer showing another something useful at their desk. Not a lecture, not a
+  kids' show.
+- Say "you", use contractions, and use active verbs.
+- Plain sentences: ≤ 20 words spoken (one breath; the lint checks it). Short is better.
+- **No idioms or slang** (in a nutshell, game-changer, secret sauce…): the viewer may speak
+  English as a second language. Technical words are fine; idioms aren't.
+- **No filler sentences.** Each sentence adds a fact, a step or a turn. "This is really
+  important" adds nothing, so it goes.
 
-## The spine (every concept video; replaces the old Format B)
+## Templates per pillar
 
-| # | Beat | What it must do | Bad → good (temperature, 10 Oct) |
-|---|---|---|---|
-| 1 | **Foundation** | What the thing does at all, in one sentence, before anything else | (missing) → "When ChatGPT writes, it picks one word at a time, like filling in a blank." |
-| 2 | **Problem** | A situation the viewer has lived, which this concept solves | (missing) → "Ever pressed *regenerate* and got a different answer? Sometimes you want that. Sometimes you really don't." |
-| 3 | **One everyday analogy that *is* the mechanism** | Kept for the whole video. Every step of the real thing happens *to the analogy* | "scores ÷ T" → "Picture a jar of paper chits. Tea has the most chits, so it usually comes out." |
-| 4 | **Watch it work** | Run the real thing (a simulation or real output) on the analogy's terms | "Twenty rolls: seven teas…" → "Let's pull 20 chits. Tea, tea, coffee, tea… mostly tea." |
-| 5 | **Turn the knob** | Change one thing; show the effect and say **because** | "gaps double" → "Turn it down, and tea gets even more chits, so it wins almost every time." |
-| 6 | **Name it** | The real term only now, attached to what they already understand | "…the temperature" (first line) → "That knob has a name: **temperature**." |
-| 7 | **Where the analogy breaks** | One honest line | "There's no real jar; it's numbers. But the numbers behave like chits." |
-| 8 | **One real use** | A concrete when-to-use, with an example | "low for facts and code" → "Writing code? Keep it low, so you get the same answer. Naming your startup? Turn it up." |
-| 9 | **Takeaway + loop** | One sentence they could repeat to a friend | "Low means safe and the same; high means surprising." |
+| Pillar | Template |
+|---|---|
+| python | Mistake → run it (real output) → why → fix (code on screen) |
+| ai-term | The model's real behaviour first (actual output, real numbers), then the name, then when it matters |
+| build | Result first (the working thing), then the 3 decisions that mattered |
+| tech-blog | Stake hook → named people and systems → how it worked → what to do about it |
+| system design (companion, long-form) | "N reasons X is fast", **or** a production incident: failure → why → fix → cost |
+| AI coding agents | Live agent run → obstacle → mechanism in one line → caveat |
 
-## Terms: anything a 12-year-old wouldn't say
-
-- **A term is** jargon (token, model, parameter, embedding, API), maths operations and
-  words (divide, probability, distribution, percentage points, exponential), proper nouns
-  (GPT-2, Anthropic, a research lab), acronyms, and any idiom.
-- **Each term is either cut, or defined in the same breath** with a definition marker:
-  "which means", "think of it as", "is like", "is just", "that's called", "we call this".
-  Example: "GPT-2, which is an older, smaller cousin of ChatGPT".
-- **Never stack two new terms in one sentence.**
-- **On-screen labels don't count as definitions.** The words alone must work, because
-  half of viewers don't read the screen.
+**No interview questions, ever.** An incident or a production gotcha replaces "solve this".
 
 ## Logic: every step earns the next
 
-- **No "so", "that's why" or "this means" without a cause the viewer has already seen.**
-- **Every change gets a spoken because:** "…*because* tea now has even more chits."
-- **No surprise twist that needs new expert ideas.** If the topic has a deep footnote
-  (servers drifting, sampling algorithms), it goes in a long-form video or the pinned
-  comment, not the Short.
+- **No "so" or "that's why" without a cause the viewer has already seen.**
+- **Every change gets a true "because".** "…because `lstrip` treats its argument as a set of
+  characters."
 
-## Simple, but true (added 10 Oct 2026)
+## Simple, but true
 
-An outside review of the temperature Short found three simplifications that had become
-untrue:
-- "tea came next most often in everything it read" (the model learns what comes next *in
-  this kind of sentence*; it doesn't count raw frequencies);
-- "GPT-2 is an older version of ChatGPT" (it's an older AI from the same company;
-  ChatGPT is a product);
-- "keep it low… that's usually right" (low temperature means *consistent*, not
-  *correct*).
-
-So:
-- **Every "because" must be technically true**, not just intuitive. If the true cause is
-  too hard, say what happens without inventing a cause.
-- **An analogy may simplify, but not mislead.** Name where it breaks (spine beat 7),
-  including the biggest simplification ("it picks word-pieces, not whole words").
-- **Advice never implies a setting or tool makes output correct.** "Steady" or
-  "predictable" yes; "right" no. Add the check-it habit ("still test the code").
-- **Proper nouns get their true relationship**, said simply ("an older AI from the company
-  that made ChatGPT").
+- **Every "because" must be technically true.** If the true cause doesn't fit, say what
+  happens without inventing a cause.
+- **An analogy may simplify, but not mislead.** If one is used, the next sentence gives the
+  real term, and where it breaks if that matters.
+- **Advice never implies a setting or tool makes output correct.** "Consistent" yes,
+  "right" no. Add the check-it habit where it applies.
+- **Proper nouns get their true relationship** (GPT-2 is an older model from OpenAI, not
+  "an older ChatGPT").
 - **Rubric A19's expert review enforces this.**
 
 ## Numbers
 
-- At most **one spoken number per ~10 s** (lint-checked).
-- Round them ("about half", "almost every time", "1 in 20"). Exact figures go on screen,
-  where the eye can compare them.
-- Say a percentage as a picture: "54 %" becomes "about half the jar".
+Real numbers are specifics, so use them. Say them in a form the ear can hold ("about 100,000
+a second", "since 3.9"), and put the exact figure on screen. Every number has a source.
 
-## Length
+## Length and pace
 
-Understanding comes first. A concept Short runs **60–90 s**, longer only if the topic needs it. Cut beats,
-never the foundation, the problem or the because-lines.
+- **A teaching Short runs 35–60 s; 75 s is the hard cap.** Long-form keeps its own rules.
+- Fit the length by **cutting sentences, never by rushing** or trimming the pauses. Fewer,
+  denser sentences beat more, thinner ones.
+- The pause between sentences is set by the studio (`config.json` "pacing" and
+  "voice.gap"; some channels want a full pause after every sentence so each one lands).
+  Budget for it: about 10–14 spoken sentences for a 60 s Short with 1 s pauses.
+- **A/B option, not a rule:** the research's winners speak at 2.8–3.9 words/s with short
+  breaths. To test that against the channel's pause style, render a second variant with
+  `voice_build.py --gap 0.35` and short line gaps, post both as trial Reels, and compare
+  the skip rate and average watch time after 24 h.
+
+## The ending
+
+- **End on the payoff or the artifact. No recap.**
+- CTA ≤ 4 s and send-shaped: "Send this to whoever still uses `lstrip` for this." / "Save
+  it for your next migration." Or loop back to the hook's number. "Full video on the
+  channel" is never the only reason to stay.
 
 ## Self-check before the lint
 
-Read the script aloud and imagine a 12-year-old's face. For each sentence:
-1. Would they need to ask "what's that?"
-2. Would they need to ask "why?"
+Read it aloud as a developer with one finger on the screen, ready to swipe:
+1. After sentence 1, do I know *what* this is about and *why* I should care?
+2. At the end, can I name one thing I didn't know, and someone I'd send it to?
+3. Is there any sentence I'd skip?
 
-If either, rewrite the sentence.
+If 1 or 2 is no, or 3 is yes, rewrite.

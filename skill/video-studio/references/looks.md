@@ -380,7 +380,7 @@ draw themselves, real physics, hard light↔dark switches. From ik-builds-585923
   outlines at build time (or use SVG `<text>` with a stroke, then fill in after the stroke lands).
 - **Layout:** 9:16: one huge word block y 300–800, the marker note annotating it from the side (x 600–1000),
   the physical object (ball, card, token) in y 900–1440. 16:9: type cols 1–7, note and object cols 8–12. A new
-  visual idea every 1.5–2 s, but narration still ≤ 2 words/s.
+  visual idea every 1.5–2 s, while narration keeps its paced sentences.
 - **Motion:** `kinetic-beat-slam` (type lands on phrase cues), `svg-path-draw` (Caveat notes and arrows),
   `css-marker-patterns` (circle, underline, scribble-out), `reactive-displacement` (an object knocks a word
   aside: real collisions), `motion-blur-streak` (smear on the fastest throw). Squash/stretch on landings ≤ 8 %,
