@@ -36,6 +36,38 @@ first sentence** and pairs it with a tension. None opens with an analogy, a defi
 The background (definitions, the mechanism, our product) comes after the proof, and only
 as much as the payoff needs.
 
+### Problem before tool (owner review, 15 Oct 2026)
+
+"The concrete subject" must be **something the viewer already has**: a job, a business
+problem, a tool they use. It must not be the solution's vocabulary. "My read-only Python MCP
+server let Claude Code write a full database copy" was concrete, and it passed the gates,
+but the owner rejected it: "No one knows what VACUUM is… nobody knows what a read-only MCP
+server is and they don't have any reason to copy the database, so why will they ever
+watch it." Curiosity needs a foothold. Loewenstein's information-gap theory, and Kang et
+al. (2009), find curiosity peaks at *moderate* prior knowledge (an inverted U). Zero
+knowledge of the subject gives no gap, only a swipe. The classic Dropbox explainer worked
+because it showed a file saved on a laptop opening on a phone. It never mentioned sync
+protocols.
+
+So the hook runs in this order: **the situation → what goes wrong → the tool or trick that
+fixes it.**
+
+1. **Sentence 1 is the situation, in the viewer's words.** Name a job they have done or will
+   be asked to do, with its stake: "Your boss wants an AI that answers questions from the
+   sales database." Or name the failure from that situation: "I gave Claude our sales
+   database, read-only. It walked off with a full copy." The tension sits in the situation:
+   money, customer data, a broken build or a wasted day.
+2. **The obvious fix, then why it fails.** This is the open loop: "So you make it read-only.
+   That's not enough."
+3. **The technical name arrives as the answer** (`VACUUM INTO`, `set_authorizer`, MCP),
+   after the viewer knows why they need it. A term in the first 5 s must be one the median
+   viewer has already typed (Python, SQL, Claude, a database, an API). A term they haven't
+   (MCP server, VACUUM, an RFC, a flag) waits until the problem is planted.
+
+The test is: *Could this viewer meet this problem at work in the next year, and would they
+recognise it from sentence 1 alone?* If the honest answer is "only if they already know the
+fix", the hook is built from the solution's side. Rewrite it.
+
 **The cold-viewer test (rubric A20).** A fresh sub-agent, playing a developer scrolling
 Reels, is shown only the first two spoken lines, the on-screen text and a description of the
 frames in the first 3 s. With no title and no context, it must name the concrete subject, the
@@ -128,6 +160,9 @@ service → 9, 4; build-story → 10, 1.
 
 - It names no concrete thing: "Why is your app slow?", "This changes everything", "a cool
   trick". A developer can't tell what they'd learn.
+- It names the solution's world, not the viewer's: the subject is a term or setup the viewer
+  doesn't have yet ("a read-only MCP server", "VACUUM INTO"), so there is no problem they
+  recognise (see "Problem before tool").
 - It carries no tension a developer couldn't guess ("Caches make apps faster").
 - It only makes sense once you know the topic: a riddle, a bare number pair ("10 vs 5"),
   or a metaphor ("a photo on a diet").
@@ -217,3 +252,5 @@ Three gates sit above the score. A hook that fails any is out, whatever it score
 - https://support.google.com/youtube/answer/13861714 (Test & Compare optimises watch-time share)
 - https://outlierkit.com/resources/youtube-scriptwriting-methods-compared/
 - https://www.somake.ai/blog/youtube-shorts-aspect-ratio
+- https://nautil.us/curiosity-depends-on-what-you-already-know-235803 (curiosity needs prior knowledge; Kang et al. 2009 inverted U)
+- https://commoncraft.com/curse-knowledge-and-how-defeat-it (curse of knowledge; the Dropbox explainer shows the problem, not the protocol)

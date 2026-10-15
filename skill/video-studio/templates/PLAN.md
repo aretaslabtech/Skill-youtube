@@ -92,6 +92,10 @@ artifact, no recap.>
 - **Fixes, and the re-run if any:**
 - `A16: PASS (judge)` ← only if the judge said PASS
 
+### Real problem (A21, teaching pillars)
+- **Chosen row of `research/problems.md`** (asker's words, links, score):
+- `A21: PASS (real problem)` ← only if it totals ≥ 9 with no 0 on Frequency or Everyday
+
 ### Cold-viewer hook test (A20)
 - **Input given** (first 2 lines, 3-s on-screen text, 3-s frame description — nothing else):
 - **Cold viewer JSON:**

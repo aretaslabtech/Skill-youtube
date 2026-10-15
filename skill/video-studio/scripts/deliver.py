@@ -72,6 +72,9 @@ esc = telegram.esc
 REQUIRED = ("slug", "pillar", "format", "topic", "render", "titles", "youtube_description", "caption", "hashtags")
 LOOK_REQUIRED = ("look_family", "caption_skin", "hook_type")
 PASS_LINES = ("A16: PASS (judge)", "A18: PASS", "A19: PASS (expert)", "A20: PASS (cold viewer)")
+# Teaching videos must start from a problem people are asking about (problem-scout.md, A21).
+PROBLEM_PILLARS = {"ai-term", "python", "build", "longform-ai", "longform-sd", "companion"}
+PROBLEM_LINE = "A21: PASS (real problem)"
 
 
 # ---- links: the plugin, or brand/products.json ------------------------------------------------
@@ -261,6 +264,11 @@ def main(argv: list[str]) -> int:
     for line in PASS_LINES:
         if line not in plan:
             errs.append(f"PLAN.md is missing '{line}' (rubric A16/A18/A19/A20)")
+    if post.get("pillar") in PROBLEM_PILLARS:
+        if PROBLEM_LINE not in plan:
+            errs.append(f"PLAN.md is missing '{PROBLEM_LINE}' (rubric A21)")
+        if not (vdir / "research" / "problems.md").is_file():
+            errs.append("research/problems.md not found (problem scout, rubric A21)")
     # Every voice line must come from voice_build.py and start and end on silence (B17).
     errs += voice_check(vdir)
     video = vdir / post.get("render", "")

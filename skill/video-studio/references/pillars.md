@@ -33,7 +33,9 @@ tie-in that doesn't fit. "Follow for the next one" is a fine CTA.
   Stripe, Cloudflare, Netflix tech blogs), and the concepts behind this week's AI news
   (e.g. "how does a vector DB index work").
 
-Pick what's **confusing or new this week**, not what's evergreen-and-saturated.
+For teaching pillars these sources feed the **problem scout** (`problem-scout.md`). Pick a
+problem developers are **visibly asking about**, not a fact that is merely new or clever. New
+releases count only when people are hitting them (upgrade breakage, a changed default).
 
 ---
 

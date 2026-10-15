@@ -103,11 +103,18 @@ must be resumable from its folder.
   (`build <slug>` mode). Delays are fine; abandoning half-made work is not.
 - Name the video folder `videos/<delivery date>-<slug>/`.
 - Read `references/pillars.md` § <pillar>, `brand/pillars.md`, and `references/craft/README.md`.
-- **Research the pick on the web** (5–10 searches):
-  - what is trending or confusing *this week* for the pillar;
+- **Teaching pillars (ai-term, python, build, longform-ai, longform-sd): run the problem
+  scout first** (`references/problem-scout.md`). It is a fresh sub-agent that finds the problems
+  working developers are actually asking about (Stack Overflow, Reddit, GitHub issues, HN,
+  "People also ask"), proves each one with ≥ 2 links and their numbers, and ranks them.
+  Read the problem bank first. Save `research/problems.md` and pick the top row that passes the
+  ledger check. With a planned topic, the scout ranks the real problems *within* that topic.
+  The video is about the problem; the tool or trick is its answer. Gate A21.
+- **Then research the pick on the web** (5–10 searches):
+  - for tech-blog: the week's story, and what developers are saying about it (HN, Reddit);
   - for long-form: what people are asking about the topic (HN threads, Reddit, docs
     issues), so the chapters answer real questions;
-  - what already ranks for the topic on YouTube Shorts, so you can find the angle
+  - what already ranks for the problem on YouTube Shorts, so you can find the angle
     nobody took.
 - Choose the topic and a slug. Run `ledger.py check <slug> <topic words>` and pick again
   if it fails (it refuses anything close to a video ever made).
@@ -186,8 +193,8 @@ must be resumable from its folder.
   false, misleading or overclaiming, each with a true fix. Write `A19: PASS (expert)` only
   on its PASS. A developer must learn something (A16) **and** an expert must agree it's
   true (A19).
-- **Also run A20, the cold-viewer hook test:** sentence 1 names the concrete subject plus
-  a tension, and the proof is visible by 1.5 s (`references/craft/hooks.md`). A fresh
+- **Also run A20, the cold-viewer hook test:** sentence 1 names a problem the viewer
+  already has (problem before tool) plus a tension, and the proof is visible by 1.5 s (`references/craft/hooks.md`). A fresh
   sub-agent playing a developer scrolling Reels sees only the first 3 s and must name the
   subject, the tension and what it expects to learn, and say it would keep watching. Write
   `A20: PASS (cold viewer)` only on its PASS.

@@ -37,7 +37,8 @@ reviewer's or linter's PASS. B17 and B18 it measures itself, from the files.
 | A17 | Long-form chapters end on a one-line recap | long-form |
 | A18 🔒 | `script_lint.py`: hook ≤ 14 words naming a concrete subject with no banned opener, no sentence over 20 words, ≥ 3 named specifics per 30 s, no hard term before its gloss, no idioms | ✔ |
 | A19 🔒 | Expert review: a fresh agent flags anything false or misleading, each with a fix as short and true | ✔ |
-| A20 🔒 | Cold viewer: a fresh agent playing a developer scrolling Reels sees only the first 3 s and must name the subject, the tension and what it expects to learn | ✔ |
+| A20 🔒 | Cold viewer: a fresh agent playing a developer scrolling Reels sees only the first 3 s and must name the subject, the tension and what it expects to learn, list every term it would look up (must be none) and name the problem from its own work | ✔ |
+| A21 🔒 | Real problem (teaching pillars): a fresh scout agent ranks problems developers are asking about, each backed by ≥ 2 public links; the video's problem scores ≥ 9/15 (`references/problem-scout.md`) | ✔ |
 
 ## Gate B — the build
 
@@ -75,6 +76,7 @@ Almost none were in the first version. Each was added the day a video failed tha
 | A script that "considers the viewer as an expert"; a self-graded review that passed it | A14, A15, A16 (with a separate judge), A18 |
 | Three simplifications that had become untrue | A19 |
 | "The hook doesn't make sense… I am noticing this in all videos" | A2, A20 |
+| "No one knows what VACUUM is… start with a business problem"; "no point making a video on a problem which no one is facing" | A20 (problem before tool), A21 |
 | Two videos so alike "it will soon be noticed as AI generated"; footage in tiny cards | B11, B13, the look rotation |
 | A rendered first frame that differed from every browser snapshot | B14 on the final file |
 | 3–5 s gaps from padded frames | B16 |

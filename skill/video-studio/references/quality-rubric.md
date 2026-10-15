@@ -31,6 +31,7 @@ Each line is pass or fail; there is no partial credit.
 | A17 | **Recaps (long-form).** Every chapter ends on a one-line on-screen recap; the video ends on the map with every chapter filled in | ✔ (long-form) |
 | A18 | **`script_lint.py hf/SCRIPT.md` passes**, before audio is generated: hook ≤ 14 words with a concrete subject and no banned opener, no sentence over 20 words, ≥ 3 named specifics per 30 s, no term from `jargon.txt` before its gloss, no idioms. Paste its output into PLAN §10; `deliver.py` checks the line `A18: PASS` | ✔ |
 | A20 | **The cold-viewer hook test passed** (procedure below). A developer scrolling Reels, given only the first 3 s, names the concrete subject, the tension and what they expect to learn, and would keep watching. PLAN §10 must contain `A20: PASS (cold viewer)`; `deliver.py` refuses otherwise | ✔ |
+| A21 | **A real problem** (`problem-scout.md`). Teaching pillars only. The chosen problem is in `research/problems.md` with the asker's words, ≥ 2 evidence links and a score ≥ 9/15 (no 0 on Frequency or Everyday), and sentence 1 opens on its situation. PLAN §10 must contain `A21: PASS (real problem)`; `deliver.py` refuses otherwise. Added after the read-only-MCP Short: true and built, but about a problem nobody had | ✔ |
 | A19 | **The expert accuracy review passed** (procedure below). Simplified is fine; false is not. Every "because" is technically true, no analogy plants a misconception, and no advice implies a setting or tool guarantees correctness. PLAN §10 must contain `A19: PASS (expert)`; `deliver.py` refuses otherwise. Added after an outside review of the temperature Short caught three simplifications that had become untrue ("tea came next most often in everything it read", "GPT-2 is an older version of ChatGPT", "low temperature… that's usually right") | ✔ |
 
 ### The new-to-me review (A16) — rewritten Oct 2026
@@ -106,16 +107,21 @@ final and before audio:
    on-screen text of the first 3 s, and a plain description of what is visible in those
    3 s, taken from the storyboard. Don't give it the title, the topic or the PLAN.
    Persona:
-   > You are a developer scrolling Instagram Reels on a break. You swipe away from anything
-   > vague, slow or aimed at beginners. Here is everything you saw and heard in this
-   > video's first 3 seconds. Reply in JSON:
+   > You are a working developer scrolling Instagram Reels on a break. You know Python, SQL
+   > and the popular AI tools by name, but you have never used the specific library,
+   > protocol or flag this video might be about. You swipe away from anything vague, slow,
+   > aimed at beginners, or about a problem you don't have. Here is everything you saw and
+   > heard in this video's first 3 seconds. Reply in JSON:
    > `{"subject": "the concrete thing it's about", "tension": "what's surprising, wrong or
-   > at stake", "expect_to_learn": "...", "would_keep_watching": true|false, "why": "...",
+   > at stake", "my_problem": "the situation in my own work this is about, or null",
+   > "unknown_terms": ["every word or name you would have to look up"],
+   > "expect_to_learn": "...", "would_keep_watching": true|false, "why": "...",
    > "confusing": ["anything you didn't get"]}`.
 2. **The planner checks:** `subject` names the concrete thing (not a category), `tension`
-   matches the hook's tension, `expect_to_learn` matches PLAN's `message` in substance,
-   `would_keep_watching` is true, and `confusing` is empty. Otherwise rewrite sentence 1
-   from the hook library and run a fresh cold viewer.
+   matches the hook's tension, `my_problem` is a real situation, not null and not "using
+   <the tool>", `unknown_terms` and `confusing` are empty, `expect_to_learn` matches PLAN's
+   `message` in substance, and `would_keep_watching` is true. Otherwise, rewrite sentence 1
+   problem-first (`craft/hooks.md` "Problem before tool") and run a fresh cold viewer.
 3. **Write `A20: PASS (cold viewer)`** into PLAN §10, with the JSON, only on a PASS.
 
 ## Gate B — the build (snapshots and the contact sheet)

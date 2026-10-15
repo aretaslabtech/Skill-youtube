@@ -267,7 +267,7 @@ class Deliver(unittest.TestCase):
             voice(v)
             render(v)
             (v / "POST.json").write_text(json.dumps(post(product="my-tool", titles=["T1", "T2"])))
-            (v / "PLAN.md").write_text("## 10\n" + "\n".join(deliver.PASS_LINES) + "\n")
+            (v / "PLAN.md").write_text("## 10\n" + "\n".join(deliver.PASS_LINES + (deliver.PROBLEM_LINE,)) + "\n")
             self.assertEqual(deliver.main([str(v), "--dry-run"]), 0)
 
     def test_without_telegram_the_kit_is_saved_and_logged(self):
@@ -276,7 +276,7 @@ class Deliver(unittest.TestCase):
             voice(v)
             render(v)
             (v / "POST.json").write_text(json.dumps(post(slug="local-one")))
-            (v / "PLAN.md").write_text("\n".join(deliver.PASS_LINES) + "\n")
+            (v / "PLAN.md").write_text("\n".join(deliver.PASS_LINES + (deliver.PROBLEM_LINE,)) + "\n")
             self.assertEqual(deliver.main([str(v)]), 0)
             self.assertTrue((v / "POST-KIT.html").is_file())
             self.assertEqual(ledger.load()[-1]["slug"], "local-one")
@@ -291,13 +291,35 @@ class Deliver(unittest.TestCase):
             (v / "PLAN.md").write_text("A16: pass (self-graded)\n")
             self.assertEqual(deliver.main([str(v), "--dry-run"]), 1)
 
+    def test_refuses_a_teaching_video_without_a_real_problem(self):
+        with tempfile.TemporaryDirectory() as d:
+            v = Path(d)
+            voice(v)
+            render(v)
+            (v / "POST.json").write_text(json.dumps(post()))
+            (v / "PLAN.md").write_text("\n".join(deliver.PASS_LINES) + "\n")
+            self.assertEqual(deliver.main([str(v), "--dry-run"]), 1)
+            (v / "PLAN.md").write_text("\n".join(deliver.PASS_LINES + (deliver.PROBLEM_LINE,)) + "\n")
+            (v / "research" / "problems.md").unlink()
+            self.assertEqual(deliver.main([str(v), "--dry-run"]), 1)
+
+    def test_a_promo_needs_no_problem_scout(self):
+        with tempfile.TemporaryDirectory() as d:
+            v = Path(d)
+            voice(v)
+            render(v)
+            (v / "research" / "problems.md").unlink()
+            (v / "POST.json").write_text(json.dumps(post(pillar="promo", product="my-tool")))
+            (v / "PLAN.md").write_text("\n".join(deliver.PASS_LINES) + "\n")
+            self.assertEqual(deliver.main([str(v), "--dry-run"]), 0)
+
     def test_refuses_a_voice_line_cut_on_speech(self):
         with tempfile.TemporaryDirectory() as d:
             v = Path(d)
             voice(v, starts_on_speech=True)
             render(v)
             (v / "POST.json").write_text(json.dumps(post()))
-            (v / "PLAN.md").write_text("\n".join(deliver.PASS_LINES) + "\n")
+            (v / "PLAN.md").write_text("\n".join(deliver.PASS_LINES + (deliver.PROBLEM_LINE,)) + "\n")
             self.assertEqual(deliver.main([str(v), "--dry-run"]), 1)
             self.assertIn("01.wav starts or ends on speech", " ".join(voice_build.check(v)))
 
@@ -312,6 +334,8 @@ class Deliver(unittest.TestCase):
 def render(v: Path):
     (v / "hf" / "renders").mkdir(parents=True, exist_ok=True)
     (v / "hf" / "renders" / "video.mp4").write_bytes(b"\0" * 1000)
+    (v / "research").mkdir(exist_ok=True)
+    (v / "research" / "problems.md").write_text("# Problems\n")
 
 
 def voice(v: Path, starts_on_speech: bool = False):
