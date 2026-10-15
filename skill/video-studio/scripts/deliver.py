@@ -269,6 +269,9 @@ def main(argv: list[str]) -> int:
             errs.append(f"PLAN.md is missing '{PROBLEM_LINE}' (rubric A21)")
         if not (vdir / "research" / "problems.md").is_file():
             errs.append("research/problems.md not found (problem scout, rubric A21)")
+        if sc.load().get("review", {}).get("second_opinion_model") and \
+                not (vdir / "research" / "second-opinion" / "meta.json").is_file():
+            errs.append("research/second-opinion/meta.json not found: run scripts/second_opinion.py (rubric A22)")
     # Every voice line must come from voice_build.py and start and end on silence (B17).
     errs += voice_check(vdir)
     video = vdir / post.get("render", "")

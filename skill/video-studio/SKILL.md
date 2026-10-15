@@ -148,6 +148,14 @@ must be resumable from its folder.
   retired in Oct 2026: viewers found it childish, and 67 % swiped away in 3 s.)
 - Write `hf/SCRIPT.md` early and run `python3 $SKILL_DIR/scripts/script_lint.py <SCRIPT.md>`
   until it passes (rubric A18). Paste the output into PLAN §10 with the line `A18: PASS`.
+- **Second opinion (A22), when `review.second_opinion_model` is set:** run
+  `python3 $SKILL_DIR/scripts/second_opinion.py videos/<dir>`. Another model family (via
+  OpenRouter) reviews the script against these rules, and separately writes its own script from the
+  same brief and facts without seeing ours. Read `research/second-opinion/review.json` and
+  `rewrite.md`. Adopt every P1 fix that is true, and any line of the rewrite that teaches more
+  clearly, especially its hook and its "LEARNS" line. Then re-lint. Write
+  `A22: second opinion (<model>) adopted N, rejected M` with one reason per rejection in PLAN
+  §10. Do this before A16/A19/A20, which then judge the improved script.
 - **Look research — every video looks different** (two videos in a row from one template
   "will soon be noticed as AI generated"):
   1. Search the web for how strong creators visualise **this** topic or format **this
