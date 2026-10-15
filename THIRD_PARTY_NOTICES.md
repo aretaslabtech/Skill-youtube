@@ -19,7 +19,10 @@ or depends on, the following. Each keeps its own licence.
 | Component | Licence |
 |---|---|
 | [HyperFrames](https://github.com/heygen-com/hyperframes) and its agent skills | Apache 2.0 |
-| [HeyGen API](https://developers.heygen.com) | Commercial service; your account and its terms |
+| [Pocket TTS](https://github.com/kyutai-labs/pocket-tts) (Kyutai), installed by `install_voice.sh pocket` | code MIT; model weights CC-BY-4.0 (credit Kyutai) |
+| [IndicF5](https://github.com/AI4Bharat/IndicF5) (AI4Bharat), installed by `install_voice.sh indicf5` | MIT |
+| [faster-whisper](https://github.com/SYSTRAN/faster-whisper) and Whisper models, for word timings | MIT |
+| [HeyGen API](https://developers.heygen.com), only if you enable HyperFrames' music retrieval | Commercial service; your account and its terms |
 | [Claude Code](https://code.claude.com) | Anthropic's terms |
 | [FFmpeg](https://ffmpeg.org) | LGPL/GPL, depending on your build |
 | [Playwright](https://playwright.dev) (for animate) | Apache 2.0 |

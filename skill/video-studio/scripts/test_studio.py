@@ -13,7 +13,7 @@ from pathlib import Path
 os.environ["STUDIO_NO_PLANNER"] = "1"
 _ROOT = tempfile.TemporaryDirectory()
 os.environ["STUDIO_ROOT"] = _ROOT.name
-for k in ("TELEGRAM_BOT_TOKEN", "TELEGRAM_CHAT_ID", "HEYGEN_VOICE_ID"):
+for k in ("TELEGRAM_BOT_TOKEN", "TELEGRAM_CHAT_ID"):
     os.environ.pop(k, None)
 
 # Three tracks, the way a channel with a teaching rotation, product promos and a daily blog
@@ -59,12 +59,8 @@ class Config(unittest.TestCase):
     def test_user_tracks_replace_the_default_tracks(self):
         self.assertEqual(sorted(sc.load()["tracks"]), ["blog", "daily", "promo"])
 
-    def test_voice_id_from_env_wins(self):
-        os.environ["HEYGEN_VOICE_ID"] = "abc"
-        try:
-            self.assertEqual(sc.load()["voice"]["voice_id"], "abc")
-        finally:
-            del os.environ["HEYGEN_VOICE_ID"]
+    def test_voice_defaults_to_the_open_source_english_engine(self):
+        self.assertEqual(sc.load()["voice"]["engine"], "pocket")
 
     def test_brand_falls_back_to_the_placeholder(self):
         self.assertEqual(sc.brand_file("products.json").parent.name, "brand")

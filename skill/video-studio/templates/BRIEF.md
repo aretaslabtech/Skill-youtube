@@ -9,7 +9,7 @@ language: en
 length: <e.g. 45s>
 angle: <concept | tutorial | promo | story>
 audience: "<PLAN.md audience>"
-voice: <HeyGen voice id>
+voice: <config voice engine + variant, e.g. pocket, or indicf5 (hi)>
 ---
 
 ## Intent
@@ -37,8 +37,9 @@ storyboard of record: follow its beats, narration and on-screen text exactly.
 - **Render is pre-approved (standing instruction).** After
   `check` passes and the contact sheet is reviewed, render without asking. Do not start
   the Studio preview server.
-- **Voice is fixed:** HeyGen, the id in frontmatter. Do not ask, do not fall back to
-  Kokoro. If HeyGen fails, stop and report the blocker.
-- **Music:** HeyGen BGM retrieval, mood "<from PLAN.md>", ducked about 20 dB under the voice.
+- **Voice is fixed:** already made by `scripts/voice_build.py` into `assets/voice/`. Do not
+  voice anything else, and do not call a cloud TTS or fall back to Kokoro. If voicing failed,
+  stop and report the blocker.
+- **Music:** the media-use BGM step (or a CC0 track from the studio's library), mood "<from PLAN.md>", ducked about 20 dB under the voice.
   None on the hook's first second.
 - Avoid: everything in frame.md `avoid:` and references/quality-rubric.md B5.

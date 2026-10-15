@@ -1,7 +1,7 @@
 {
   "name": "faceless-video-studio",
   "version": "1.0.1",
-  "description": "Research, script, HeyGen voice clone, HyperFrames render and 38 pass/fail gates: one finished faceless video a day.",
+  "description": "Research, script, open-source voice clone (English + Hindi, offline), HyperFrames render and 38 pass/fail gates: one finished faceless video a day.",
   "author": {
     "name": "Cybiqon AI Solutions",
     "url": "https://cybiqon.in"
@@ -9,6 +9,6 @@
   "homepage": "https://github.com/cybiqon-ai/faceless-video-studio",
   "repository": "https://github.com/cybiqon-ai/faceless-video-studio",
   "license": "MIT",
-  "keywords": ["video", "hyperframes", "heygen", "faceless", "youtube-shorts", "voice-clone", "explainer"],
+  "keywords": ["video", "hyperframes", "pocket-tts", "indicf5", "hindi", "faceless", "youtube-shorts", "voice-clone", "explainer"],
   "skills": ["./skill/video-studio"]
 }

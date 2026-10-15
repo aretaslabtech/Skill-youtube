@@ -2,7 +2,8 @@
 name: video-studio
 description: >-
   A faceless video studio. It researches, plans, designs and renders one finished video a
-  day with HyperFrames and a HeyGen voice clone: 9:16 Shorts/Reels on most days and 16:9
+  day with HyperFrames and an open-source clone of your voice (Pocket TTS for English,
+  IndicF5 for Hindi), offline on CPU: 9:16 Shorts/Reels on most days and 16:9
   long-form deep dives on the days config.json says, each checked by 38 pass/fail quality
   gates before it is delivered as an MP4 plus a post kit (Telegram, or saved locally).
   Pillars: AI terms, Python, build-a-thing, tech news, product and service promos, blog
@@ -27,8 +28,9 @@ renders.
 | Studio workspace | `$STUDIO_ROOT` (default: the current directory) — run every command from here |
 | One video | `videos/<YYYY-MM-DD>-<slug>/`, holding `PLAN.md`, `research/`, `POST.json`, and `hf/` (the HyperFrames project) |
 | Ledger | `ledger.json`, written only by `scripts/deliver.py` |
-| Studio config | `config.json`: tracks, rotation, timezone, `voice.voice_id`, variety gaps, plugins (`scripts/studio_config.py` documents every key) |
-| Secrets | `.env` in the studio (`HEYGEN_API_KEY`, optional `TELEGRAM_BOT_TOKEN`/`TELEGRAM_CHAT_ID`). Never print, copy or commit them |
+| Studio config | `config.json`: tracks, rotation, timezone, `voice` (engine, reference recording, speed, `variants` such as `hi`), variety gaps, plugins (`scripts/studio_config.py` documents every key) |
+| Voice engines | `.venvs/pocket`, `.venvs/indicf5` in the studio, made by `scripts/install_voice.sh <engine>`; `scripts/tts_engine.py` runs inside them |
+| Secrets | `.env` in the studio (optional `TELEGRAM_BOT_TOKEN`/`TELEGRAM_CHAT_ID`, `HF_TOKEN`, `HEYGEN_API_KEY` for HyperFrames' optional music retrieval). Never print, copy or commit them |
 | Brand (what never changes) | `brand/brand-core.md`: voice, one accent, end mark, safe zones, truth. Falls back to `assets/brand-core.md` |
 | Your channel | `brand/pillars.md`: audience, honest tie-ins, products and where their real footage lives. `brand/products.json`: the products and services links are built for |
 | Looks (what changes every video) | `references/looks.md` (22 families) → `hf/frame.md` built from the chosen family; `assets/looks/navy-code.md` is the original look |
@@ -47,10 +49,9 @@ the studio's `brand/<file>` first, the skill's `assets/<file>` otherwise.
 **Environment.** A scheduled run (`bin/run.sh`) exports the studio's `.env` and checks that
 `node`, `npx`, `ffmpeg` and `python3` are on `PATH`. The skill's own scripts (`voice_build.py`,
 `deliver.py`, `telegram.py`) load `$STUDIO_ROOT/.env` themselves, without overriding what is
-already set. For `npx hyperframes …` and the HeyGen helpers in an interactive session where
-`echo ${HEYGEN_API_KEY:+set}` prints nothing, prefix the command with
-`set -a; . ./.env; set +a;` (from `$STUDIO_ROOT`). Never print the key, write it into a
-project file, or commit it. `<media-use>` below is the folder
+already set. For `npx hyperframes …` in an interactive session that needs a key from `.env`,
+prefix the command with `set -a; . ./.env; set +a;` (from `$STUDIO_ROOT`). Never print a key,
+write it into a project file, or commit it. `<media-use>` below is the folder
 `python3 $SKILL_DIR/scripts/studio_config.py --media-use` prints.
 
 ---
@@ -59,22 +60,20 @@ project file, or commit it. `<media-use>` below is the folder
 
 1. `which ffmpeg ffprobe node npx`. If any is missing, stop and say exactly what to install
    (FFmpeg from the OS package manager; Node.js 22+).
-2. `grep -q '^HEYGEN_API_KEY=.' .env`. If it's missing, stop: the person adds it there
-   (`chmod 600 .env`; the file is gitignored). Never print or commit it.
-3. `npx hyperframes auth status` (with the key loaded) must report HeyGen. Relay its
-   output.
-4. **Voice.**
-   - If `config.json` has no `voice.voice_id` and `voice/` holds a recording
-     (`references/craft/recording-and-lighting.md` §4 says how to record one), clone it:
-     `node <media-use>/audio/scripts/heygen-voice.mjs clone <file> --name "<their name>"`.
-   - Otherwise list the voices (`node <media-use>/audio/scripts/heygen-tts.mjs --list`) and
-     ask which one to use.
-   - Write the id to `config.json` → `voice.voice_id`. The same voice every day is part of the
-     brand.
-   - Acceptance test: voice two sentences with `scripts/voice_build.py`'s settings and
-     report the words per second. Above ~2.2 words/s, keep the default per-sentence 0.75
-     speed rather than slowing whole lines.
-5. `npx hyperframes doctor`. Report ✗ lines; only FFmpeg and HeyGen are required.
+2. **Voice engine.** If `.venvs/<config voice.engine>/bin/python` is missing, run
+   `bash $SKILL_DIR/scripts/install_voice.sh <engine>` (and `indicf5` too if a variant uses it).
+   The models are gated on Hugging Face: if it fails with "could not download", stop and ask
+   the person to accept the terms on the model page and run `hf auth login`.
+3. **Reference recording.** `voice.reference` (default `voice/sample.wav`) must exist: 20–30 s
+   of the person talking naturally (`docs/voice.md`, `references/craft/recording-and-lighting.md`
+   §4). If it's a phone note with hiss, clean it with FFmpeg `arnndn` first. For an IndicF5
+   variant, cut a 6–10 s clip that ends on a pause and write its exact words to
+   `reference_text` (a longer reference cuts words off).
+4. **Acceptance test.** Make a scratch video folder with a two-sentence `hf/SCRIPT.md`, run
+   `scripts/voice_build.py` on it (and `--voice <variant>` for each variant), and send or play
+   the WAVs to the person. Report words per second; above ~2.5, lower `voice.speed` a step
+   rather than slowing whole lines. The same voice every day is part of the brand.
+5. `npx hyperframes doctor`. Report ✗ lines; only FFmpeg is required.
 6. **Scaffold the studio if it's new** (a plugin install has no `install.sh` step). The
    starter files ship with the skill at `$SKILL_DIR/../../studio.example/`. For each of
    `config.json`, `brand/` and `gitignore` (→ `.gitignore`) that doesn't exist in the
@@ -238,16 +237,18 @@ must be resumable from its folder.
 5. **Invoke the workflow skill** (Skill tool: `faceless-explainer` /
    `product-launch-video` / `general-video`) on `hf/`, and follow it from the step after
    storyboard and script.
-   - Pass `--voice <config voice.voice_id>` to its audio step.
-   - Load the HeyGen key as above.
+   - Skip the workflow's own TTS step: the voice comes from `voice_build.py`, never from a
+     cloud TTS.
    - **Voice with `python3 $SKILL_DIR/scripts/voice_build.py <video-dir>`** (one take per
-     sentence at config `voice.speed`, with config `voice.gap` breaths between a line's
-     sentences). It writes the
+     sentence from the configured open-source engine, at config `voice.speed`, with config
+     `voice.gap` breaths between a line's sentences; `--voice hi` for a Hindi video). Put
+     spoken spellings of symbols and code in `hf/say.json` (`{"S113": "S one thirteen"}`);
+     captions keep the script's words. It writes the
      `assets/voice/NN.wav` and `NN.words.json` files, which the audio step's
      `sync-durations` reads. It must end on `Voice: … every take trimmed on silence`.
-     **Never trim a take on TTS word timestamps, and never write a per-video voice
-     script.** HeyGen's first-word timestamp runs ~0.2 s late; trimming on it sliced the
-     start off a third of all sentences.
+     **Never trim a take on word timestamps, and never write a per-video voice
+     script.** Timestamps run late; trimming on them sliced the start off a third of all
+     sentences. IndicF5 runs at ~30× real time on CPU: a Hindi Short's voicing takes ~30 min.
    - **Engines.** HyperFrames is always the composition, voice, caption and delivery layer.
      A look tagged `engine: animate` in `references/looks.md` (pixel-era, riso-poster,
      ink-machine, math-board, iso-hairline, cut-paper, sketchbook) builds its visual beats

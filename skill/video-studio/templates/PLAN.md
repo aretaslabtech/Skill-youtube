@@ -10,7 +10,7 @@ message: "<the ONE sentence the viewer leaves with>"
 audience: "<which developers exactly (the base viewer is fixed: a developer who already codes)>"
 product: <brand/products.json "products" key or null>
 service: <brand/products.json "services" key or null>
-voice: <HeyGen voice id>
+voice: <config voice engine + variant, e.g. pocket, or indicf5 (hi)>
 ---
 
 # <working title>

@@ -17,7 +17,7 @@
 #
 # Environment (all optional except where noted):
 #   STUDIO_ROOT        the studio folder (default: the current directory)
-#   STUDIO_ENV_FILE    file to load secrets from (default: $STUDIO_ROOT/.env; needs HEYGEN_API_KEY)
+#   STUDIO_ENV_FILE    file to load secrets from (default: $STUDIO_ROOT/.env; Telegram and other optional keys)
 #   STUDIO_TRACK       the track for `daily` (default: config.json "default_track"); modes
 #                      `promo` and `blog` use the tracks of the same name. Exported, so the
 #                      skill's ledger.py and deliver.py use it too
@@ -66,9 +66,10 @@ START_LINE=$(( $( [ -f "$LOG" ] && wc -l < "$LOG" || echo 0 ) + 1 ))
   for bin in claude node npx ffmpeg python3 flock timeout; do   # macOS: brew install coreutils flock (GNU timeout)
     command -v "$bin" >/dev/null || { echo "Failed: $bin not on PATH"; alert "no video: $bin is not on PATH (cron has a short PATH; set it in the crontab)."; exit 1; }
   done
-  if [ -z "${HEYGEN_API_KEY:-}" ]; then
-    echo "Failed: HEYGEN_API_KEY missing from $ENV_FILE"
-    alert "no video: HEYGEN_API_KEY is missing from $ENV_FILE."
+  # The voice is a local open-source clone; its engine must be installed (install_voice.sh).
+  if ! why="$(cd "$STUDIO_ROOT" && python3 -c 'import sys; sys.path.insert(0, sys.argv[1]); import voice_build as v; v.engine_python(v.sc.load()["voice"])' "$SKILL/scripts" 2>&1)"; then
+    echo "$why"
+    alert "no video: ${why#Failed: }"
     exit 1
   fi
 

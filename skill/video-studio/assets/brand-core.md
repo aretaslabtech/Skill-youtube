@@ -11,7 +11,7 @@ description: >
 
 # Constant
 
-1. **Voice:** one HeyGen voice, `voice.voice_id` in `config.json`. Same voice, every video.
+1. **Voice:** one voice, cloned from `voice.reference` in `config.json` (open-source, local). Same voice, every video.
 2. **One accent:** the brand accent **`#00D890`** (change it here) appears **at least once**,
    as the accent of whatever look is used: the answer, the CTA, the key word, a highlight.
    The rest of the palette belongs to the look. If the look's own accent is another hue, the

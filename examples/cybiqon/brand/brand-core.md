@@ -11,8 +11,8 @@ description: >
 
 # Constant
 
-1. **Voice:** the founder's own HeyGen voice clone, `voice.voice_id` in `config.json`. Same
-   voice, every video.
+1. **Voice:** the founder's own voice, cloned locally (Pocket TTS for English, IndicF5 for
+   Hindi) from `voice.reference` in `config.json`. Same voice, every video.
 2. **One accent:** Cybiqon green **`#00D890`** appears **at least once**,
    as the accent of whatever look is used: the answer, the CTA, the key word, a highlight.
    The rest of the palette belongs to the look. If the look's own accent is another hue, the

@@ -99,12 +99,14 @@ straight to camera, scrappy over polished). Budget assumes a phone, one inexpens
 - No processing on the raw take: no noise suppression, no compression, no EQ, no music.
 - Headphones on playback; listen for hum, fan, echo, mouth clicks, before re-recording.
 
-## 4. The HeyGen voice-clone sample (one-time, ~20 min of work)
+## 4. The voice-clone reference (one-time, ~10 min of work)
 
-What HeyGen and the other cloning vendors agree on:
-- **Length**: HeyGen's guide says **30–60 s of expressive speech** is enough for an instant clone;
-  its FAQ asks for **≥ 1 min**. ElevenLabs notes more than 2–3 min gives little improvement for
-  instant clones. **Target: one continuous 90–120 s take; submit the best 60–90 s.**
+The studio clones locally (Pocket TTS for English, IndicF5 for Hindi; `docs/voice.md`), and
+both learn from a short reference. What cloning guides (HeyGen's, ElevenLabs') and our own runs
+agree on:
+- **Length**: **20–30 s of natural, expressive speech** for Pocket. For IndicF5, keep a **6–10 s
+  clip that ends on a pause** and write down its exact words: a reference over ~15 s gets
+  clipped while its text doesn't, and the clone cuts words off.
 - **Clean**: one voice, no music, no background noise; the clone copies the room, so the room
   matters more than the mic.
 - **Expressive, not flat**: cloning flattens tone — read with clear rises and falls, smile where it
@@ -145,10 +147,11 @@ them, Python/AI terms (dictionary, O of n, embedding), your product names, and a
 your audience's own words — the clone learns from what you read.
 
 ### After recording
-1. Trim head/tail silence; keep the room tone separately; don't denoise or normalise beyond
-   peak −3 dBFS.
-2. Save as `voice/sample.wav` in your studio (or `.mp3` ≥ 192 kbps if the uploader needs it).
-3. Clone via the setup mode in `SKILL.md`; write the `voice_id` to `config.json` → `voice.voice_id`.
+1. Trim head/tail silence. Remove steady hiss with FFmpeg `arnndn` (it gets cloned otherwise);
+   don't normalise beyond peak −3 dBFS.
+2. Save as `voice/sample.wav` in your studio and set `voice.reference` in `config.json` (for
+   Hindi: the 6–10 s clip and `reference_text` under `voice.variants.hi`).
+3. Run the setup mode in `SKILL.md`; it installs the engine and voices a test.
 4. Acceptance test: generate the Two Sum beat sheet VO (`teaching-formats.md`) and listen for:
    pitch movement on questions, natural pauses at full stops, correct "O of n", no metallic room
    echo. If it's flat, re-record more expressively — don't tweak settings first.

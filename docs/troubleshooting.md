@@ -5,15 +5,14 @@ listed so you recognise them.
 
 ## Setup
 
-**`heygen-tts.mjs not found`** — the HyperFrames skills aren't installed, or are somewhere
-unusual. Install them (`npx skills add heygen-com/hyperframes`) or set `HEYGEN_TTS_SCRIPT` to
-the file's full path in `.env`.
+**`no pocket engine at …/.venvs/pocket/bin/python`** — run
+`STUDIO_ROOT=<studio> skill/video-studio/scripts/install_voice.sh pocket` (or `indicf5`).
 
-**`no voice id`** — run `/video-studio setup`, or put your HeyGen voice id in `config.json` →
-`voice.voice_id` (or `HEYGEN_VOICE_ID` in `.env`).
+**`could not download kyutai/pocket-tts`** (or `ai4bharat/IndicF5`) — the models are gated.
+Accept the terms on the model page with the account you logged in with (`hf auth whoami`).
 
-**`npx hyperframes auth status` doesn't report HeyGen** — the key isn't loaded in that shell.
-`set -a; . ./.env; set +a` first.
+**`no voice.reference`** — record a sample (docs/voice.md) and set `voice.reference` in
+`config.json`.
 
 **Fonts fail to load / a look needs a font you don't have** — some machines can't reach
 Google Fonts. Pick a look whose fonts are vendored (`assets/fonts/`) or embedded by the
@@ -22,16 +21,23 @@ Mono, JetBrains Mono, Source Code Pro).
 
 ## Voice
 
-**Words cut off at the start of sentences** — something trimmed takes on TTS timestamps,
-which run ~0.2 s late. Re-voice with `voice_build.py`; `deliver.py` refuses audio it didn't
-build (B17).
+**Words cut off at the start of sentences** — something trimmed takes on timestamps, which run
+late. Re-voice with `voice_build.py`; `deliver.py` refuses audio it didn't build (B17).
 
-**The narration is too fast** — measure words per second (setup reports it). Keep per-
-sentence voicing at speed 0.75 and adjust `voice.speed`/`voice.gap`; don't slow whole lines.
+**Hindi words cut off at the end** — the IndicF5 reference is too long, or `reference_text`
+doesn't match it word for word. Use a 6–10 s clip that ends on a pause, with exactly its words.
 
-**Lines refused, or missing, after a voicing step** — HeyGen allows 30 TTS requests a minute,
-and parallel batches can fail quietly. `voice_build.py` retries with backoff; don't run more
-than ~4 voice jobs at once.
+**IndicF5: `Tensor on device cpu is not on the expected device meta`** — transformers 5.x got
+installed. Re-run `install_voice.sh indicf5` (it pins 4.49.0).
+
+**The narration is too fast** — lower `voice.speed` a step (0.82 → 0.75); don't slow whole
+lines, and don't go much below 0.7 or it drawls.
+
+**A word goes missing in every take** — Pocket drops words after a quoted phrase; remove the
+quotes from what is spoken (`hf/say.json`). Set `voice.best_of: 3` for stubborn sentences.
+
+**Voicing is slow** — IndicF5 runs at ~30× real time on CPU, so a 60 s Hindi Short needs about
+half an hour. Run it from the overnight cron, or on a GPU machine.
 
 **Gaps of several seconds between sentences** — frames were padded to fit their animation.
 Shorten the animation or add a spoken line; `gap_check.py` enforces ≤ 0.7 s (B16).

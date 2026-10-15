@@ -3,15 +3,16 @@
 # Faceless Video Studio
 
 **A Claude Code skill that researches, scripts, voices and renders a finished explainer video
-every day — with [HyperFrames](https://github.com/heygen-com/hyperframes), a
-[HeyGen](https://www.heygen.com/) clone of your own voice, and 38 pass/fail gates that stop
-AI slop before it ships.**
+every day — with [HyperFrames](https://github.com/heygen-com/hyperframes), an open-source
+clone of your own voice that runs offline (English and Hindi), and 38 pass/fail gates that
+stop AI slop before it ships.**
 
-No camera. No avatar. No editing timeline. You review an MP4 in the morning and post it.
+No camera. No avatar. No editing timeline. No voice subscription. You review an MP4 in the
+morning and post it.
 
 <a href="https://github.com/cybiqon-ai/faceless-video-studio/releases/download/v1.0.1/demo.mp4"><img src="docs/assets/demo.gif" width="800" alt="A 15-second highlight: a real blog-explainer video the studio made, a wall of contact sheets from 14 videos in 9 different looks, seven hand-drawn animation styles, and the repo URL."></a>
 
-<sub>Real output: a blog explainer the studio made on 12 Oct 2026, contact sheets from its first 14 videos, and the demo pieces of the seven animate styles it ships with. ▶ <a href="https://github.com/cybiqon-ai/faceless-video-studio/releases/download/v1.0.1/demo.mp4">Watch the 40-second version with sound</a> (the voice is a HeyGen clone).</sub>
+<sub>Real output: a blog explainer the studio made on 12 Oct 2026, contact sheets from its first 14 videos, and the demo pieces of the seven animate styles it ships with. ▶ <a href="https://github.com/cybiqon-ai/faceless-video-studio/releases/download/v1.0.1/demo.mp4">Watch the 40-second version with sound</a> (narrated with the HeyGen clone the studio used before it moved to open-source voices).</sub>
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 ![Claude Code skill](https://img.shields.io/badge/Claude%20Code-skill-cc785c)
@@ -28,7 +29,8 @@ No camera. No avatar. No editing timeline. You review an MP4 in the morning and 
 
 ## What it makes
 
-Real videos made by this studio, narrated by a HeyGen clone of the founder's voice:
+Real videos made by this studio, narrated by a clone of the founder's voice (HeyGen at the
+time; since 15 Oct 2026 the studio voices everything with the open-source engines below):
 
 | Video | Format | What it shows |
 |---|---|---|
@@ -48,7 +50,7 @@ flowchart LR
     A[1 Pick<br/>ledger + rotation] --> B[2 Research<br/>sources.md, code that ran]
     B --> C[3 Plan<br/>3 scored hooks, script, new look]
     C --> D{4 Gate A<br/>lint + 3 reviewer agents}
-    D -->|pass| E[5 Voice<br/>HeyGen clone, one take per sentence]
+    D -->|pass| E[5 Voice<br/>local voice clone, one take per sentence]
     D -->|fail| C
     E --> F[6 Frames<br/>one sub-agent per beat]
     F --> G{7 Gate B<br/>check, snapshots, final-file judge}
@@ -63,11 +65,14 @@ flowchart LR
 3. **Plan.** Three hooks from a library of 20 real-Short templates, scored out of 12; a
    35–60 s script for developers who already code, with an artifact worth saving; and a
    look chosen from the least recently used families.
-4. **Gate A — before any money is spent on voice.** A linter, then three fresh sub-agents: a
+4. **Gate A — before any time is spent on voice.** A linter, then three fresh sub-agents: a
    mid-level developer who must name something new it learned (with a separate judge), an
    expert who flags anything false, and a cold viewer who sees only the first three seconds.
-5. **Voice.** One HeyGen take per sentence, trimmed on the real sound (never on TTS
-   timestamps, which run late and cut words), with a hash manifest.
+5. **Voice.** One take per sentence from an open-source clone of your voice, made on your own
+   CPU: [Pocket TTS](https://github.com/kyutai-labs/pocket-tts) for English,
+   [IndicF5](https://github.com/AI4Bharat/IndicF5) for Hindi and 10 other Indian languages.
+   Each take is timed with faster-whisper and trimmed on the real sound (never on timestamps,
+   which run late and cut words), with a hash manifest.
 6. **Frames.** One sub-agent per beat builds HTML + GSAP in parallel; HyperFrames assembles.
 7. **Gate B.** `hyperframes check`, snapshots the agent actually looks at, and a judge that
    reviews frames decoded from the final MP4.
@@ -81,10 +86,11 @@ The studio **never posts**. A person watches it, posts it, and runs `ledger.py m
 
 You need **Linux** (we run Ubuntu 24.04; macOS works with GNU `timeout` and `flock` from
 Homebrew), **Node.js 22+**, **Python 3.10+**, **FFmpeg**,
-[Claude Code](https://code.claude.com), and a [HeyGen API](https://app.heygen.com) key.
+[Claude Code](https://code.claude.com), a free [Hugging Face](https://huggingface.co) account
+(the voice models are gated) and ~5 GB of disk for them. No GPU and no paid voice service.
 
-**1. Install HyperFrames and its agent skills** (they provide the renderer and the HeyGen
-voice helpers this skill calls):
+**1. Install HyperFrames and its agent skills** (they provide the renderer and the media
+helpers for music, sound effects and captions):
 
 ```bash
 claude plugin marketplace add heygen-com/hyperframes
@@ -113,26 +119,25 @@ cd faceless-video-studio
 As a plugin the command is `/faceless-video-studio:video-studio`; below it's written
 `/video-studio`.
 
-**3. Add your HeyGen key** to `~/my-studio/.env` (mode 600, gitignored; with the plugin,
-run step 5's setup once first and it creates the file):
+**3. Install a voice engine.** Accept the model's terms on Hugging Face
+([Pocket TTS](https://huggingface.co/kyutai/pocket-tts) for English,
+[IndicF5](https://huggingface.co/ai4bharat/IndicF5) for Hindi), log in once, then install it
+into your studio (its own virtualenv in `~/my-studio/.venvs/`, CPU-only):
 
 ```bash
-HEYGEN_API_KEY=<your HeyGen API key>
+pip install -U huggingface_hub && hf auth login
+STUDIO_ROOT=~/my-studio skill/video-studio/scripts/install_voice.sh pocket    # English
+STUDIO_ROOT=~/my-studio skill/video-studio/scripts/install_voice.sh indicf5   # Hindi (optional)
 ```
 
-Fund the HeyGen API wallet; usage is billed per call. Check the key and balance:
+**4. Record your voice once** — 20–30 s of natural, expressive speech in a quiet room, saved
+as `~/my-studio/voice/sample.wav`. For Hindi, record a separate Hindi take and keep a 6–10 s
+clip of it that ends on a pause, with its exact words in `config.json`
+(`voice.variants.hi.reference_text`). [docs/voice.md](docs/voice.md) has the scripts to read
+and what makes a clone sound like you.
 
-```bash
-cd ~/my-studio && set -a && . ./.env && set +a
-curl -s -H "X-Api-Key: $HEYGEN_API_KEY" https://api.heygen.com/v3/users/me
-```
-
-**4. Record your voice once** — one expressive 90–120 s take in a quiet room, saved as
-`~/my-studio/voice/sample.wav`. [docs/voice.md](docs/voice.md) has the script to read and
-what makes a clone sound like you.
-
-**5. Run setup.** It checks FFmpeg, the key and HyperFrames, clones your voice, and writes
-the voice id into `config.json`:
+**5. Run setup.** It checks FFmpeg, HyperFrames and the voice engine, and voices two test
+sentences in your voice for you to approve:
 
 ```bash
 cd ~/my-studio && claude
@@ -177,14 +182,13 @@ From the studio's own first four days (October 2026), where it made 12 finished 
 
 | Item | Cost |
 |---|---|
-| HeyGen voice, all 12 videos plus revisions and tests | **$8.20** (wallet $15 → $6.80) |
-| HeyGen clone TTS, measured | **~$0.14 per minute** of narration |
-| HeyGen music retrieval | $0.00 per call in our tests |
+| Voice, open-source on your CPU | **$0**: Pocket TTS ~1× real time (English), IndicF5 ~30× (Hindi) on 4 cores |
+| Voice before 15 Oct 2026 (HeyGen clone, for comparison) | $8.20 for all 12 videos plus revisions (~$0.14 per minute of narration) |
 | Claude Code run, one 85 s Short | ~$18.35 (estimate reported by Claude Code; ~$10 of it the 11 parallel frame workers) |
 | Claude Code run, a 7-minute long-form + its companion Short | ~$26 |
 | Rendering | your own CPU: 2.5–19.5 min per video on 4 cores |
 
-Nearly all the spend is the agent, not the voice. `bin/run.sh` caps every run with
+All of the spend is the agent. `bin/run.sh` caps every run with
 `--max-budget-usd` ($25 for a Short, $60 for a long-form by default), and `POST.json` has a
 `cost_usd` field: fill it from day one. The full breakdown is in the
 [write-up](https://cybiqon.in/lab/hyperframes-heygen-ai-video-pipeline).
@@ -214,7 +218,8 @@ from: [`skill/video-studio/references/quality-rubric.md`](skill/video-studio/ref
 skill/video-studio/
   SKILL.md                 the skill: modes, pipeline, rules
   references/              the rubric, 22 looks, pillars, prompt library, 9 craft notes
-  scripts/                 ledger, deliver, voice_build, script_lint, gap/fill checks, tests
+  scripts/                 ledger, deliver, voice_build + tts_engine + install_voice,
+                           script_lint, gap/fill checks, tests
   templates/               PLAN.md and BRIEF.md
   assets/                  caption skins, fonts (OFL), placeholder brand
   vendor/animate/          cth9191/animate (MIT), a second engine with 7 styles
@@ -229,7 +234,7 @@ docs/                      setup, configuration, voice, scheduling, gates, troub
 
 - [Setup, step by step](docs/setup.md)
 - [Configuration: tracks, rotation, plugins](docs/configuration.md)
-- [Cloning your voice](docs/voice.md)
+- [Cloning your voice, English and Hindi](docs/voice.md)
 - [Running it on a schedule](docs/scheduling.md)
 - [All 38 gates](docs/gates.md)
 - [Troubleshooting: every trap we hit](docs/troubleshooting.md)
@@ -237,13 +242,18 @@ docs/                      setup, configuration, voice, scheduling, gates, troub
 ## FAQ
 
 **Does it need an avatar or a camera?** No. Every visual is an animated HTML scene, a real
-web page captured in a browser, or real product footage. HeyGen supplies only the voice
-(and, optionally, music).
+web page captured in a browser, or real product footage. The voice is a clone of your own,
+made on your machine.
 
-**Can I use another voice provider?** The voice step calls HeyGen's TTS through the
-HyperFrames media-use helper. Swapping providers means replacing `take()` in
-`scripts/voice_build.py`; keep the trim-on-real-sound logic and the manifest, because the
-B17 gate depends on them.
+**Which languages can it speak?** English with Pocket TTS, Hindi (and Bengali, Gujarati,
+Kannada, Malayalam, Marathi, Odia, Punjabi, Tamil, Telugu, Assamese) with IndicF5. Put a
+second voice under `voice.variants` in `config.json` and pick it with
+`voice_build.py --voice hi`. Write Hindi scripts the way people talk (Hinglish, "तो हुआ ये
+कि…"), not textbook Hindi, or the clone sounds flat.
+
+**Can I use another voice engine?** Add a class with `say(text) -> samples` to
+`scripts/tts_engine.py` and an install recipe to `install_voice.sh`. Keep the
+trim-on-real-sound logic and the manifest in `voice_build.py`: the B17 gate depends on them.
 
 **Does it post for me?** No, on purpose. It delivers a video and a post kit. YouTube's API
 keeps uploads private until an app passes Google's audit, and a person should watch every
@@ -263,6 +273,9 @@ it was built, what broke and what it cost:
 [*Twelve videos in four days. Nobody picked up a camera.*](https://cybiqon.in/lab/hyperframes-heygen-ai-video-pipeline)
 
 Stands on [HyperFrames](https://github.com/heygen-com/hyperframes) (Apache 2.0),
+[Pocket TTS](https://github.com/kyutai-labs/pocket-tts) by Kyutai (code MIT, model CC-BY-4.0),
+[IndicF5](https://github.com/AI4Bharat/IndicF5) by AI4Bharat (MIT),
+[faster-whisper](https://github.com/SYSTRAN/faster-whisper) (MIT),
 [animate](https://github.com/cth9191/animate) by cth9191 (MIT, vendored),
 [Manim](https://www.manim.community/) (MIT, optional), and lessons from
 [awesome-opus5-5-videos](https://github.com/yihui-dev/awesome-opus5-5-videos) (MIT). See

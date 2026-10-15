@@ -21,7 +21,8 @@ my-studio/
 {
   "timezone": "UTC",
   "next_day_from_hour": 18,
-  "voice": { "provider": "heygen", "voice_id": "", "speed": 0.75, "gap": 0.35 },
+  "voice": { "engine": "pocket", "reference": "voice/sample.wav", "language": "english_2026-04",
+             "speed": 0.82, "gap": 0.35, "variants": { "hi": { "engine": "indicf5", "...": "below" } } },
   "default_track": "daily",
   "tracks": { "...": "below" },
   "variety": { "look_family_gap": 6, "signature_gap": 5 },
@@ -33,8 +34,16 @@ my-studio/
 |---|---|
 | `timezone` | IANA name (`Asia/Kolkata`, `America/New_York`). Decides the delivery date and weekday |
 | `next_day_from_hour` | A run started at or after this local hour makes *tomorrow's* video, so an 11 pm cron delivers a video for the next morning |
-| `voice.voice_id` | Your HeyGen voice. `HEYGEN_VOICE_ID` in `.env` overrides it |
-| `voice.speed`, `voice.gap` | TTS speed per sentence and the breath between a line's sentences. 0.75 and 0.35 s suit a clone that speaks fast |
+| `voice.engine` | `pocket` (Kyutai Pocket TTS: English) or `indicf5` (AI4Bharat IndicF5: Hindi and 10 Indian languages). Install with `scripts/install_voice.sh <engine>` |
+| `voice.reference` | Your cleaned recording, relative to the studio. Pocket: 20–30 s. IndicF5: a 6–10 s clip that ends on a pause (over 12 s is refused: F5 clips it and cuts words off) |
+| `voice.reference_text` | The exact words of the reference. IndicF5 needs it; Pocket ignores it |
+| `voice.language` | Pocket's model version (`english_2026-04`, `english_2026-09`, `french`, …). Ignored by IndicF5 |
+| `voice.asr_language` | Whisper's language for word timings: `en` (uses `small.en`), `hi`, … |
+| `voice.python` | The engine's interpreter. Default `<studio>/.venvs/<engine>/bin/python` |
+| `voice.speed`, `voice.gap` | Tempo after synthesis (FFmpeg `atempo`, pitch kept; 0.82 for Pocket, 1.0 for IndicF5) and the breath between a line's sentences |
+| `voice.best_of` | Takes per sentence; the one Whisper hears closest to the script wins. Default 1 |
+| `voice.max_pause` | Longest silence kept inside a sentence, s. Default 0.6 |
+| `voice.variants` | More voices laid over the default, picked with `voice_build.py --voice <key>`; e.g. `"hi": {"engine": "indicf5", "reference": "voice/hindi.wav", "reference_text": "…", "asr_language": "hi", "speed": 1.0}` |
 | `pacing.max_gap`, `pacing.payoff_gap` | Rubric B16: the longest silence allowed between voice lines, and the one longer payoff beat. Defaults 0.7 s and 1.2 s. For a pause of about 1 s after every sentence, set `max_gap` ≈ 1.3 and `voice.gap` ≈ 0.8 |
 | `default_track` | The track `/video-studio daily` uses |
 | `variety.look_family_gap` | A look family can't repeat within this many videos |
@@ -159,9 +168,8 @@ in Google Drive.
 
 | Variable | Used by | Meaning |
 |---|---|---|
-| `HEYGEN_API_KEY` | voice | Required |
-| `HEYGEN_VOICE_ID` | voice | Overrides `voice.voice_id` |
-| `HEYGEN_TTS_SCRIPT` | voice | Full path to `heygen-tts.mjs` if it isn't in the usual skill folders |
+| `HF_TOKEN` | `install_voice.sh` | Hugging Face token for the gated voice models (or run `hf auth login` once) |
+| `HEYGEN_API_KEY` | HyperFrames media helpers | Optional: only for HyperFrames' own music/SFX retrieval. The voice never uses it |
 | `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` | delivery, alerts | Optional Telegram delivery |
 | `STUDIO_ROOT` | everything | The studio folder (default: the current directory, or the folder above `videos/` when a script is given a video path) |
 | `STUDIO_DATE` | ledger | `YYYY-MM-DD`: make up a missed day's video |

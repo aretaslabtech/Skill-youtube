@@ -2,10 +2,22 @@
   "timezone": "Asia/Kolkata",
   "next_day_from_hour": 18,
   "voice": {
-    "provider": "heygen",
-    "voice_id": "",
-    "speed": 0.75,
-    "gap": 0.35
+    "engine": "pocket",
+    "reference": "voice/sample.wav",
+    "reference_text": "",
+    "language": "english_2026-04",
+    "asr_language": "en",
+    "speed": 0.82,
+    "gap": 0.35,
+    "variants": {
+      "hi": {
+        "engine": "indicf5",
+        "reference": "voice/hindi.wav",
+        "reference_text": "<the exact words of voice/hindi.wav>",
+        "asr_language": "hi",
+        "speed": 1.0
+      }
+    }
   },
   "default_track": "itspyguru",
   "tracks": {

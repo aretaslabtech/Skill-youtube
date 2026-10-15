@@ -10,7 +10,7 @@
 | `platform-specs.md` | Safe-zone pixels, Shorts/Reels/FB specs, encoding, hashtags, related video, trial reels, caption style, posting times | build, render, POST.json |
 | `script-voice.md` | The fixed viewer (a developer who already codes), known terms never defined, the artifact and specifics rules, the hook, per-pillar templates, length | PLAN §script (Gate A14–A18) |
 | `video-engines.md` | animate and Manim as second engines, HyperFrames adapters, candidates not installed | Build, signature beats |
-| `recording-and-lighting.md` | Window/one-light/3-point setups, phone settings, framing, home VO recording, the HeyGen clone sample and script | filming yourself, `setup` |
+| `recording-and-lighting.md` | Window/one-light/3-point setups, phone settings, framing, home VO recording, the voice-clone reference and script | filming yourself, `setup` |
 
 **The 10 rules that matter most**
 1. Frame 0 is the hook and the cover: the VO starts by 0.2 s, the claim is on screen by 1.5 s, and no logo appears in the first 2 s.

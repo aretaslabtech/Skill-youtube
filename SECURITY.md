@@ -31,4 +31,4 @@ The studio runs an AI agent unattended that **reads the web and then runs code i
 
 - Secrets live only in your studio's `.env` (mode 600, gitignored by the template).
 - `logs/` is gitignored: logs can quote tool output.
-- Never paste your HeyGen voice id, API key or Telegram chat id into an issue.
+- Never paste an API key, Hugging Face token, Telegram chat id or your voice recording into an issue.

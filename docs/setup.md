@@ -1,6 +1,6 @@
 # Setup, step by step
 
-This takes about 30 minutes, most of it recording your voice. Every step says how to check
+This takes about 30 minutes, most of it installing the voice models and recording your voice. Every step says how to check
 it worked before you move on.
 
 ## 0. What you need
@@ -12,7 +12,8 @@ it worked before you move on.
 | Python | 3.10 or newer | `python3 --version` | your OS package manager |
 | FFmpeg + ffprobe | any recent | `ffmpeg -version` | `sudo apt install ffmpeg` / `brew install ffmpeg` |
 | flock | — | `flock --version` | util-linux (Linux); `brew install flock` (macOS). Only for scheduled runs |
-| A HeyGen account | API access | — | <https://app.heygen.com> → Settings → API |
+| A Hugging Face account | free | `hf auth whoami` | <https://huggingface.co/join>, then accept the [Pocket TTS](https://huggingface.co/kyutai/pocket-tts) (and, for Hindi, [IndicF5](https://huggingface.co/ai4bharat/IndicF5)) terms |
+| Disk | ~5 GB free | `df -h ~` | for the voice models and their virtualenvs |
 
 The machine we run it on is Ubuntu 24.04 with 4 CPUs and 30 GiB RAM. Rendering is the
 heavy part: a 7-minute video took 19.5 minutes there. Any recent laptop works; it's just
@@ -21,8 +22,7 @@ slower.
 ## 1. Install HyperFrames and its skills
 
 HyperFrames is the renderer, and its skills teach Claude how to build compositions. Its
-`media-use` skill also contains the HeyGen voice helpers (`heygen-tts.mjs`,
-`heygen-voice.mjs`) that this skill calls.
+`media-use` skill handles music, sound effects and captions.
 
 ```bash
 claude plugin marketplace add heygen-com/hyperframes
@@ -37,8 +37,7 @@ npx skills add heygen-com/hyperframes
 
 **Check:** `python3 skill/video-studio/scripts/studio_config.py --media-use` (from this repo,
 after step 2) prints the folder. It looks in `~/.claude/skills`, `~/.agents/skills` and the
-Claude Code plugin cache. If it says "not found" but you know where `heygen-tts.mjs` is, set
-`HEYGEN_TTS_SCRIPT` in your studio's `.env` to its full path.
+Claude Code plugin cache.
 
 ## 2. Install this skill and create a studio
 
@@ -57,28 +56,25 @@ The installer:
 
 It never overwrites a file you have already edited.
 
-## 3. Add your HeyGen API key
+## 3. Install a voice engine
 
-Open `~/my-studio/.env` and fill in:
-
-```bash
-HEYGEN_API_KEY=<your HeyGen API key>
-```
-
-The API is billed per call from a prepaid wallet, separately from HeyGen's web plans. Add
-a few dollars, then check the key and the balance:
+The voice is an open-source clone that runs on your CPU: Pocket TTS for English, IndicF5 for
+Hindi and other Indian languages. Both models are gated on Hugging Face, so accept the terms on
+[kyutai/pocket-tts](https://huggingface.co/kyutai/pocket-tts) (and
+[ai4bharat/IndicF5](https://huggingface.co/ai4bharat/IndicF5) for Hindi), then:
 
 ```bash
-cd ~/my-studio && set -a && . ./.env && set +a
-curl -s -H "X-Api-Key: $HEYGEN_API_KEY" https://api.heygen.com/v3/users/me
+pip install -U huggingface_hub && hf auth login
+STUDIO_ROOT=~/my-studio ~/faceless-video-studio/skill/video-studio/scripts/install_voice.sh pocket
+STUDIO_ROOT=~/my-studio ~/faceless-video-studio/skill/video-studio/scripts/install_voice.sh indicf5   # optional
 ```
 
-The reply includes `wallet.remaining_balance`. For scale: a minute of cloned narration cost
-us about $0.14.
+**Check:** it ends with `OK: pocket engine at ~/my-studio/.venvs/pocket/bin/python`.
 
-## 4. Record and clone your voice
+## 4. Record your voice
 
-Follow [voice.md](voice.md). Save the recording as `~/my-studio/voice/sample.wav`.
+Follow [voice.md](voice.md). Save the recording as `~/my-studio/voice/sample.wav`; for Hindi,
+also a 6–10 s Hindi clip and its exact words under `voice.variants.hi`.
 
 ## 5. Run setup
 
@@ -88,12 +84,12 @@ claude
 > /video-studio setup
 ```
 
-Setup checks FFmpeg, the key and `npx hyperframes auth status`, clones your voice from
-`voice/sample.wav`, writes the voice id to `config.json` → `voice.voice_id`, voices two test
-sentences and reports words per second, then runs `npx hyperframes doctor`.
+Setup checks FFmpeg and the voice engine, voices two test sentences in your voice from
+`voice/sample.wav` (and each variant) for you to approve, reports words per second, then runs
+`npx hyperframes doctor`.
 
 **Check:** `python3 ~/faceless-video-studio/skill/video-studio/scripts/studio_config.py`
-prints your config with a `voice_id`.
+prints your config with `"engine": "pocket"` and your `reference`.
 
 ## 6. Make it yours
 

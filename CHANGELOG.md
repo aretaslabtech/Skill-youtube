@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+- **Open-source voices; HeyGen voice cloning removed.** The voice is now a clone of your own
+  recording made offline on CPU: [Pocket TTS](https://github.com/kyutai-labs/pocket-tts) for
+  English, [IndicF5](https://github.com/AI4Bharat/IndicF5) for Hindi and 10 other Indian
+  languages. `scripts/tts_engine.py` runs each engine in its own virtualenv
+  (`scripts/install_voice.sh pocket|indicf5`); `voice_build.py` voices every missing sentence in
+  one engine run, times words with faster-whisper, and keeps the trim-on-real-sound logic and
+  the B17 manifest. New config: `voice.engine`, `reference`, `reference_text`, `language`,
+  `asr_language`, `best_of`, `max_pause`, and `variants` (`voice_build.py --voice hi`).
+  `hf/say.json` holds spoken spellings. Sentences also split on the Devanagari `।`.
+  `HEYGEN_API_KEY` is no longer required (`bin/run.sh` checks the voice engine instead);
+  `voice.voice_id`, `HEYGEN_VOICE_ID` and `HEYGEN_TTS_SCRIPT` are gone. Take caches from
+  earlier versions aren't reused.
 - **Script rules rewritten for developers.** The "smart 12-year-old who never coded" viewer
   overcorrected: viewers called the scripts childish, and 67 % swiped away in the first 3 s.
   Based on research into top tech Shorts, the viewer is now a developer or CS student who

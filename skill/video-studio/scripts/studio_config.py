@@ -44,7 +44,14 @@ DEFAULTS = {
     # A run started at or after this local hour delivers the next morning, so the rotation is
     # keyed off tomorrow's weekday (an overnight cron makes "tomorrow's" video).
     "next_day_from_hour": 18,
-    "voice": {"provider": "heygen", "voice_id": "", "speed": 0.75, "gap": 0.35},
+    # Open-source voice clone of your reference recording (voice_build.py, tts_engine.py).
+    # engine: pocket (English; Kyutai Pocket TTS) | indicf5 (Hindi + 10 Indian languages; AI4Bharat).
+    # reference: a cleaned recording of you (relative to STUDIO_ROOT); reference_text: its exact
+    # words (IndicF5 needs them). speed: tempo after synthesis. variants: other voices laid over
+    # this one, picked with `voice_build.py --voice <key>`, e.g. {"hi": {"engine": "indicf5", ...}}.
+    "voice": {"engine": "pocket", "reference": "voice/sample.wav", "reference_text": "",
+              "language": "english_2026-04", "asr_language": "en", "python": "",
+              "speed": 0.82, "gap": 0.35, "best_of": 1, "max_pause": 0.6, "variants": {}},
     # Silence between sentences (rubric A8/B16). gap_check.py fails any gap over max_gap, except
     # one payoff beat up to payoff_gap. A channel that wants a pause after every sentence sets
     # max_gap ~1.3 and voice.gap ~0.8 (with a matching gap between lines in the composition).
@@ -122,11 +129,7 @@ def load() -> dict:
         user = {}
     except json.JSONDecodeError as e:
         raise SystemExit(f"Failed: {path} is not valid JSON — {e}")
-    cfg = _merge(DEFAULTS, user)
-    env_voice = os.environ.get("HEYGEN_VOICE_ID")
-    if env_voice:
-        cfg["voice"]["voice_id"] = env_voice
-    return cfg
+    return _merge(DEFAULTS, user)
 
 
 def tz() -> ZoneInfo:
@@ -160,15 +163,15 @@ def load_env() -> None:
 
 
 def media_use_dir() -> Path | None:
-    """The HyperFrames `media-use` skill (it holds the HeyGen voice helpers): skills installed
-    with `npx skills add`, or with the Claude Code plugin."""
+    """The HyperFrames `media-use` skill (music, SFX, captions): skills installed with
+    `npx skills add`, or with the Claude Code plugin."""
     home = Path.home()
     for p in (home / ".claude/skills/media-use", home / ".agents/skills/media-use"):
-        if (p / "audio/scripts/heygen-tts.mjs").is_file():
+        if (p / "SKILL.md").is_file():
             return p
-    hits = sorted((home / ".claude/plugins").glob("**/skills/media-use/audio/scripts/heygen-tts.mjs"),
+    hits = sorted((home / ".claude/plugins").glob("**/skills/media-use/SKILL.md"),
                   key=lambda f: f.stat().st_mtime, reverse=True)
-    return hits[0].parents[2] if hits else None
+    return hits[0].parent if hits else None
 
 
 def brand_file(name: str) -> Path:

@@ -72,7 +72,7 @@ copy config.json config.json
 copy brand brand
 copy gitignore .gitignore
 if [ -e "$STUDIO/.env" ]; then note "kept your .env"
-else cp "$REPO/studio.example/env.example" "$STUDIO/.env"; chmod 600 "$STUDIO/.env"; ok "created .env (mode 600) — add your HEYGEN_API_KEY"; fi
+else cp "$REPO/studio.example/env.example" "$STUDIO/.env"; chmod 600 "$STUDIO/.env"; ok "created .env (mode 600) — optional keys only"; fi
 mkdir -p "$STUDIO/videos" "$STUDIO/voice" "$STUDIO/logs"
 
 echo; echo "Optional engines"
@@ -82,7 +82,8 @@ note "Manim (maths/algorithm beats): python3 -m venv ~/.venvs/manim && ~/.venvs/
 cat <<EOF
 
 Next steps
-  1. Put your HeyGen API key in $STUDIO/.env
+  1. Accept the voice model's terms on https://huggingface.co/kyutai/pocket-tts, run  hf auth login,
+     then:  STUDIO_ROOT="$STUDIO" "$SKILL/scripts/install_voice.sh" pocket   (indicf5 for Hindi)
   2. Record a voice sample to $STUDIO/voice/sample.wav (docs/voice.md)
   3. cd "$STUDIO" && claude, then run:  /video-studio setup
   4. Edit brand/brand-core.md, brand/pillars.md and brand/products.json

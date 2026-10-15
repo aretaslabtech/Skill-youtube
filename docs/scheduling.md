@@ -32,7 +32,7 @@ as a normal user with nothing else sensitive in reach.
 | Variable | Default | Meaning |
 |---|---|---|
 | `STUDIO_ROOT` | current directory | Your studio |
-| `STUDIO_ENV_FILE` | `$STUDIO_ROOT/.env` | Where `HEYGEN_API_KEY` (and Telegram) live |
+| `STUDIO_ENV_FILE` | `$STUDIO_ROOT/.env` | Where optional keys (Telegram, `HF_TOKEN`) live |
 | `STUDIO_TRACK` | `default_track` | The track for `daily` |
 | `STUDIO_LIMIT` | `3h` / `7h` | Any `timeout` duration (`75m`, `2h`) |
 | `STUDIO_BUDGET` | `25` / `60` | USD cap per run |
