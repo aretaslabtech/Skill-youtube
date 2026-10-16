@@ -65,6 +65,7 @@ import fill_check  # noqa: E402
 import studio_config as sc  # noqa: E402
 import telegram  # noqa: E402
 from ledger import LOOK_FIELDS, delivery_date, load, save  # noqa: E402
+from mix_check import check as mix_check  # noqa: E402
 from voice_build import check as voice_check  # noqa: E402
 
 esc = telegram.esc
@@ -274,6 +275,8 @@ def main(argv: list[str]) -> int:
             errs.append("research/second-opinion/meta.json not found: run scripts/second_opinion.py (rubric A22)")
     # Every voice line must come from voice_build.py and start and end on silence (B17).
     errs += voice_check(vdir)
+    # The music bed sits well under the voice (owner, 16 Oct 2026: "the voiceover is still low").
+    errs += mix_check(vdir)
     video = vdir / post.get("render", "")
     if not video.is_file():
         errs.append(f"render not found: {video}")

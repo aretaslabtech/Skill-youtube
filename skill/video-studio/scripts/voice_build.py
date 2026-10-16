@@ -8,6 +8,8 @@ voice_build.py — voice a script one sentence at a time, and never cut into a w
 Voices every sentence of `hf/SCRIPT.md` (indented lines) separately with an open-source voice
 clone of your reference recording (config.json "voice"; `--voice hi` picks voice.variants.hi),
 trims each take to its **audible** speech, and joins a line's sentences with a `--gap` breath.
+Each line is then compressed and set to one loudness (voice.lufs, default -16 LUFS), so the
+voice sits clearly above the music bed (mix_check.py holds the bed under it).
 Writes `hf/assets/voice/NN.wav` + `NN.words.json`, one per script line (the shape HyperFrames'
 `audio.mjs sync-durations` reads). Takes are cached in `research/voice-takes/`, so a rerun
 voices only sentences that changed.
@@ -118,6 +120,29 @@ def edges_quiet(path: Path) -> bool:
     return all(v <= thr for v in env[:2] + env[-2:])
 
 
+def lufs(path: Path) -> float:
+    """Integrated loudness (EBU R128) of a file, in LUFS."""
+    r = subprocess.run(["ffmpeg", "-hide_banner", "-nostats", "-i", str(path), "-af", "ebur128", "-f", "null", "-"],
+                       capture_output=True, text=True)
+    m = re.findall(r"I:\s+(-?[\d.]+) LUFS", r.stderr)
+    return float(m[-1]) if m else -70.0
+
+
+def level(src: Path, dst: Path, v: dict) -> None:
+    """Make the voice present and even (owner, 16 Oct 2026: "the voiceover is still low"):
+    a gentle compressor tames the peaks, then a static gain brings every line to the same
+    loudness (voice.lufs, default -16), under a -1.5 dBFS limiter. Static gain, not loudnorm:
+    loudnorm on a 5 s line pumps."""
+    comp = "acompressor=threshold=-24dB:ratio=3:attack=5:release=120:knee=4"
+    squeezed = src.with_suffix(".comp.wav")
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(src), "-af", comp, "-ar", str(SR), "-ac", "1",
+                    str(squeezed)], check=True)
+    gain = max(-12.0, min(18.0, float(v.get("lufs", -16)) - lufs(squeezed)))
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(squeezed), "-af",
+                    f"volume={gain:.2f}dB,alimiter=limit=0.84:level=disabled",
+                    "-ar", str(SR), "-ac", "1", str(dst)], check=True)
+
+
 def stem_for(i: int, k: int, sentence: str, say: str, v: dict, speed: float) -> str:
     """Cache name of a take: position, a readable slug, and a hash of everything that shapes the
     audio, so an edited sentence or a new reference is voiced again and nothing else is."""
@@ -198,7 +223,8 @@ def build(video: Path, v: dict, speed: float, gap: float) -> int:
             labels.append(f"[{n}:a]")
         subprocess.run(["ffmpeg", "-v", "error", "-y", *inputs, "-filter_complex",
                         f"{''.join(labels)}concat=n={len(parts)}:v=0:a=1",
-                        "-ar", str(SR), "-ac", "1", str(out / f"{i:02d}.wav")], check=True)
+                        "-ar", str(SR), "-ac", "1", str(takes / f"line{i:02d}.raw.wav")], check=True)
+        level(takes / f"line{i:02d}.raw.wav", out / f"{i:02d}.wav", v)
         (out / f"{i:02d}.words.json").write_text(json.dumps(words, ensure_ascii=False, indent=1))
         print(f"{i:02d} {len(words)} words, {t:.2f}s voiced")
     if bad:

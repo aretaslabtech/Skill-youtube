@@ -51,7 +51,10 @@ DEFAULTS = {
     # this one, picked with `voice_build.py --voice <key>`, e.g. {"hi": {"engine": "indicf5", ...}}.
     "voice": {"engine": "pocket", "reference": "voice/sample.wav", "reference_text": "",
               "language": "english_2026-04", "asr_language": "en", "python": "",
-              "speed": 0.82, "gap": 0.35, "best_of": 1, "max_pause": 0.6, "variants": {}},
+              "speed": 0.82, "gap": 0.35, "best_of": 1, "max_pause": 0.6, "lufs": -16, "variants": {}},
+    # The mix (mix_check.py, a deliver.py gate): the music bed's effective loudness (its file's
+    # LUFS + its data-volume) must sit at least voice_over_music_db under the voice lines.
+    "mix": {"voice_over_music_db": 20},
     # Silence between sentences (rubric A8/B16). gap_check.py fails any gap over max_gap, except
     # one payoff beat up to payoff_gap. A channel that wants a pause after every sentence sets
     # max_gap ~1.3 and voice.gap ~0.8 (with a matching gap between lines in the composition).

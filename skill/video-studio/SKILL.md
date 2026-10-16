@@ -354,6 +354,9 @@ must be resumable from its folder.
     vocabulary and caption skin, then re-check once.
 
 ### 6. Render
+First `python3 $SKILL_DIR/scripts/mix_check.py videos/<dir> --fix`: it sets the music bed's
+volume so it sits ≥ 20 dB (config `mix.voice_over_music_db`) under the voice, whatever the
+bed file's own loudness; deliver.py refuses a louder bed. Never raise the bed back by hand.
 `npx hyperframes render --quality high --output renders/video.mp4` inside `hf/`. If host
 ffmpeg is missing, add `--docker`.
 - **Loudness.** The raw render sits around −20 dB mean, quieter than Shorts and Reels.
