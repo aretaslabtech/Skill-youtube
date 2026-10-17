@@ -4,11 +4,12 @@
 
 **A Claude Code skill that researches, scripts, voices and renders a finished explainer video
 every day — with [HyperFrames](https://github.com/heygen-com/hyperframes), an open-source
-clone of your own voice that runs offline (English and Hindi), and 38 pass/fail gates that
+clone of your own voice that runs offline (English and Hindi), and 40 pass/fail gates that
 stop AI slop before it ships.**
 
-No camera. No avatar. No editing timeline. No voice subscription. You review an MP4 in the
-morning and post it.
+No camera. No avatar. No editing timeline. No voice subscription. The only thing you pay for
+is Claude Code. You review an MP4 in the morning and post it, or hand its `POST.json` to your
+own uploader and let cron do it.
 
 <a href="https://github.com/cybiqon-ai/faceless-video-studio/releases/download/v1.0.1/demo.mp4"><img src="docs/assets/demo.gif" width="800" alt="A 15-second highlight: a real blog-explainer video the studio made, a wall of contact sheets from 14 videos in 9 different looks, seven hand-drawn animation styles, and the repo URL."></a>
 
@@ -21,7 +22,7 @@ morning and post it.
 ![Node 22+](https://img.shields.io/badge/node-22%2B-339933)
 
 [How it works](#how-it-works) · [Quickstart](#quickstart) · [What it costs](#what-it-costs) ·
-[The gates](#the-38-gates) · [Scheduling](docs/scheduling.md) · [The full story](https://cybiqon.in/lab/hyperframes-heygen-ai-video-pipeline)
+[The gates](#the-40-gates) · [Plug it in](#plug-it-into-your-pipeline) · [Scheduling](docs/scheduling.md) · [The full story](https://cybiqon.in/lab/open-source-ai-video-studio-claude-code)
 
 </div>
 
@@ -29,11 +30,15 @@ morning and post it.
 
 ## What it makes
 
-Real videos made by this studio, narrated by a clone of the founder's voice (HeyGen at the
-time; since 15 Oct 2026 the studio voices everything with the open-source engines below):
+Real videos made by this studio, narrated by a clone of the founder's voice. The first three
+use the open-source Pocket TTS clone the studio runs today, made offline on a 4-core CPU; the
+last three used the HeyGen clone it had before 15 Oct 2026:
 
 | Video | Format | What it shows |
 |---|---|---|
+| [In this puzzle game, light can teleport. Stones can't.](https://youtu.be/PHj-BNQHcuE) | 47 s product Short | Real gameplay driven by the game's own solver: the mechanic shown, then solved |
+| [Coding agents ace benchmarks. On 95 realistic delivery jobs, the best resolved 14](https://youtu.be/1j_GwfF1mSY) | 149 s explainer | A research paper explained from its own pages, split-screen |
+| [A 3B-active model tied Kimi K3 on Kaggle](https://youtu.be/NtXKZbDEovs) | 148 s explainer | What actually did the work, from the source write-up |
 | [Google gave its newest AI real jobs](https://youtu.be/Tuv_wF5Yhw4) | 117 s explainer | Real source-page footage with highlights drawn on the exact sentences |
 | [Jev, explained](https://youtu.be/el5VAfAQASM) | 118 s explainer | A blog post turned into a teaching video |
 | [How OpenAI trained agents to run enterprise software](https://youtu.be/sXXElHX-7SU) | explainer | News explained for a beginner |
@@ -47,9 +52,9 @@ plus the vendored [animate](https://github.com/cth9191/animate) styles and optio
 
 ```mermaid
 flowchart LR
-    A[1 Pick<br/>ledger + rotation] --> B[2 Research<br/>sources.md, code that ran]
+    A[1 Pick<br/>rotation + problem scout] --> B[2 Research<br/>sources.md, code that ran]
     B --> C[3 Plan<br/>3 scored hooks, script, new look]
-    C --> D{4 Gate A<br/>lint + 3 reviewer agents}
+    C --> D{4 Gate A<br/>lint, a 2nd model,<br/>3 reviewer agents}
     D -->|pass| E[5 Voice<br/>local voice clone, one take per sentence]
     D -->|fail| C
     E --> F[6 Frames<br/>one sub-agent per beat]
@@ -59,28 +64,39 @@ flowchart LR
 ```
 
 1. **Pick.** `ledger.py today` returns the day's pillar and format from your rotation, and
-   refuses any topic close to a video you have ever made.
+   refuses any topic close to a video you have ever made. For teaching videos, a
+   [problem scout](skill/video-studio/references/problem-scout.md) agent first searches
+   Stack Overflow, GitHub issues, Hacker News, Google's "People also ask" and developer forums
+   (≥ 12 searches, ≥ 4 kinds of source) for problems developers are actually asking about, and
+   the video has to start from one that scores ≥ 9/15 with ≥ 2 links as proof (A21).
 2. **Research.** Every fact gets a source URL. Teaching videos run their code first, and only
    the real output goes on screen.
 3. **Plan.** Three hooks from a library of 20 real-Short templates, scored out of 12; a
    35–60 s script for developers who already code, with an artifact worth saving; and a
    look chosen from the least recently used families.
-4. **Gate A — before any time is spent on voice.** A linter, then three fresh sub-agents: a
-   mid-level developer who must name something new it learned (with a separate judge), an
-   expert who flags anything false, and a cold viewer who sees only the first three seconds.
+4. **Gate A — before any time is spent on voice.** A linter; then, optionally, a
+   **second opinion from a different model family** via OpenRouter, which reviews the script
+   and writes its own version so the agent can adopt what's better (A22, about $0.03 a script);
+   then three fresh sub-agents: a mid-level developer who must name something new it learned
+   (with a separate judge), an expert who flags anything false, and a cold viewer who sees only
+   the first three seconds.
 5. **Voice.** One take per sentence from an open-source clone of your voice, made on your own
    CPU: [Pocket TTS](https://github.com/kyutai-labs/pocket-tts) for English,
    [IndicF5](https://github.com/AI4Bharat/IndicF5) for Hindi and 10 other Indian languages.
    Each take is timed with faster-whisper and trimmed on the real sound (never on timestamps,
-   which run late and cut words), with a hash manifest.
+   which run late and cut words), levelled to −16 LUFS, and recorded in a hash manifest.
 6. **Frames.** One sub-agent per beat builds HTML + GSAP in parallel; HyperFrames assembles.
 7. **Gate B.** `hyperframes check`, snapshots the agent actually looks at, and a judge that
    reviews frames decoded from the final MP4.
 8. **Deliver.** `deliver.py` refuses the video unless every review line is present, every
-   voice line is clean and a Short fills its frame; then it sends the MP4 and a post kit
-   (titles, descriptions, hashtags, tracked links, sources) to Telegram — or saves it locally.
+   voice line is clean, the music sits ≥ 20 dB under the voice (`mix_check.py`) and a Short
+   fills its frame; then it sends the MP4 and a post kit (titles, descriptions, hashtags,
+   tracked links, sources) to Telegram — or saves it locally — and prints one
+   `Rendered: <slug> …` line a scheduler can check.
 
-The studio **never posts**. A person watches it, posts it, and runs `ledger.py mark-posted`.
+The studio itself **never posts**: you decide what goes out under your name. Watch it and post
+it by hand, or [plug in your own uploader](#plug-it-into-your-pipeline) — we post ours to
+YouTube and X from cron.
 
 ## Quickstart
 
@@ -188,16 +204,22 @@ From the studio's own first four days (October 2026), where it made 12 finished 
 | Claude Code run, a 7-minute long-form + its companion Short | ~$26 |
 | Rendering | your own CPU: 2.5–19.5 min per video on 4 cores |
 
-All of the spend is the agent. `bin/run.sh` caps every run with
+The six runs whose cost we logged between 12 and 17 Oct 2026 (Shorts and 2.5-minute
+explainers) cost **$11–20.50** each. Optional
+extras cost cents: the A22 second opinion is about **$0.03** a script on OpenRouter, and a
+`HEYGEN_API_KEY`, if you set one, is used only by HyperFrames' own music and sound-effect
+search — never for the voice.
+
+All of the required spend is the agent. `bin/run.sh` caps every run with
 `--max-budget-usd` ($25 for a Short, $60 for a long-form by default), and `POST.json` has a
 `cost_usd` field: fill it from day one. The full breakdown is in the
-[write-up](https://cybiqon.in/lab/hyperframes-heygen-ai-video-pipeline).
+[write-up](https://cybiqon.in/lab/open-source-ai-video-studio-claude-code).
 
-## The 38 gates
+## The 40 gates
 
 Most of them exist because a real video failed in exactly that way. `deliver.py` refuses a
-video unless the four review pass lines are in its plan, and it checks the voice (B17) and
-the frame fill (B18) itself:
+video unless the review pass lines are in its plan (A16, A18–A21, and A22 when a second-opinion
+model is set), and it checks the voice (B17), the frame fill (B18) and the music level itself:
 
 | Gate | Rule | The failure behind it |
 |---|---|---|
@@ -207,10 +229,40 @@ the frame fill (B18) itself:
 | **A2, A20** | Sentence 1 names the concrete subject plus a tension, proven on screen by 1.5 s | "The hook doesn't make sense"; then 67 % swiping away in 3 s |
 | **B11, B13** | Footage fills the frame; no two videos look like one template | "Quite similar… it will soon be noticed as AI generated" |
 | **B16, B17** | No silence over the configured pause (0.7 s default); every voice line starts and ends on silence | Gaps of 3–5 s; a third of sentences losing their first word |
+| **A21** | A teaching video starts from a problem developers are asking about: ≥ 2 public links, ≥ 9/15 | A true, well-made Short about a problem nobody had: "no point making a video on a problem which no one is facing" |
+| **A22** | A model from another family reviews the script and writes its own version | Scripts that passed every Claude-judged gate and still taught nothing |
 | **B18** | A Short fills its frame to the bottom edge | An empty bottom 40% on every Short |
+| `mix_check` | Voice levelled to −16 LUFS; music ≥ 20 dB under it | "The voiceover is still low" |
 
-All 38, with what each checks: [docs/gates.md](docs/gates.md). The rubric the agent works
+All 40, with what each checks: [docs/gates.md](docs/gates.md). The rubric the agent works
 from: [`skill/video-studio/references/quality-rubric.md`](skill/video-studio/references/quality-rubric.md).
+
+## Plug it into your pipeline
+
+The studio is built to be one stage in your own system, not a closed app.
+
+- **One command to run it.** `bin/run.sh [daily|promo|blog|plan <topic>|…]` runs
+  `claude -p "/video-studio <mode>"` headless with a lock, a time limit, a spend cap and a deny
+  list, and alerts you when no video came out. Exit 0 with no `Rendered:` line counts as a
+  failure. Several tracks (we run blog explainers at 12:30, a product Short at 15:15 and a
+  teaching video at 23:00) share one machine through the lock.
+- **Four plugins**, each a small Python file named in `config.json`, connect it to your
+  systems without forking: `planner` (a content calendar chooses topics and gets marked
+  "made"), `notify` (Telegram by default; Slack, email or your own bot),
+  `links` (tracked links to your products) and `archive` (keep final renders in cloud
+  storage). See [configuration.md](docs/configuration.md#plugins).
+- **One file to hand on.** Every delivered video has `videos/<date>-<slug>/POST.json`,
+  validated by `deliver.py`: three titles, a YouTube description, a caption without URLs,
+  hashtags, a pinned comment, `thumbnail_at`, sources and `cost_usd`. The MP4 is
+  `hf/renders/video.mp4` beside it.
+
+**To post automatically**, run your uploader after `bin/run.sh` prints its `Rendered:` line:
+read `POST.json`, upload the MP4, and keep a ledger keyed by slug so a retry never posts
+twice. Ours schedules the product Short on YouTube (Data API v3, private with
+`status.publishAt`, one playlist per product), posts the same MP4 to X at the same time
+(API v2 chunked upload; no link in the text, because X charges $0.20 instead of $0.015 for a
+post with a URL), and checks 30 minutes later that it really went public. How it's wired, with
+the schedule and costs: [the write-up](https://cybiqon.in/lab/open-source-ai-video-studio-claude-code).
 
 ## What's in the box
 
@@ -219,7 +271,7 @@ skill/video-studio/
   SKILL.md                 the skill: modes, pipeline, rules
   references/              the rubric, 22 looks, pillars, prompt library, 9 craft notes
   scripts/                 ledger, deliver, voice_build + tts_engine + install_voice,
-                           script_lint, gap/fill checks, tests
+                           script_lint, second_opinion, gap/fill/mix checks, tests
   templates/               PLAN.md and BRIEF.md
   assets/                  caption skins, fonts (OFL), placeholder brand
   vendor/animate/          cth9191/animate (MIT), a second engine with 7 styles
@@ -236,7 +288,8 @@ docs/                      setup, configuration, voice, scheduling, gates, troub
 - [Configuration: tracks, rotation, plugins](docs/configuration.md)
 - [Cloning your voice, English and Hindi](docs/voice.md)
 - [Running it on a schedule](docs/scheduling.md)
-- [All 38 gates](docs/gates.md)
+- [All 40 gates](docs/gates.md)
+- [The problem scout: picking topics people actually have](skill/video-studio/references/problem-scout.md)
 - [Troubleshooting: every trap we hit](docs/troubleshooting.md)
 
 ## FAQ
@@ -255,9 +308,20 @@ second voice under `voice.variants` in `config.json` and pick it with
 `scripts/tts_engine.py` and an install recipe to `install_voice.sh`. Keep the
 trim-on-real-sound logic and the manifest in `voice_build.py`: the B17 gate depends on them.
 
-**Does it post for me?** No, on purpose. It delivers a video and a post kit. YouTube's API
-keeps uploads private until an app passes Google's audit, and a person should watch every
-video before it goes out.
+**Does it post for me?** Not by itself, on purpose: it delivers a video, a post kit and a
+machine-readable `POST.json`, and a person should decide what goes out under their name. If
+you want posting automated, a small uploader that reads `POST.json` after each run is all it
+takes — see [Plug it into your pipeline](#plug-it-into-your-pipeline). We post to YouTube and X
+that way; Instagram and Facebook we still post by hand.
+
+**How does it choose topics?** From your rotation (or your content calendar, through the
+`planner` plugin). For teaching videos, a problem-scout agent then finds problems developers
+are visibly asking about this quarter, and the studio refuses to deliver a video whose problem
+isn't backed by at least two public links (gate A21).
+
+**Does it need HeyGen?** No. The voice has been Pocket TTS and IndicF5, offline, since
+15 Oct 2026. HyperFrames, the renderer, is an open-source project from HeyGen that needs no
+HeyGen account; an optional `HEYGEN_API_KEY` only enables its music and sound-effect search.
 
 **How long does a run take?** `bin/run.sh` caps a Short at 3 hours and a long-form at 7
 (both configurable); most of that time goes on research and the review agents, not
@@ -268,8 +332,10 @@ video you have made, and `look-check` refuses a look family used in the last six
 
 ## Credits
 
-Built by [Cybiqon](https://cybiqon.in) and run daily on our own channels. The story of how
-it was built, what broke and what it cost:
+Built by [Cybiqon](https://cybiqon.in) and run daily on our own channels. How it runs today —
+offline voices, three tracks a day, auto-posting to YouTube and X, and what it costs:
+[*We deleted the voice bill. Now the studio posts its own videos.*](https://cybiqon.in/lab/open-source-ai-video-studio-claude-code)
+How it was built, what broke first and what it cost then:
 [*Twelve videos in four days. Nobody picked up a camera.*](https://cybiqon.in/lab/hyperframes-heygen-ai-video-pipeline)
 
 Stands on [HyperFrames](https://github.com/heygen-com/hyperframes) (Apache 2.0),

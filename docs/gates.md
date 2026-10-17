@@ -1,4 +1,4 @@
-# The 38 gates
+# The 40 gates
 
 Every video passes two gates. **Gate A** checks the plan, before any money is spent on voice.
 **Gate B** checks the build, before and after rendering. Each line is pass or fail; there is
@@ -10,9 +10,10 @@ The agent works from the full text in
 [`skill/video-studio/references/quality-rubric.md`](../skill/video-studio/references/quality-rubric.md),
 which has the exact thresholds and the reviewer prompts. This page is the map.
 
-**Checked by `deliver.py`** (🔒): it refuses the video without them. For A16, A18, A19 and
-A20 it requires the pass line in `PLAN.md` — which the skill says to write only on the
-reviewer's or linter's PASS. B17 and B18 it measures itself, from the files.
+**Checked by `deliver.py`** (🔒): it refuses the video without them. For A16, A18, A19,
+A20 and A21 it requires the pass line in `PLAN.md` — which the skill says to write only on the
+reviewer's, linter's or scout's PASS — and for A22 the second opinion's `meta.json`. B17 and
+B18 it measures itself, from the files, and so is the music level (`mix_check.py`).
 
 ## Gate A — the plan
 
@@ -39,6 +40,7 @@ reviewer's or linter's PASS. B17 and B18 it measures itself, from the files.
 | A19 🔒 | Expert review: a fresh agent flags anything false or misleading, each with a fix as short and true | ✔ |
 | A20 🔒 | Cold viewer: a fresh agent playing a developer scrolling Reels sees only the first 3 s and must name the subject, the tension and what it expects to learn, list every term it would look up (must be none) and name the problem from its own work | ✔ |
 | A21 🔒 | Real problem (teaching pillars): a fresh scout agent ranks problems developers are asking about, each backed by ≥ 2 public links; the video's problem scores ≥ 9/15 (`references/problem-scout.md`) | ✔ |
+| A22 🔒 | Second opinion (when `review.second_opinion_model` is set): a model from a different family reviews the script via OpenRouter and writes its own version from the same facts; true P1 fixes are adopted and the outcome is recorded as `A22: second opinion (<model>) adopted N, rejected M` (`scripts/second_opinion.py`) | ✔ |
 
 ## Gate B — the build
 
@@ -63,8 +65,10 @@ reviewer's or linter's PASS. B17 and B18 it measures itself, from the files.
 | B17 🔒 | Every word is heard: every voice line was made by `voice_build.py` and starts and ends on silence | ✔ |
 | B18 🔒 | A 9:16 Short fills its frame down to the bottom edge — `fill_check.py` | ✔ |
 
-**Totals:** 38 gates, 33 hard (A5 and A17 only for teaching and long-form videos), 6
-checked by `deliver.py` (2 of them measured from the files).
+**Totals:** 40 gates, 35 hard (A5, A17 and A21 only for teaching and long-form videos; A22
+only when a second-opinion model is set), 8 checked by `deliver.py` (2 of them measured from
+the files), plus the music-level check (`mix_check.py`: voice levelled to −16 LUFS, music
+≥ 20 dB under it), which `deliver.py` also enforces.
 
 ## Where the gates came from
 
@@ -81,6 +85,8 @@ Almost none were in the first version. Each was added the day a video failed tha
 | A rendered first frame that differed from every browser snapshot | B14 on the final file |
 | 3–5 s gaps from padded frames | B16 |
 | A third of all sentences losing their first ~0.2 s | B17 |
+| Scripts that passed every Claude-judged gate and still taught nothing | A22 (a second model) |
+| "The voiceover is still low": a music bed only 13 dB under the voice | `mix_check.py`, voice levelling |
 | The bottom 40% of every Short left empty | B18 |
 
 **The lesson:** gates written in prose get bent under pressure; gates checked in code

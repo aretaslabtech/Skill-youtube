@@ -1,6 +1,27 @@
 # Changelog
 
-## Unreleased
+## 1.1.0 — 2026-10-17
+
+- **Problem scout and gate A21.** Teaching videos start from a problem developers are asking
+  about in public: a fresh scout agent does ≥ 12 searches across ≥ 4 kinds of source (Stack
+  Overflow, GitHub issues, Hacker News, Google "People also ask", forums, Reddit), quotes the
+  askers and scores each problem 0–3 on Frequency, Recency, Everyday, Showable and Provable.
+  The video's problem needs ≥ 9/15 and ≥ 2 links; rows persist in `research/problem-bank.json`.
+  `deliver.py` refuses a teaching video without `A21: PASS (real problem)` and
+  `research/problems.md`. Hooks go problem before tool.
+- **Second opinion, gate A22.** `scripts/second_opinion.py` sends the script to a model from a
+  different family through OpenRouter (`review.second_opinion_model`, `OPENROUTER_API_KEY`),
+  which reviews it and writes its own version from the same facts. The outcome is recorded in
+  PLAN §10; `deliver.py` requires `research/second-opinion/meta.json` when it is configured.
+  About $0.03 a script. Off by default.
+- **Voice on top.** Every voice line is levelled to `voice.lufs` (−16 by default) with a
+  compressor, static gain and a −1.5 dBFS limiter. `scripts/mix_check.py` keeps every music bed
+  ≥ `mix.voice_over_music_db` (20) dB under the voice (`--fix` rewrites the bed volume), and
+  `deliver.py` enforces it.
+- 40 gates now (A1–A22, B1–B18), 35 hard, 8 checked by `deliver.py`, plus the mix check.
+- README: a "Plug it into your pipeline" section (the runner, the four plugins, `POST.json` as
+  the hand-off to your own uploader), newer example videos voiced by the open-source clone, and
+  the second write-up.
 
 - **Open-source voices; HeyGen voice cloning removed.** The voice is now a clone of your own
   recording made offline on CPU: [Pocket TTS](https://github.com/kyutai-labs/pocket-tts) for

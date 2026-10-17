@@ -4,7 +4,7 @@ description: >-
   A faceless video studio. It researches, plans, designs and renders one finished video a
   day with HyperFrames and an open-source clone of your voice (Pocket TTS for English,
   IndicF5 for Hindi), offline on CPU: 9:16 Shorts/Reels on most days and 16:9
-  long-form deep dives on the days config.json says, each checked by 38 pass/fail quality
+  long-form deep dives on the days config.json says, each checked by 40 pass/fail quality
   gates before it is delivered as an MP4 plus a post kit (Telegram, or saved locally).
   Pillars: AI terms, Python, build-a-thing, tech news, product and service promos, blog
   explainers and long-form explainers. Use when asked to make today's video, to plan or
