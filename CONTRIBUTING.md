@@ -32,4 +32,4 @@ Both run in CI on every push.
 ## Reporting a bad video
 
 Open an issue with the pillar, the look family, what was wrong (a frame grab helps), and the
-gate you think should have caught it. That's how most of the 43 gates were born.
+gate you think should have caught it. That's how most of the 44 gates were born.

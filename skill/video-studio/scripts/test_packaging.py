@@ -71,5 +71,18 @@ class Thumbs(unittest.TestCase):
         self.assertTrue(any("landscape" in e for e in pk.thumb_errors(self.d, p)))
 
 
+class Remaster(unittest.TestCase):
+    def test_clips_are_sorted_into_voice_bed_and_sfx(self):
+        import remaster
+        html = ('<audio id="v01" src="assets/voice/01.wav" data-start="0.5" data-duration="2" data-volume="1">'
+                '<audio id="bed" src="assets/music/bed.mp3" data-start="0" data-volume="0.08">'
+                '<audio id="s" src="assets/sfx/pop.mp3" data-start="1.2" data-duration="0.7" data-volume="0.28">')
+        c = remaster.clips(html)
+        self.assertEqual([x["kind"] for x in c], ["voice", "bed", "sfx"])
+        self.assertEqual(c[0]["start"], 0.5)
+        self.assertIsNone(c[1]["dur"])
+        self.assertAlmostEqual(c[2]["vol"], 0.28)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -15,6 +15,7 @@ It refuses (prints `Failed: …`, exits 1) unless:
   - the published text passes post_text.py: ≤ 5 hashtags, none generic, a caption that opens
     on a sentence (A23). Invisible characters, em dashes and curly quotes are fixed and written
     back to POST.json, which the publishers read.
+  - the final file was remastered voice-first (remaster.py, B19): -12 LUFS or louder;
   - the packaging passes packaging.py (A24): titles[0] ≤ 55 characters with no parenthetical,
     "explained" or chained clauses, and 3 designed thumbnails with ≤ 4 words each.
 
@@ -73,6 +74,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import fill_check  # noqa: E402
 import packaging  # noqa: E402
+import remaster  # noqa: E402
 import post_text  # noqa: E402
 import studio_config as sc  # noqa: E402
 import telegram  # noqa: E402
@@ -310,6 +312,8 @@ def main(argv: list[str]) -> int:
         errs.append(f"render not found: {video}")
     else:
         errs += fill_errors(video, post)
+        if video.stat().st_size > 10_000:   # a real render (tests use placeholder files)
+            errs += remaster.check(video)
     if errs:
         print("Failed: " + "; ".join(errs))
         return 1

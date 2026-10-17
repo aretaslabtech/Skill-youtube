@@ -140,6 +140,7 @@ beat midpoint>`, then **Read** `snapshots/contact-sheet.jpg` and every frame PNG
 | B3 | **Readable on a phone:** body ≥ 32 px, headlines ≥ 72 px, code ≥ 30 px with ≤ 22 visible chars per line on 9:16 | ✔ |
 | B4 | **One focal point per frame.** The accent (the brand-core accent, default `#00D890`, in every look) appears on at most one element per frame, and at least once in the video | ✔ |
 | B5 | **No slop tells:** gradient text, neon cyan or purple, glow stacks, centred card grids, a pure #000 or #fff ground, banned fonts (Inter, Roboto, Poppins, Montserrat-as-display…), stock people, emoji as decoration | ✔ |
+| B19 | **Voice first, at Reels level** (`scripts/remaster.py`). The soundtrack is rebuilt from the stems so the voice comes up and the music doesn't; the final file is −12 LUFS or louder (`deliver.py` refuses a plain −14 LUFS render). Added after the owner heard our voice as low next to other people's posts: every render was at −14 LUFS while Reels sit at −9 to −11, and turning the whole mix up raised the music 9.5 dB between sentences | ✔ |
 | B6 | **Frame 1 works as a thumbnail and cover:** readable title-like text plus a striking visual at t=0 | ✔ |
 | B7 | **Motion explains:** at each midpoint, something meaningful is mid-change (a pointer moving, a cell filling, a curve drawing), not a static slide with a drifting background | |
 | B8 | **Captions:** word-synced, 2–4 words at a time (the engine groups by speaking speed), inside the caption band (y 1440–1600, x 64–850, set by the caption skin), with the key word in `voltage` | ✔ |

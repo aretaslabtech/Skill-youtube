@@ -4,7 +4,7 @@ description: >-
   A faceless video studio. It researches, plans, designs and renders one finished video a
   day with HyperFrames and an open-source clone of your voice (Pocket TTS for English,
   IndicF5 for Hindi), offline on CPU: 9:16 Shorts/Reels on most days and 16:9
-  long-form deep dives on the days config.json says, each checked by 43 pass/fail quality
+  long-form deep dives on the days config.json says, each checked by 44 pass/fail quality
   gates before it is delivered as an MP4 plus a post kit (Telegram, or saved locally).
   Pillars: AI terms, Python, build-a-thing, tech news, product and service promos, blog
   explainers and long-form explainers. Use when asked to make today's video, to plan or
@@ -361,9 +361,12 @@ volume so it sits ≥ 20 dB (config `mix.voice_over_music_db`) under the voice, 
 bed file's own loudness; deliver.py refuses a louder bed. Never raise the bed back by hand.
 `npx hyperframes render --quality high --output renders/video.mp4` inside `hf/`. If host
 ffmpeg is missing, add `--docker`.
-- **Loudness.** The raw render sits around −20 dB mean, quieter than Shorts and Reels.
-  Normalise to −14 LUFS without touching the video:
-  `cd renders && mv video.mp4 video-raw.mp4 && ffmpeg -v error -i video-raw.mp4 -c:v copy -af loudnorm=I=-14:TP=-1.5:LRA=11 -ar 48000 -c:a aac -b:a 192k -movflags +faststart video.mp4`
+- **Loudness, voice first (B19).** Run `python3 $SKILL_DIR/scripts/remaster.py videos/<dir>`.
+  It rebuilds the soundtrack from the composition's own stems: the voice gets a presence lift
+  and compression and comes up, the music and effects stay where they were, and the master
+  lands near −10.5 LUFS (speech ≈ −9.3), the level of other people's Reels. The video stream is
+  copied; the raw render is kept as `video-raw.mp4`. Never turn the whole mix up instead: that
+  raised the music 9.5 dB between sentences for 3.5 dB of voice (owner, 17 Oct 2026).
 - Shorts: 1080×1920, 30 fps.
 - Long-form: 1920×1080, 30 fps.
 - **Long-form build notes:**

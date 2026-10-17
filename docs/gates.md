@@ -1,4 +1,4 @@
-# The 43 gates
+# The 44 gates
 
 Every video passes two gates. **Gate A** checks the plan, before any money is spent on voice.
 **Gate B** checks the build, before and after rendering. Each line is pass or fail; there is
@@ -12,8 +12,8 @@ which has the exact thresholds and the reviewer prompts. This page is the map.
 
 **Checked by `deliver.py`** (🔒): it refuses the video without them. For A16, A18, A19,
 A20 and A21 it requires the pass line in `PLAN.md` — which the skill says to write only on the
-reviewer's, linter's or scout's PASS — and for A22 the second opinion's `meta.json`. A23, A24, B17 and
-B18 it measures itself, from the files, and so is the music level (`mix_check.py`).
+reviewer's, linter's or scout's PASS — and for A22 the second opinion's `meta.json`. A23, A24, B17,
+B18 and B19 it measures itself, from the files, and so is the music level (`mix_check.py`).
 
 ## Gate A — the plan
 
@@ -67,9 +67,10 @@ B18 it measures itself, from the files, and so is the music level (`mix_check.py
 | B16 | No silence over 0.7 s between voice lines (one ≤ 1.2 s payoff beat allowed) — `gap_check.py` | ✔ |
 | B17 🔒 | Every word is heard: every voice line was made by `voice_build.py` and starts and ends on silence | ✔ |
 | B18 🔒 | A 9:16 Short fills its frame down to the bottom edge — `fill_check.py` | ✔ |
+| B19 🔒 | Voice first, at Reels level: the soundtrack is rebuilt from the stems so the voice comes up and the music doesn't; the file is −12 LUFS or louder — `remaster.py` | ✔ |
 
-**Totals:** 43 gates, 38 hard (A5, A17 and A21 only for teaching and long-form videos; A22
-only when a second-opinion model is set), 10 checked by `deliver.py` (4 of them measured from
+**Totals:** 44 gates, 39 hard (A5, A17 and A21 only for teaching and long-form videos; A22
+only when a second-opinion model is set), 11 checked by `deliver.py` (5 of them measured from
 the files), plus the music-level check (`mix_check.py`: voice levelled to −16 LUFS, music
 ≥ 20 dB under it), which `deliver.py` also enforces.
 
@@ -94,6 +95,7 @@ Almost none were in the first version. Each was added the day a video failed tha
 | Viewers leaving at 10–18 s, before a fix that arrived at 30–40 s | A25 |
 | "The voiceover is still low": a music bed only 13 dB under the voice | `mix_check.py`, voice levelling |
 | The bottom 40% of every Short left empty | B18 |
+| "The voice is low compared to other people's posts": every render at −14 LUFS, Reels at −9 to −11 | B19 |
 
 **The lesson:** gates written in prose get bent under pressure; gates checked in code
 don't. When you catch a failure by eye, turn it into a line of code that refuses the next

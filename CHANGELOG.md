@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- **Voice-first remaster, gate B19.** `scripts/remaster.py` rebuilds the soundtrack from the
+  composition's stems: the voice gets a presence lift and compression and comes up about 4.5 dB,
+  the music and effects stay where they were, and the master lands near −10.5 LUFS (speech
+  ≈ −9.3), the level of other people's Reels. `deliver.py` refuses a file quieter than −12 LUFS.
+  Replaces the −14 LUFS loudnorm step, which sounded quiet next to other posts.
 - **Packaging gate A24.** `scripts/packaging.py`: `deliver.py` refuses a first title over 55
   characters (alternatives over 70), parentheticals, "explained" and chained clauses, and a
   video without 3 designed thumbnails (≤ 4 words each, ≤ 2 MB, the render's shape) for YouTube's
