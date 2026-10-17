@@ -42,6 +42,7 @@ PRODUCTS = {
 (Path(_ROOT.name) / "brand" / "products.json").write_text(json.dumps(PRODUCTS))
 
 import deliver  # noqa: E402
+import post_text  # noqa: E402
 import ledger  # noqa: E402
 import studio_config as sc  # noqa: E402
 import voice_build  # noqa: E402
@@ -346,6 +347,66 @@ def voice(v: Path, starts_on_speech: bool = False):
         w.setnchannels(1); w.setsampwidth(2); w.setframerate(sr)
         w.writeframes(struct.pack(f"<{lead + len(tone) + 800}h", *([0] * lead + tone + [0] * 800)))
     (out / "voice_build.json").write_text(json.dumps({"files": {"01.wav": voice_build.sha1(out / "01.wav")}}))
+
+
+class PostText(unittest.TestCase):
+    """Rubric A23: the text published under the video."""
+
+    def test_six_hashtags_are_refused(self):
+        errs, _ = post_text.check_post(post(hashtags=["a", "b", "c", "d", "e", "f"]))
+        self.assertTrue(any("6 hashtags" in e for e in errs))
+
+    def test_five_topic_hashtags_pass(self):
+        errs, _ = post_text.check_post(post(caption="Python 3.15 makes UTF-8 the default.",
+                                            hashtags=["python", "utf8", "unicode", "pep686", "coding"]))
+        self.assertEqual(errs, [])
+
+    def test_generic_tag_and_hashtag_opener_are_refused(self):
+        errs, _ = post_text.check_post(post(hashtags=["python", "fyp"]))
+        self.assertTrue(any("#fyp" in e for e in errs))
+        errs, _ = post_text.check_post(post(caption="#python tip: set a timeout."))
+        self.assertTrue(any("first line" in e for e in errs))
+
+    def test_invisible_characters_em_dashes_and_curly_quotes_are_fixed(self):
+        p = post(caption="requests\u200b has no timeout \u2014 it \u201cwaits\u201d.")
+        _, notes = post_text.check_post(p)
+        self.assertEqual(p["caption"], 'requests has no timeout, it "waits".')
+        self.assertTrue(any("fixed" in n for n in notes))
+
+    def test_arrows_ranges_and_urls_are_left_alone(self):
+        text = "scores 0.73\u20130.82 \u2192 0.39 https://a.example/x\u2014y"
+        self.assertEqual(post_text.clean(text)[0], text)
+
+    def test_hindi_keeps_its_joiners(self):
+        text = "\u0915\u094d\u200d\u0937 \u2014 test"
+        cleaned, _ = post_text.clean(text)
+        self.assertIn("\u200d", cleaned)
+        self.assertNotIn("\u2014", cleaned)
+
+    def test_deliver_refuses_eight_hashtags(self):
+        with tempfile.TemporaryDirectory() as d:
+            v = Path(d)
+            voice(v)
+            render(v)
+            (v / "POST.json").write_text(json.dumps(post(pillar="product", product="my-app",
+                                                         hashtags=list("abcdefgh"))))
+            (v / "PLAN.md").write_text("\n".join(deliver.PASS_LINES) + "\n")
+            self.assertEqual(deliver.main([str(v), "--dry-run"]), 1)
+
+    def test_deliver_writes_the_cleaned_caption_back(self):
+        with tempfile.TemporaryDirectory() as d:
+            v = Path(d)
+            voice(v)
+            render(v)
+            (v / "POST.json").write_text(json.dumps(post(slug="clean-one", pillar="product", product="my-app",
+                                                         caption="Tap once \u2014 that\u2019s it.")))
+            (v / "PLAN.md").write_text("\n".join(deliver.PASS_LINES) + "\n")
+            self.assertEqual(deliver.main([str(v), "--dry-run"]), 0)
+            self.assertIn("\u2014", json.loads((v / "POST.json").read_text())["caption"])  # dry run writes nothing
+            self.assertEqual(deliver.main([str(v)]), 0)
+            saved = json.loads((v / "POST.json").read_text())
+            self.assertEqual(saved["caption"], "Tap once, that's it.")
+            self.assertNotIn("_text_check", saved)
 
 
 if __name__ == "__main__":

@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased
+
+- **Text gate A23.** `scripts/post_text.py` lints what gets published under the video, using a
+  caption linter and humanizer vendored from
+  [instagram-agent-skill](https://github.com/Jakeschincariol/instagram-agent-skill) (MIT,
+  `vendor/igtext`). `deliver.py` refuses more than 5 hashtags (Instagram's cap), generic tags
+  and a caption that opens on a hashtag, mention or blank line. It strips invisible characters,
+  em dashes and curly quotes and writes the cleaned text back to `POST.json`. The human score,
+  stock words and structural tells are advice in the kit. The skill now asks for 3–5 hashtags,
+  not 5–8.
+
 ## 1.1.0 — 2026-10-17
 
 - **Problem scout and gate A21.** Teaching videos start from a problem developers are asking

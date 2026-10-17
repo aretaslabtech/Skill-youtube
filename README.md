@@ -4,7 +4,7 @@
 
 **A Claude Code skill that researches, scripts, voices and renders a finished explainer video
 every day — with [HyperFrames](https://github.com/heygen-com/hyperframes), an open-source
-clone of your own voice that runs offline (English and Hindi), and 40 pass/fail gates that
+clone of your own voice that runs offline (English and Hindi), and 41 pass/fail gates that
 stop AI slop before it ships.**
 
 No camera. No avatar. No editing timeline. No voice subscription. The only thing you pay for
@@ -215,11 +215,12 @@ All of the required spend is the agent. `bin/run.sh` caps every run with
 `cost_usd` field: fill it from day one. The full breakdown is in the
 [write-up](https://cybiqon.in/lab/open-source-ai-video-studio-claude-code).
 
-## The 40 gates
+## The 41 gates
 
 Most of them exist because a real video failed in exactly that way. `deliver.py` refuses a
 video unless the review pass lines are in its plan (A16, A18–A21, and A22 when a second-opinion
-model is set), and it checks the voice (B17), the frame fill (B18) and the music level itself:
+model is set), and it checks the post text (A23), the voice (B17), the frame fill (B18) and the
+music level itself:
 
 | Gate | Rule | The failure behind it |
 |---|---|---|
@@ -231,6 +232,7 @@ model is set), and it checks the voice (B17), the frame fill (B18) and the music
 | **B16, B17** | No silence over the configured pause (0.7 s default); every voice line starts and ends on silence | Gaps of 3–5 s; a third of sentences losing their first word |
 | **A21** | A teaching video starts from a problem developers are asking about: ≥ 2 public links, ≥ 9/15 | A true, well-made Short about a problem nobody had: "no point making a video on a problem which no one is facing" |
 | **A22** | A model from another family reviews the script and writes its own version | Scripts that passed every Claude-judged gate and still taught nothing |
+| **A23** | ≤ 5 hashtags, none generic; no invisible characters, em dashes or curly quotes in the caption | Twelve kits in a row with 6–8 hashtags, over Instagram's cap of 5 |
 | **B18** | A Short fills its frame to the bottom edge | An empty bottom 40% on every Short |
 | `mix_check` | Voice levelled to −16 LUFS; music ≥ 20 dB under it | "The voiceover is still low" |
 
@@ -288,7 +290,7 @@ docs/                      setup, configuration, voice, scheduling, gates, troub
 - [Configuration: tracks, rotation, plugins](docs/configuration.md)
 - [Cloning your voice, English and Hindi](docs/voice.md)
 - [Running it on a schedule](docs/scheduling.md)
-- [All 40 gates](docs/gates.md)
+- [All 41 gates](docs/gates.md)
 - [The problem scout: picking topics people actually have](skill/video-studio/references/problem-scout.md)
 - [Troubleshooting: every trap we hit](docs/troubleshooting.md)
 

@@ -11,7 +11,10 @@ It refuses (prints `Failed: …`, exits 1) unless:
   - PLAN.md carries the four review pass lines, written only on a reviewer's or the linter's PASS:
     `A16: PASS (judge)`, `A18: PASS`, `A19: PASS (expert)`, `A20: PASS (cold viewer)`;
   - every voice line was made by voice_build.py and starts and ends on silence (B17);
-  - a 9:16 render fills its frame down to the bottom edge (B18).
+  - a 9:16 render fills its frame down to the bottom edge (B18);
+  - the published text passes post_text.py: ≤ 5 hashtags, none generic, a caption that opens
+    on a sentence (A23). Invisible characters, em dashes and curly quotes are fixed and written
+    back to POST.json, which the publishers read.
 
 POST.json (written by the skill at the end of a run):
 
@@ -26,7 +29,7 @@ POST.json (written by the skill at the end of a run):
     "titles": ["...", "...", "..."],       # first is the pick
     "youtube_description": "...",          # no URLs — links are appended in code
     "caption": "...",                      # Instagram/Facebook caption, no URLs
-    "hashtags": ["python", "..."],
+    "hashtags": ["python", "..."],         # 3–5; Instagram counts 5 at most (A23)
     "pinned_comment": "...",
     "product": "my-app" | null,            # a key of brand/products.json "products", or
     "service": "websites" | null,          # a key of its "services"
@@ -62,6 +65,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import fill_check  # noqa: E402
+import post_text  # noqa: E402
 import studio_config as sc  # noqa: E402
 import telegram  # noqa: E402
 from ledger import LOOK_FIELDS, delivery_date, load, save  # noqa: E402
@@ -189,6 +193,8 @@ def kit(post: dict, link_map: dict) -> str:
         L += ["", "<i>Sources:</i> " + " · ".join(esc(s) for s in post["sources"][:5])]
     if post.get("notes"):
         L += ["", f"📝 {esc(post['notes'])}"]
+    if post.get("_text_check"):
+        L += ["", "🧹 <b>Text check (A23)</b>"] + [f"• {esc(n)}" for n in post["_text_check"]]
     L += ["", f"<i>Published it? Run</i> <code>ledger.py mark-posted {esc(post['slug'])}</code>"]
     return "\n".join(L)
 
@@ -254,6 +260,9 @@ def main(argv: list[str]) -> int:
         print(f"Failed: POST.json unreadable — {e}")
         return 1
     errs = validate(post)
+    original = json.dumps(post, ensure_ascii=False)
+    text_errs, post["_text_check"] = post_text.check_post(post)
+    errs += text_errs
     known = any(e.get("slug") == post.get("slug") for e in load())
     if known and not dry and not revision:
         errs.append(f"slug {post.get('slug')!r} is already in the ledger")
@@ -299,6 +308,9 @@ def main(argv: list[str]) -> int:
     if revision and not known:
         print(f"Failed: --revision but {post['slug']!r} is not in the ledger")
         return 1
+    saved = {k: v for k, v in post.items() if k != "_text_check"}
+    if json.dumps(saved, ensure_ascii=False) != original:
+        (vdir / "POST.json").write_text(json.dumps(saved, indent=1, ensure_ascii=False) + "\n")
 
     msg, parts, err = send_all(vdir, video, post, text, revision)
     if err:

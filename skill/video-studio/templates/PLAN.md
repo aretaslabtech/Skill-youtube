@@ -77,7 +77,7 @@ artifact, no recap.>
 - **On screen and spoken:** <the one action>
 - **Link target:** <product / service / none — deliver.py builds the tracked links>
 - **Title options (3):** <≤ 60 chars, curiosity + clarity, no clickbait the video doesn't pay off>
-- **Hashtags (5–8):**
+- **Hashtags (3–5, never generic like #fyp; A23):**
 
 ## 10. Gate A — rubric
 <A1…A17: pass/fail + one note each. A rewrite is recorded here, not hidden.>
