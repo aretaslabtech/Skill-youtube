@@ -11,6 +11,12 @@ No camera. No avatar. No editing timeline. No voice subscription. The only thing
 is Claude Code. You review an MP4 in the morning and post it, or hand its `POST.json` to your
 own uploader and let cron do it.
 
+> [!IMPORTANT]
+> **Already have Claude Code on a Claude subscription (Pro or Max)? Each video costs you ₹0 / $0
+> extra.** The $11–30 per run quoted below is the *API-equivalent* estimate Claude Code prints.
+> You pay it only if you run Claude Code on pay-as-you-go API billing. On a subscription, a run
+> just uses part of your plan's usage limits. The voice and rendering are free either way.
+
 <a href="https://github.com/cybiqon-ai/faceless-video-studio/releases/download/v1.0.1/demo.mp4"><img src="docs/assets/demo.gif" width="800" alt="A 15-second highlight: a real blog-explainer video the studio made, a wall of contact sheets from 14 videos in 9 different looks, seven hand-drawn animation styles, and the repo URL."></a>
 
 <sub>Real output: a blog explainer the studio made on 12 Oct 2026, contact sheets from its first 14 videos, and the demo pieces of the seven animate styles it ships with. ▶ <a href="https://github.com/cybiqon-ai/faceless-video-studio/releases/download/v1.0.1/demo.mp4">Watch the 40-second version with sound</a> (narrated with the HeyGen clone the studio used before it moved to open-source voices).</sub>
@@ -200,17 +206,17 @@ From the studio's own first four days (October 2026), where it made 12 finished 
 |---|---|
 | Voice, open-source on your CPU | **$0**: Pocket TTS ~1× real time (English), IndicF5 ~30× (Hindi) on 4 cores |
 | Voice before 15 Oct 2026 (HeyGen clone, for comparison) | $8.20 for all 12 videos plus revisions (~$0.14 per minute of narration) |
-| Claude Code run, one 85 s Short | ~$18.35 (estimate reported by Claude Code; ~$10 of it the 11 parallel frame workers) |
-| Claude Code run, a 7-minute long-form + its companion Short | ~$26 |
+| Claude Code run, one 85 s Short | ~$18.35 at API rates, $0 extra on a subscription (estimate reported by Claude Code; ~$10 of it the 11 parallel frame workers) |
+| Claude Code run, a 7-minute long-form + its companion Short | ~$26 at API rates, $0 extra on a subscription |
 | Rendering | your own CPU: 2.5–19.5 min per video on 4 cores |
 
 The six runs whose cost we logged between 12 and 17 Oct 2026 (Shorts and 2.5-minute
-explainers) cost **$11–20.50** each. Optional
+explainers) came to **$11–20.50** each at API rates. Optional
 extras cost cents: the A22 second opinion is about **$0.03** a script on OpenRouter, and a
 `HEYGEN_API_KEY`, if you set one, is used only by HyperFrames' own music and sound-effect
 search — never for the voice.
 
-All of the required spend is the agent. `bin/run.sh` caps every run with
+All of the required spend is the agent, and only on API billing. `bin/run.sh` caps every run with
 `--max-budget-usd` ($25 for a Short, $60 for a long-form by default), and `POST.json` has a
 `cost_usd` field: fill it from day one. The full breakdown is in the
 [write-up](https://cybiqon.in/lab/open-source-ai-video-studio-claude-code).
