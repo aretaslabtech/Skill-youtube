@@ -15,6 +15,8 @@ It refuses (prints `Failed: …`, exits 1) unless:
   - the published text passes post_text.py: ≤ 5 hashtags, none generic, a caption that opens
     on a sentence (A23). Invisible characters, em dashes and curly quotes are fixed and written
     back to POST.json, which the publishers read.
+  - the packaging passes packaging.py (A24): titles[0] ≤ 55 characters with no parenthetical,
+    "explained" or chained clauses, and 3 designed thumbnails with ≤ 4 words each.
 
 POST.json (written by the skill at the end of a run):
 
@@ -33,7 +35,12 @@ POST.json (written by the skill at the end of a run):
     "pinned_comment": "...",
     "product": "my-app" | null,            # a key of brand/products.json "products", or
     "service": "websites" | null,          # a key of its "services"
-    "thumbnail_at": 1.2,                   # seconds; the frame to use as cover
+    "thumbnail_at": 1.2,                   # seconds; the Reels/Shorts cover frame in the app
+    "thumbnails": [                        # 3 designed variants for YouTube Test & Compare (A24);
+      {"file": "thumbs/a.jpg", "text": "FROZE FOR 4 HOURS"},   # first is the default; ≤ 4 words
+      {"file": "thumbs/b.jpg", "text": "NO TIMEOUT"},
+      {"file": "thumbs/c.jpg", "text": "requests.get() hangs"}
+    ],
     "sources": ["https://..."],
     "notes": "anything you should know, including any gate that failed",
     "cost_usd": 18.35,                     # optional; what the run cost
@@ -65,6 +72,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import fill_check  # noqa: E402
+import packaging  # noqa: E402
 import post_text  # noqa: E402
 import studio_config as sc  # noqa: E402
 import telegram  # noqa: E402
@@ -187,8 +195,13 @@ def kit(post: dict, link_map: dict) -> str:
         L += [f"{esc(k)}: {esc(v)}" for k, v in link_map.items()]
     if post.get("pinned_comment"):
         L += ["", f"📌 <b>Pinned comment:</b> {esc(post['pinned_comment'])}"]
+    if post.get("thumbnails"):
+        L += ["", "🖼 <b>THUMBNAILS</b> (sent as files; the first is the default. Upload all 3 to "
+              "YouTube Studio → the video → Thumbnail → Test &amp; compare)"]
+        L += [f"{i}. {esc(t.get('text', ''))} · <code>{esc(t.get('file', ''))}</code>"
+              for i, t in enumerate(post["thumbnails"], 1)]
     if post.get("thumbnail_at") is not None:
-        L += [f"🖼 Cover frame: {esc(post['thumbnail_at'])}s"]
+        L += [f"🖼 Reels/Shorts cover frame: {esc(post['thumbnail_at'])}s"]
     if post.get("sources"):
         L += ["", "<i>Sources:</i> " + " · ".join(esc(s) for s in post["sources"][:5])]
     if post.get("notes"):
@@ -237,6 +250,11 @@ def send_all(vdir: Path, video: Path, post: dict, text: str, revision: bool) -> 
     if not r["ok"]:
         return None, 0, f"video — {r.get('error')}"
     parts = 1
+    send_doc = getattr(n, "send_document", None)
+    for i, t in enumerate(post.get("thumbnails") or [], 1):
+        f = vdir / str(t.get("file", ""))
+        if send_doc and f.is_file() and send_doc(f, caption=f"Thumbnail {i}: {t.get('text', '')}")["ok"]:
+            parts += 1
     for chunk in telegram.split_message(text):
         k = n.send(chunk)
         if not k["ok"]:
@@ -263,6 +281,7 @@ def main(argv: list[str]) -> int:
     original = json.dumps(post, ensure_ascii=False)
     text_errs, post["_text_check"] = post_text.check_post(post)
     errs += text_errs
+    errs += packaging.check_post(vdir, post)
     known = any(e.get("slug") == post.get("slug") for e in load())
     if known and not dry and not revision:
         errs.append(f"slug {post.get('slug')!r} is already in the ledger")

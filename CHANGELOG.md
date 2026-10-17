@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- **Packaging gate A24.** `scripts/packaging.py`: `deliver.py` refuses a first title over 55
+  characters (alternatives over 70), parentheticals, "explained" and chained clauses, and a
+  video without 3 designed thumbnails (≤ 4 words each, ≤ 2 MB, the render's shape) for YouTube's
+  Test & Compare. The kit lists them and Telegram gets them as files. New SKILL.md step 6b on
+  making them. Measured first: 10.1k impressions at a 1.1 % click-through rate.
+- **Retention rule A25.** The first payoff is on screen by 10 s; four Shorts lost their viewers at
+  10–18 s while the fix arrived at 30–40 s.
 - **Text gate A23.** `scripts/post_text.py` lints what gets published under the video, using a
   caption linter and humanizer vendored from
   [instagram-agent-skill](https://github.com/Jakeschincariol/instagram-agent-skill) (MIT,

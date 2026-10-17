@@ -4,7 +4,7 @@ description: >-
   A faceless video studio. It researches, plans, designs and renders one finished video a
   day with HyperFrames and an open-source clone of your voice (Pocket TTS for English,
   IndicF5 for Hindi), offline on CPU: 9:16 Shorts/Reels on most days and 16:9
-  long-form deep dives on the days config.json says, each checked by 41 pass/fail quality
+  long-form deep dives on the days config.json says, each checked by 43 pass/fail quality
   gates before it is delivered as an MP4 plus a post kit (Telegram, or saved locally).
   Pillars: AI terms, Python, build-a-thing, tech news, product and service promos, blog
   explainers and long-form explainers. Use when asked to make today's video, to plan or
@@ -141,7 +141,9 @@ must be resumable from its folder.
   `references/craft/hooks.md`), with the proof on screen by 1.5 s. Use the pillar's
   template (mistake → run it → why → fix, and so on). Every Short carries at least one
   artifact to save (a command, code line, number or rule, spoken and on screen), ≥ 3 named
-  real things per 30 s, and a rehook every 10–15 s. Real output beats analogy; an analogy is
+  real things per 30 s, and a rehook every 10–15 s. **The first payoff (the fix, the result,
+  the number the hook promised) is on screen by 10 s** (A25): measured on four Shorts, the
+  average viewer left at 10–18 s, before a fix that arrived at 30–40 s. Real output beats analogy; an analogy is
   at most one sentence, followed by the real term. End on the payoff, no recap. Then
   `teaching-formats.md` for the visual vocabulary. (The earlier "smart 12-year-old" rule was
   retired in Oct 2026: viewers found it childish, and 67 % swiped away in 3 s.)
@@ -372,9 +374,27 @@ ffmpeg is missing, add `--docker`.
   - snapshot every chapter midpoint and every recap for Gate B.
   - A render of 5–8 min takes roughly 15–30 min on a 4-CPU machine.
 
+### 6b. Thumbnails (A24)
+The thumbnail and the title decide whether anyone clicks; the video only decides whether they
+stay. A channel with 10.1k impressions at 1.1 % click-through had frame grabs for covers.
+- Design **3 variants** for YouTube's Test & Compare, each with a different idea (the result,
+  the stakes, the artifact), not three colours of one.
+- Each: one focal object or real screenshot ≥ 40 % of the frame, **≤ 4 words** of text at
+  ≥ 120 px (1280-wide), high contrast, readable when downscaled to 160 px wide. Use the video's
+  look and fonts so the thumbnail matches what plays (Test & Compare picks by watch time).
+- Never promise what the video doesn't show, and never repeat the title word for word.
+- Build them as a tiny HyperFrames project (`hf-thumbs/`, 1280×720 for 16:9 or 1080×1920 for
+  9:16, one 1 s clip per variant), then
+  `npx hyperframes snapshot hf-thumbs --at 0.5,1.5,2.5 --no-end --keep -o thumbs/raw` and
+  convert each still to JPG ≤ 2 MB (`ffmpeg -i thumbs/raw/at-0.5s.png -q:v 3 thumbs/a.jpg`).
+- List them in POST.json `thumbnails` (first = default) with the words on each.
+
 ### 7. Deliver
 Write `POST.json` (schema in `scripts/deliver.py`'s docstring):
-- 3 titles;
+- 3 titles. **The first is ≤ 55 characters** (it is cut off in the mobile feed beyond that),
+  alternatives ≤ 70: the viewer's problem or a surprising number first, the gap left open.
+  No parentheses, no "explained", at most one colon (A24; `packaging.py`);
+- `thumbnails`: the 3 designed variants from step 6b;
 - a YouTube description and an Instagram/Facebook caption, **with no URLs**;
 - 3–5 hashtags (Instagram counts 5 at most; `deliver.py` refuses more, A23);
 - a pinned comment;

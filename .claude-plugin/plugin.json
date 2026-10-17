@@ -1,7 +1,7 @@
 {
   "name": "faceless-video-studio",
   "version": "1.1.0",
-  "description": "Research from real developer problems, script with a second-model review, open-source voice clone (English + Hindi, offline), HyperFrames render and 41 pass/fail gates: one finished faceless video a day, with a POST.json for your own uploader.",
+  "description": "Research from real developer problems, script with a second-model review, open-source voice clone (English + Hindi, offline), HyperFrames render and 43 pass/fail gates: one finished faceless video a day, with a POST.json for your own uploader.",
   "author": {
     "name": "Cybiqon AI Solutions",
     "url": "https://cybiqon.in"

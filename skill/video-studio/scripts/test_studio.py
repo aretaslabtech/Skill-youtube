@@ -6,6 +6,7 @@ brand/products.json, so nothing here reads or writes a real studio, and nothing 
 import json
 import os
 import tempfile
+import subprocess
 import unittest
 from datetime import date, datetime
 from pathlib import Path
@@ -194,6 +195,7 @@ class Repeats(unittest.TestCase):
 def post(**kw):
     p = {"slug": "s", "pillar": "ai-term", "format": "short", "topic": "t", "render": "hf/renders/video.mp4",
          "titles": ["A"], "youtube_description": "d", "caption": "c", "hashtags": ["python"],
+         "thumbnails": [{"file": f"thumbs/{n}.png", "text": n.upper()} for n in "abc"],
          "look": {"look_family": "whiteboard", "caption_skin": "underline-bar", "hook_type": "question"}}
     p.update(kw)
     return p
@@ -331,6 +333,10 @@ class Deliver(unittest.TestCase):
 def render(v: Path):
     (v / "hf" / "renders").mkdir(parents=True, exist_ok=True)
     (v / "hf" / "renders" / "video.mp4").write_bytes(b"\0" * 1000)
+    (v / "thumbs").mkdir(exist_ok=True)
+    for n in "abc":   # packaging gate (A24): three designed thumbnails
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "lavfi", "-i", "color=c=navy:s=1280x720",
+                        "-frames:v", "1", str(v / "thumbs" / f"{n}.png")], check=True)
     (v / "research").mkdir(exist_ok=True)
     (v / "research" / "problems.md").write_text("# Problems\n")
 

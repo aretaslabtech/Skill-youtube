@@ -4,7 +4,7 @@
 
 **A Claude Code skill that researches, scripts, voices and renders a finished explainer video
 every day — with [HyperFrames](https://github.com/heygen-com/hyperframes), an open-source
-clone of your own voice that runs offline (English and Hindi), and 41 pass/fail gates that
+clone of your own voice that runs offline (English and Hindi), and 43 pass/fail gates that
 stop AI slop before it ships.**
 
 No camera. No avatar. No editing timeline. No voice subscription. The only thing you pay for
@@ -215,11 +215,11 @@ All of the required spend is the agent. `bin/run.sh` caps every run with
 `cost_usd` field: fill it from day one. The full breakdown is in the
 [write-up](https://cybiqon.in/lab/open-source-ai-video-studio-claude-code).
 
-## The 41 gates
+## The 43 gates
 
 Most of them exist because a real video failed in exactly that way. `deliver.py` refuses a
 video unless the review pass lines are in its plan (A16, A18–A21, and A22 when a second-opinion
-model is set), and it checks the post text (A23), the voice (B17), the frame fill (B18) and the
+model is set), and it checks the post text (A23), the title and thumbnails (A24), the voice (B17), the frame fill (B18) and the
 music level itself:
 
 | Gate | Rule | The failure behind it |
@@ -233,10 +233,12 @@ music level itself:
 | **A21** | A teaching video starts from a problem developers are asking about: ≥ 2 public links, ≥ 9/15 | A true, well-made Short about a problem nobody had: "no point making a video on a problem which no one is facing" |
 | **A22** | A model from another family reviews the script and writes its own version | Scripts that passed every Claude-judged gate and still taught nothing |
 | **A23** | ≤ 5 hashtags, none generic; no invisible characters, em dashes or curly quotes in the caption | Twelve kits in a row with 6–8 hashtags, over Instagram's cap of 5 |
+| **A24** | First title ≤ 55 characters; 3 designed thumbnails, ≤ 4 words each, for Test & Compare | 10.1k impressions at a 1.1 % click-through rate: headline titles cut off on phones, frame grabs for covers |
+| **A25** | The fix or result is on screen by 10 s | Four Shorts that held 17–32 %: viewers left at 10–18 s, before the fix at 30–40 s |
 | **B18** | A Short fills its frame to the bottom edge | An empty bottom 40% on every Short |
 | `mix_check` | Voice levelled to −16 LUFS; music ≥ 20 dB under it | "The voiceover is still low" |
 
-All 40, with what each checks: [docs/gates.md](docs/gates.md). The rubric the agent works
+All 43, with what each checks: [docs/gates.md](docs/gates.md). The rubric the agent works
 from: [`skill/video-studio/references/quality-rubric.md`](skill/video-studio/references/quality-rubric.md).
 
 ## Plug it into your pipeline
@@ -290,7 +292,7 @@ docs/                      setup, configuration, voice, scheduling, gates, troub
 - [Configuration: tracks, rotation, plugins](docs/configuration.md)
 - [Cloning your voice, English and Hindi](docs/voice.md)
 - [Running it on a schedule](docs/scheduling.md)
-- [All 41 gates](docs/gates.md)
+- [All 43 gates](docs/gates.md)
 - [The problem scout: picking topics people actually have](skill/video-studio/references/problem-scout.md)
 - [Troubleshooting: every trap we hit](docs/troubleshooting.md)
 

@@ -158,6 +158,8 @@ Timing (Material motion, adapted for video where the viewer can't pause):
 - Long-form thumbnails: 1280×720 min (YouTube recommends up to 3840×2160, ≤ 2 MB from mobile);
   3–5 words max, face or object on one third, text on the other; YouTube Test & Compare picks
   by watch-time share, so the thumbnail must match the video.
+- Since A24 (17 Oct 2026) every video ships 3 designed thumbnails (SKILL.md step 6b), ≤ 4 words
+  each, and a first title ≤ 55 characters. Frame 0 stays the in-app Reels/Shorts cover.
 
 ## 8. Anti-slop checklist (Gate B5 detail)
 

@@ -105,6 +105,21 @@ def send_video(path, caption: str = "", duration=None) -> dict:
     return _post("sendVideo", b"".join(parts), f"multipart/form-data; boundary={boundary}", 300)
 
 
+def send_document(path, caption: str = "") -> dict:
+    """Send a file uncompressed (thumbnails: the person uploads these to YouTube as they are)."""
+    if not configured():
+        return {"ok": False, "error": "TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID not set"}
+    p = Path(path)
+    _, chat = _creds()
+    boundary = "faceless-video-studio-boundary"
+    parts = [f'--{boundary}\r\nContent-Disposition: form-data; name="{k}"\r\n\r\n{v}\r\n'.encode()
+             for k, v in {"chat_id": chat, "caption": caption[:1024]}.items()]
+    parts.append(f'--{boundary}\r\nContent-Disposition: form-data; name="document"; filename="{p.name}"\r\n'
+                 f"Content-Type: application/octet-stream\r\n\r\n".encode() + p.read_bytes() + b"\r\n")
+    parts.append(f"--{boundary}--\r\n".encode())
+    return _post("sendDocument", b"".join(parts), f"multipart/form-data; boundary={boundary}", 120)
+
+
 if __name__ == "__main__":
     sys.path.insert(0, str(Path(__file__).resolve().parent))
     import studio_config
