@@ -58,7 +58,9 @@ DEFAULTS = {
     # Silence between sentences (rubric A8/B16). gap_check.py fails any gap over max_gap, except
     # one payoff beat up to payoff_gap. A channel that wants a pause after every sentence sets
     # max_gap ~1.3 and voice.gap ~0.8 (with a matching gap between lines in the composition).
-    "pacing": {"max_gap": 0.7, "payoff_gap": 1.2},
+    # lead_in: silence before the first word, so it isn't lost while the video starts playing;
+    # the hook's text and proof are still on screen from frame 0.
+    "pacing": {"max_gap": 0.7, "payoff_gap": 1.2, "lead_in": 1.0},
     "default_track": "daily",
     "tracks": {
         # One teaching video a day. A slot is a pillar name, "promo" (alternates product and

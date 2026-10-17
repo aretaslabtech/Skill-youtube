@@ -290,6 +290,9 @@ must be resumable from its folder.
      silence (padding once left 3–5 s gaps). Run `python3 $SKILL_DIR/scripts/gap_check.py hf/`
      after padding and again after assembly; it must PASS. Never shorten a frame below its
      voice.
+   - **Lead-in before the first word.** Start the first voice line at config
+     `pacing.lead_in` (1 s by default), not at t=0: the first words were lost while the
+     video started playing. The hook's text and proof stay on screen from frame 0.
    - **Word cues into the storyboard.** Write each frame's real word timings (from
      `audio_meta.json` `voices[].words`) under its `keyMessage` as an authoritative
      "Timing" line. Workers key reveals to the spoken word, not to the plan's guessed
