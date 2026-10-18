@@ -26,6 +26,12 @@ first sentence** and pairs it with a tension. None opens with an analogy, a defi
 
    A question is fine if it names the subject: "Why does Postgres need VACUUM at all?" Not
    "Why is your app slow?"
+
+   **Spoken, not headline-ese.** The 14-word limit is a ceiling, not a target, and it never
+   means dropping verbs, articles or "you". Say it the way a person would say it to a friend:
+   "You built a new website, but nobody's visiting?" not "New website, no visitors?". A
+   clipped headline belongs on the on-screen slab (≤ 14 characters a line); the voice speaks
+   the full sentence. Test it by reading it aloud: if no one talks like that, rewrite it.
 2. **The proof (on screen by 1.5 s, ideally from frame 0).** It's the code, the output, the
    number or the diagram, readable with the sound off. The viewer must be able to see that
    the claim is real before they decide to swipe.
