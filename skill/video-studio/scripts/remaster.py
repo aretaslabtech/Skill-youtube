@@ -90,6 +90,14 @@ def main(argv: list[str]) -> int:
         return 1
     render = hf / "renders" / "video.mp4"
     raw = hf / "renders" / "video-raw.mp4"
+    stamp = hf / "renders" / ".remastered.json"
+    # A re-render after a remaster writes a new video.mp4 beside the old video-raw.mp4. The stamp
+    # records the file this script wrote; if video.mp4 no longer matches it, it is a new render and
+    # the stale raw must not be used (it silently shipped the old picture on 18 Oct 2026).
+    if raw.is_file() and render.is_file() and stamp.is_file():
+        st = render.stat()
+        if json.loads(stamp.read_text()) != {"size": st.st_size, "mtime": st.st_mtime}:
+            raw.unlink()
     src_video = raw if raw.is_file() else render
     out = Path(argv[argv.index("--out") + 1]).resolve() if "--out" in argv else render
     cs = [c for c in clips((hf / "index.html").read_text()) if (hf / c["src"]).is_file()]
@@ -141,6 +149,9 @@ def main(argv: list[str]) -> int:
                     "-c:v", "copy", "-af", norm, "-ar", "48000", "-c:a", "aac", "-b:a", "192k",
                     "-movflags", "+faststart", "-shortest", str(tmp_out)], check=True)
     tmp_out.replace(out)
+    if out == render:
+        st = render.stat()
+        stamp.write_text(json.dumps({"size": st.st_size, "mtime": st.st_mtime}))
     tmp.unlink(missing_ok=True)
     f = loud(out)
     print(f"remaster: {vdir.name} {float(f['input_i']):.1f} LUFS tp {float(f['input_tp']):.1f} clips={len(cs)}")
