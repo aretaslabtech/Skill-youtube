@@ -56,9 +56,12 @@ new. Now the review checks **value**:
    > (2) Would you save it or send it? To whom, and why?
    > (3) Where would you have swiped away, and why? (a line or a second)
    > (4) Which sentences felt slow, obvious or condescending?
+   > (5) Could you now do it? Without rewatching, write the steps you would take in your
+   > own code tomorrow, and say what you would still have to look up.
    >
    > Reply in JSON: `{"learned": "...", "already_knew": true|false, "save_or_send": "...",
-   > "send_to": "...", "swipe_at": "...", "slow_or_obvious": ["..."]}`.
+   > "send_to": "...", "swipe_at": "...", "slow_or_obvious": ["..."],
+   > "can_do": "yes|partly|no", "my_steps": ["..."], "still_missing": ["..."]}`.
 3. **Judge sub-agent** (a separate fresh agent) gets the PLAN `message`, the planner's
    new-to-me fact, the reviewer's JSON **and the narration**. It replies
    `{"verdict": "PASS" | "FAIL", "P0": [...], "P1": [...], "P2": [...]}`, where:
@@ -67,9 +70,15 @@ new. Now the review checks **value**:
    - **P1** = a swipe point in the first 15 s, a sentence the reviewer called condescending
      (a known term defined, a kids' analogy), or a term beyond a CS student left unglossed.
      The judge quotes the line.
+   - **P1** also = `can_do` is "no", or (for a how-to, or any video that promises a fix)
+     `my_steps` misses or garbles a step the video teaches, or `still_missing` names
+     something the viewer needs to act on it that the video could have shown in one line.
    - **P2** = polish.
 
-   **PASS** = a concrete `learned`, a named `send_to`, and no P0 or P1.
+   **PASS** = a concrete `learned`, a named `send_to`, `can_do` "yes" (or "partly" with only
+   P2 gaps), and no P0 or P1. A fact the viewer can repeat is not enough: they must be able
+   to act on it. Added Oct 2026 after a Short told a good story about a caching bug, passed
+   this review on the fact alone, and left nobody able to set caching up.
 4. **Fixes may not push the Short past 75 s** (A8). Fix by swapping a weak sentence for a
    sharper one, never by stacking on more.
 5. **The planner never overrides the judge.** On FAIL, fix the script and re-run steps 2
