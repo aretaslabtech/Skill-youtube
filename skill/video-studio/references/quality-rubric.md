@@ -119,7 +119,9 @@ final and before audio:
 1. **Cold viewer sub-agent** (fresh). Give it **only** the first two narration lines, the
    on-screen text of the first 3 s, and a plain description of what is visible in those
    3 s, taken from the storyboard. Don't give it the title, the topic or the PLAN.
-   Persona:
+   Persona: the PLAN's `audience`. For viewers who aren't developers (shop owners,
+   clinics…), swap the first sentence for that viewer and add `"addressed_to_me": true|false`
+   to the JSON. Otherwise:
    > You are a working developer scrolling Instagram Reels on a break. You know Python, SQL
    > and the popular AI tools by name, but you have never used the specific library,
    > protocol or flag this video might be about. You swipe away from anything vague, slow,
@@ -131,7 +133,10 @@ final and before audio:
    > "expect_to_learn": "...", "would_keep_watching": true|false, "why": "...",
    > "confusing": ["anything you didn't get"]}`.
 2. **The planner checks:** `subject` names the concrete thing (not a category), `tension`
-   matches the hook's tension, `my_problem` is a real situation, not null and not "using
+   matches the hook's tension, a question hook is a full question put to the viewer ("Are
+   you still copying every order by hand?", never a bare "-ing" fragment, which
+   `script_lint` now fails; for a non-developer audience, open on that direct question
+   about their habit, with `addressed_to_me` true), `my_problem` is a real situation, not null and not "using
    <the tool>", `unknown_terms` and `confusing` are empty, `expect_to_learn` matches PLAN's
    `message` in substance, and `would_keep_watching` is true. Otherwise, rewrite sentence 1
    problem-first (`craft/hooks.md` "Problem before tool") and run a fresh cold viewer.

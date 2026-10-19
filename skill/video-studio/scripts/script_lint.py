@@ -7,7 +7,8 @@ script_lint.py — the mechanical half of the script rules (references/craft/scr
 The viewer is a developer or CS student who already codes. The lint reads the spoken lines of
 a SCRIPT.md (the indented blocks the TTS step reads) and fails (exit 1) on any of:
   - a hook (the first spoken sentence) over 14 words, one that opens on a banned opener
-    ("have you ever", "imagine", "in this video"…), or one that names no concrete subject;
+    ("have you ever", "imagine", "in this video"…), one that names no concrete subject, or a
+    bare "-ing" question ("Copying every order by hand?" instead of "Are you still copying…?");
   - a sentence over 20 words (one TTS breath);
   - fewer than 3 named specifics per 30 s of audio (see SPECIFICS below);
   - a term from references/jargon.txt (terms beyond a final-year CS student) spoken before
@@ -176,6 +177,10 @@ def hook_problems(ss: list[str], screen: set[str]) -> list[str]:
     opener = next((b for b in BANNED_OPENERS if low.startswith(b)), None)
     if opener:
         out.append(f"hook opens with {opener!r}")
+    first = (words(hook) or [""])[0]
+    if hook.rstrip().endswith("?") and first.lower().endswith("ing") and first.lower() not in COMMON:
+        out.append(f"hook is a bare {first!r} fragment; ask the viewer a full question "
+                   f"(\"Are you still {first.lower()}…?\")")
     if not any(_is_specific(w, i == 0, screen) for i, w in enumerate(words(hook))):
         out.append("hook names no concrete subject (a tool, language, company, number or code)")
     return out
