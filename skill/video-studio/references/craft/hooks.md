@@ -32,6 +32,9 @@ first sentence** and pairs it with a tension. None opens with an analogy, a defi
    "You built a new website, but nobody's visiting?" not "New website, no visitors?". A
    clipped headline belongs on the on-screen slab (≤ 14 characters a line); the voice speaks
    the full sentence. Test it by reading it aloud: if no one talks like that, rewrite it.
+   A question hook is a complete question put to the viewer: "Are you still copying every
+   WhatsApp order into Excel by hand?", not "Copying every WhatsApp order into Excel by
+   hand?". A bare "-ing" fragment with a question mark is headline-ese too.
 2. **The proof (on screen by 1.5 s, ideally from frame 0).** It's the code, the output, the
    number or the diagram, readable with the sound off. The viewer must be able to see that
    the claim is real before they decide to swipe.
