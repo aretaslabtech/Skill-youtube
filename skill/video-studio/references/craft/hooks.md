@@ -249,6 +249,35 @@ Three gates sit above the score. A hook that fails any is out, whatever it score
 - [ ] Every number in the hook appears in `research/sources.md` or `run.txt`.
 - [ ] Nothing in the first 3 s is branding.
 
+## Frame-0 motion (the first 3 seconds, on screen)
+
+Adapted from the `virality` skill in [Ootto-AI/claude-content-skills](https://github.com/Ootto-AI/claude-content-skills)
+(MIT), built from one account's 262 Reels: its flops opened on abstract backgrounds, a still card,
+an empty frame 0 or small pale text; its 100k+ winners opened with something already moving that the
+viewer recognised. One account in one niche, so treat it as a strong hint, not proof. Every Short hook
+passes all of these:
+
+1. Frame 0 is already moving. No fade-in, no black or empty frame.
+2. Frame 0 shows something the viewer recognises (the app, the platform, their own problem), not abstract art.
+3. The biggest element owns ≥ 40 % of the frame and moves from frame 1.
+4. Something happens before 3 s: it breaks, builds itself, burns, or a number races and locks.
+5. The claim lands at about 1.2–1.6 s, word by word, big, high contrast. Never at 0, never after 3 s.
+6. The first spoken word is within 0.5 s and is the subject.
+7. It works on mute.
+8. It is about the viewer's own business or work, not about us or about AI in general.
+
+Order inside the hook: motion, then lock, then claim. Rotate the angle between videos (result first,
+contrarian, pain first, something breaks) so the feed does not see the same opening twice.
+
+**One goal per video.** Pick it before scripting: save (a numbered system that assembles on one
+frame), share (a surprise the sender wants to be seen knowing), follow (a gap and a real climbing
+number), or lead. For a lead goal, end on one keyword ("Comment BILL and I'll send the sheet") and
+make the DM deliver something real; the link goes in the DM, not a public comment.
+
+**A/B a hook with one variable.** Two hooks with different mechanisms, everything else identical
+(cover, length, caption, time); write what you learn if A wins and if B wins, and judge on 3-second
+retention, not likes.
+
 ## Sources
 
 - https://subscribr.ai/youtube-strategy/youtube-shorts-analytics-metrics-growth

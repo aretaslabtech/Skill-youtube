@@ -13,6 +13,7 @@ or depends on, the following. Each keeps its own licence.
 | [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono) | `skill/video-studio/assets/fonts/` | SIL Open Font License 1.1 — [`OFL-jetbrainsmono.txt`](skill/video-studio/assets/fonts/OFL-jetbrainsmono.txt) | Latin subset from Google Fonts |
 | Prompt excerpts from [awesome-opus5-5-videos](https://github.com/yihui-dev/awesome-opus5-5-videos) | `skill/video-studio/references/prompt-library.md` | The list is MIT; each excerpt is short, quoted for commentary, and linked to its source | Credit belongs to the original creators named in each entry |
 | Style rules adapted from [lemo-opuscar](https://github.com/lemomo-ai/lemo-opuscar) by Lemomo | `skill/video-studio/references/looks.md` (the **Craft**, **Moves**, **Sound** and **Pitfalls** notes in `blueprint` and `whiteboard`) | MIT | Paraphrased and adapted to HyperFrames from its `styles/blueprint/STYLE.md` and `styles/whiteboard/STYLE.md`; no code copied |
+| Hook checklist adapted from the `virality` skill in [claude-content-skills](https://github.com/Ootto-AI/claude-content-skills) by Ootto | `skill/video-studio/references/craft/hooks.md` (§ Frame-0 motion) and gates A2, A7, B6, B14 | MIT | Ideas and a short list, rewritten; no code or text copied wholesale |
 | [GSAP](https://gsap.com) (loaded from a CDN, not bundled) | `skill/video-studio/assets/captions/*.html` | GSAP's standard licence | Fetched at render time |
 
 ## Required at runtime, not bundled
