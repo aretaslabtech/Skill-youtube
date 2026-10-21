@@ -198,20 +198,24 @@ def looks(entries: list[dict], last: int = 5) -> list[dict]:
 
 def look_check(family: str, hook_type: str, caption_skin: str, entries: list[dict],
                signature: str | None = None) -> list[str]:
-    v = sc.load()["variety"]
+    cfg = sc.load()
+    v = cfg["variety"]
     fam_gap, sig_gap = v["look_family_gap"], v["signature_gap"]
+    # A track's house look (config tracks.<t>.house_look) is meant to repeat: a series reads as
+    # one show, so its family and caption skin are exempt from the variety rules.
+    house = {(t.get("house_look") or {}).get("family") for t in cfg["tracks"].values()} - {None}
     errs = []
     if signature:
         if signature in [e.get("signature") for e in entries[-sig_gap:]]:
             errs.append(f"signature beat {signature!r} was used in the last {sig_gap} videos")
     recent_families = [e.get("look_family") for e in entries[-fam_gap:]]
-    if family in recent_families:
+    if family in recent_families and family not in house:
         errs.append(f"look family {family!r} was used in the last {fam_gap} videos ({recent_families})")
     if entries:
         prev = entries[-1]
         if hook_type and hook_type == prev.get("hook_type"):
             errs.append(f"hook type {hook_type!r} repeats the previous video ({prev.get('slug')})")
-        if caption_skin and caption_skin == prev.get("caption_skin"):
+        if caption_skin and caption_skin == prev.get("caption_skin") and family not in house:
             errs.append(f"caption skin {caption_skin!r} repeats the previous video ({prev.get('slug')})")
     return errs
 
@@ -272,6 +276,7 @@ def today_plan(today: date, track: str | None = None) -> dict:
             {k: e.get(k) for k in ("date", "slug", "pillar", "topic", "title", "product", "service")}
             for e in recent(entries, today)
         ],
+        "house_look": track_conf(track).get("house_look"),  # if set, use it instead of the rotation
         "recent_looks": looks(entries, 5),
         "products_promoted_last_14d": sorted({e["product"] for e in recent(entries, today, 14) if e.get("product")}),
         "planner_context": planner_context(today, track),

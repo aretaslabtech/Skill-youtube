@@ -157,6 +157,11 @@ must be resumable from its folder.
   clearly, especially its hook and its "LEARNS" line. Then re-lint. Write
   `A22: second opinion (<model>) adopted N, rejected M` with one reason per rejection in PLAN
   §10. Do this before A16/A19/A20, which then judge the improved script.
+- **House look first.** If `ledger.py today` returns a `house_look`, the track is a series
+  with one fixed look: read its `spec` (a path under `$STUDIO_ROOT`) and follow it exactly,
+  record its `family` in `POST.json`, and skip steps 1–3 below. Where the spec places
+  footage (a framed card, say) it overrides step 5's footage plan. The hook type and the
+  signature beat still rotate; look-check exempts the house family and caption skin.
 - **Look research — every video looks different** (two videos in a row from one template
   "will soon be noticed as AI generated"):
   1. Search the web for how strong creators visualise **this** topic or format **this

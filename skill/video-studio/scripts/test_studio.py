@@ -8,6 +8,7 @@ import os
 import tempfile
 import subprocess
 import unittest
+from unittest import mock
 from datetime import date, datetime
 from pathlib import Path
 
@@ -229,6 +230,12 @@ class Variety(unittest.TestCase):
     def test_repeating_previous_hook_or_caption_is_rejected(self):
         errs = ledger.look_check("whiteboard", "question", "band-karaoke", self.hist)
         self.assertEqual(len(errs), 2)
+
+    def test_house_look_may_repeat_family_and_caption(self):
+        cfg = {**sc.load(), "tracks": {"promo": {"house_look": {"family": "glass-diorama"}}}}
+        with mock.patch.object(ledger.sc, "load", return_value=cfg):
+            errs = ledger.look_check("glass-diorama", "stakes", "band-karaoke", self.hist)
+        self.assertEqual(errs, [])
 
     def test_signature_beat_may_not_repeat_within_five(self):
         entries = [{"look_family": f"f{i}", "signature": "era-morph" if i == 0 else f"s{i}"} for i in range(5)]
