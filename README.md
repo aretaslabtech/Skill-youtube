@@ -28,7 +28,7 @@ own uploader and let cron do it.
 ![Node 22+](https://img.shields.io/badge/node-22%2B-339933)
 
 [How it works](#how-it-works) · [Quickstart](#quickstart) · [What it costs](#what-it-costs) ·
-[The gates](#the-40-gates) · [Plug it in](#plug-it-into-your-pipeline) · [Scheduling](docs/scheduling.md) · [The full story](https://cybiqon.in/lab/open-source-ai-video-studio-claude-code)
+[The gates](#the-44-gates) · [Plug it in](#plug-it-into-your-pipeline) · [Scheduling](docs/scheduling.md) · [The full story](https://cybiqon.in/lab/open-source-ai-video-studio-claude-code)
 
 </div>
 
