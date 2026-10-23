@@ -91,7 +91,7 @@ DEFAULTS = {
     },
     # Long-form days also make a 9:16 companion Short from the same research.
     "companion_pillars": ["longform-ai", "longform-sd"],
-    "variety": {"look_family_gap": 6, "signature_gap": 5},
+    "variety": {"look_family_gap": 6, "signature_gap": 5, "fixed_caption_skin": None},  # fixed_caption_skin: one caption style kept on purpose (exempt from rotation)
     # A22: a second model reviews and independently rewrites each script (second_opinion.py, OpenRouter).
     # Empty = off. Needs OPENROUTER_API_KEY in the studio .env.
     "review": {"second_opinion_model": ""},

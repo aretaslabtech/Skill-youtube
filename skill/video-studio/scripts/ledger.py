@@ -215,7 +215,10 @@ def look_check(family: str, hook_type: str, caption_skin: str, entries: list[dic
         prev = entries[-1]
         if hook_type and hook_type == prev.get("hook_type"):
             errs.append(f"hook type {hook_type!r} repeats the previous video ({prev.get('slug')})")
-        if caption_skin and caption_skin == prev.get("caption_skin") and family not in house:
+        # variety.fixed_caption_skin: a channel that keeps one caption style on purpose
+        fixed = v.get("fixed_caption_skin")
+        if (caption_skin and caption_skin == prev.get("caption_skin") and family not in house
+                and caption_skin != fixed):
             errs.append(f"caption skin {caption_skin!r} repeats the previous video ({prev.get('slug')})")
     return errs
 
