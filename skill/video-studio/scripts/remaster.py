@@ -129,7 +129,7 @@ def main(argv: list[str]) -> int:
     if sfx:
         final.append(sfx)
     parts.append(f"{''.join(final)}amix=inputs={len(final)}:normalize=0:dropout_transition=0,"
-                 f"alimiter=limit=0.9:attack=3:release=60:level=false[mix]")
+                 f"alimiter=limit=0.9:attack=3:release=60:level=false,apad[mix]")   # silent end hold: pad to the picture (-t bounds it), or -shortest cuts the end mark
     graph = ";".join(parts)
 
     tmp = out.with_name("remaster-premaster.wav")
