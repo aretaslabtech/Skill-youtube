@@ -132,14 +132,37 @@ def level(src: Path, dst: Path, v: dict) -> None:
     """Make the voice present and even (owner, 16 Oct 2026: "the voiceover is still low"):
     a gentle compressor tames the peaks, then a static gain brings every line to the same
     loudness (voice.lufs, default -16), under a -1.5 dBFS limiter. Static gain, not loudnorm:
-    loudnorm on a 5 s line pumps."""
+    loudnorm on a 5 s line pumps.
+
+    Edge fade, after leveling (25 Oct 2026): each sentence's own trim is already quiet at its
+    edges (LEAD=0.06s/TAIL=0.12s of real silence reserved before/after the audible span, see
+    cut_points), but the compressor above only touches audio *above* its threshold — it brings
+    the peak down without touching a quiet edge, which raises the edge's level *relative to*
+    that now-smaller peak. A line whose edge was comfortably under the 3%-of-peak audible
+    threshold before leveling can end up just over it after, and deliver.py's `check()` (which
+    tests the final leveled file, not the pre-level per-sentence trims) rightly flags it as
+    "starts or ends on speech" even though no take was ever trimmed into real speech. Fixing
+    this with a longer *trim* would risk cutting the actual first/last word; a short fade well
+    inside the existing LEAD/TAIL silence buffer (never touching audible content) is the
+    correct, narrow fix."""
     comp = "acompressor=threshold=-24dB:ratio=3:attack=5:release=120:knee=4"
     squeezed = src.with_suffix(".comp.wav")
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(src), "-af", comp, "-ar", str(SR), "-ac", "1",
                     str(squeezed)], check=True)
     gain = max(-12.0, min(18.0, float(v.get("lufs", -16)) - lufs(squeezed)))
+    leveled = src.with_suffix(".lvl.wav")
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(squeezed), "-af",
                     f"volume={gain:.2f}dB,alimiter=limit=0.84:level=disabled",
+                    "-ar", str(SR), "-ac", "1", str(leveled)], check=True)
+    # Asymmetric on purpose: LEAD is only 0.06s of buffer, but a trailing word's natural decay
+    # can occupy much of the larger 0.12s TAIL buffer once compression narrows the gap between
+    # it and the peak — so the fade-out needs more of that buffer than the fade-in does, while
+    # both stay safely short of the LEAD/TAIL edges themselves (never reaching real speech).
+    FADE_IN, FADE_OUT = 0.03, 0.1
+    length = len(envelope(leveled)) * WIN
+    fade_out_start = max(0.0, length - FADE_OUT)
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(leveled), "-af",
+                    f"afade=t=in:d={FADE_IN},afade=t=out:st={fade_out_start:.3f}:d={FADE_OUT}",
                     "-ar", str(SR), "-ac", "1", str(dst)], check=True)
 
 
@@ -204,8 +227,10 @@ def build(video: Path, v: dict, speed: float, gap: float) -> int:
             # within TAIL of, or before, the ASR's own last-word end — audible words were
             # getting clipped). Never trim tighter than where the ASR itself heard real
             # speech, plus the same lead/tail padding used elsewhere.
+            # Tail only: the ASR's *first*-word start runs early, not late (25 Oct 2026, 71 Pocket
+            # takes: median 0.43 s, up to 1.1 s before the real onset), so flooring the head on it
+            # put ~0.9 s of silence before every sentence and 1.5 s gaps inside lines.
             if ws:
-                t0 = min(t0, max(0.0, ws[0]["start"] - LEAD))
                 t1 = max(t1, min(length, ws[-1]["end"] + TAIL))
             trimmed = takes / f"{stem.name}.trim.wav"
             fade_out = max(0.0, t1 - t0 - FADE)
