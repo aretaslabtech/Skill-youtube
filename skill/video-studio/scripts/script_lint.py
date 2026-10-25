@@ -41,6 +41,11 @@ MAX_SENTENCE_WORDS = 20
 MAX_HOOK_WORDS = 14
 SPECIFICS_PER_30S = 3
 WORDS_PER_SECOND = 2.5
+# A topic's distinct nameable things are finite, and "repeats count once" (see specifics()),
+# so the per-30s density floor can't keep scaling forever without forcing padding into a long
+# script. Stop raising the requirement past the length a dense short/mid-form piece runs
+# (8 min): a script this specific for 8 minutes straight has already proven itself concrete.
+SPECIFICS_DENSITY_CAP_SECONDS = 480
 
 # Phrases that define the term in the same breath ("…epoll, which means one thread watches…").
 DEFINITION_MARKERS = (
@@ -202,7 +207,8 @@ def lint(text: str, seconds: float, jargon: list[str], screen: set[str] = frozen
     ss = sentences(text)
     long_ones = [{"words": len(words(s)), "sentence": s} for s in ss if len(words(s)) > MAX_SENTENCE_WORDS]
     spec = specifics(text, screen)
-    need = max(SPECIFICS_PER_30S, math.ceil(seconds / 30 * SPECIFICS_PER_30S))
+    density_seconds = min(seconds, SPECIFICS_DENSITY_CAP_SECONDS)
+    need = max(SPECIFICS_PER_30S, math.ceil(density_seconds / 30 * SPECIFICS_PER_30S))
     idioms = sorted({i for i in IDIOMS if re.search(rf"(?<![a-z]){re.escape(i)}(?![a-z])", text.lower())})
     jarg = undefined_jargon(ss, jargon)
     hook = hook_problems(ss, screen)

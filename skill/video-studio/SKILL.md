@@ -298,6 +298,16 @@ must be resumable from its folder.
    - **Lead-in before the first word.** Start the first voice line at config
      `pacing.lead_in` (1 s by default), not at t=0: the first words were lost while the
      video started playing. The hook's text and proof stay on screen from frame 0.
+   - **Never end a frame on a word-timestamp estimate.** A frame or clip boundary computed
+     from a line's word-end timing (ASR or TTS timestamps, which both run early or late)
+     can land before the actual rendered wav finishes, cutting off the last word(s) of a
+     line — this reached a finished render undetected because `gap_check.py` only checks
+     for silence, not for a line truncated by its own frame's edge. Floor every frame's
+     duration on the **real audio file's duration** (`audio_meta.json`'s actual wav length,
+     or probe the file with ffprobe), never on a word timestamp. On a multi-clip line,
+     floor the next clip's start at the previous clip's real file end, the same rule as
+     the lead-in above. During Gate B, decode and actually listen to the last ~0.3 s of a
+     sample of lines per chapter/scene, not just run the automated gap check.
    - **Word cues into the storyboard.** Write each frame's real word timings (from
      `audio_meta.json` `voices[].words`) under its `keyMessage` as an authoritative
      "Timing" line. Workers key reveals to the spoken word, not to the plan's guessed

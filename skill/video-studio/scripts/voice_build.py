@@ -196,7 +196,17 @@ def build(video: Path, v: dict, speed: float, gap: float) -> int:
             wav = Path(f"{stem}.wav")
             ws = json.loads(Path(f"{stem}.json").read_text())["words"]
             env = envelope(wav)
-            t0, t1 = cut_points(env, len(env) * WIN)
+            length = len(env) * WIN
+            t0, t1 = cut_points(env, length)
+            # The energy-threshold detector can read a quiet trailing consonant, or a
+            # falling-pitch tail, as silence before the ASR's own transcription actually
+            # finishes (a 25 Oct 2026 audit found 71/218 sentences on one script landed
+            # within TAIL of, or before, the ASR's own last-word end — audible words were
+            # getting clipped). Never trim tighter than where the ASR itself heard real
+            # speech, plus the same lead/tail padding used elsewhere.
+            if ws:
+                t0 = min(t0, max(0.0, ws[0]["start"] - LEAD))
+                t1 = max(t1, min(length, ws[-1]["end"] + TAIL))
             trimmed = takes / f"{stem.name}.trim.wav"
             fade_out = max(0.0, t1 - t0 - FADE)
             subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(wav), "-af",
