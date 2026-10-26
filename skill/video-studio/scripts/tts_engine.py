@@ -25,6 +25,16 @@ Job file:
   best_of  candidates per sentence; the one Whisper hears closest to the text wins
   max_pause  longest silence kept inside a sentence, s (Pocket sometimes stalls mid-sentence)
 """
+import os
+import sys
+
+# This folder also holds packaging.py (the A24 gate), which shadows the pip "packaging"
+# module that transformers/torch import ("cannot import name 'version' from packaging",
+# 26 Oct 2026, first IndicF5 run after packaging.py was added). Drop the script dir from
+# sys.path: nothing here imports a sibling module.
+_here = os.path.dirname(os.path.abspath(__file__))
+sys.path[:] = [p for p in sys.path if os.path.abspath(p or os.getcwd()) != _here]
+
 import difflib
 import json
 import re
