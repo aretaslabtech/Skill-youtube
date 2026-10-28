@@ -90,6 +90,10 @@ PASS_LINES = ("A16: PASS (judge)", "A18: PASS", "A19: PASS (expert)", "A20: PASS
 # Teaching videos must start from a problem people are asking about (problem-scout.md, A21).
 PROBLEM_PILLARS = {"ai-term", "python", "build", "longform-ai", "longform-sd", "companion"}
 PROBLEM_LINE = "A21: PASS (real problem)"
+# Documentary/true-crime videos must be built from a sourced evidence ledger, not a
+# problem (case-scout.md, C1) — a separate gate so it never collides with A21's numbering.
+CASE_PILLARS = {"crime-case", "case-files"}
+CASE_LINE = "C1: PASS (case scout)"
 
 
 # ---- links: the plugin, or brand/products.json ------------------------------------------------
@@ -303,6 +307,11 @@ def main(argv: list[str]) -> int:
         if sc.load().get("review", {}).get("second_opinion_model") and \
                 not (vdir / "research" / "second-opinion" / "meta.json").is_file():
             errs.append("research/second-opinion/meta.json not found: run scripts/second_opinion.py (rubric A22)")
+    if post.get("pillar") in CASE_PILLARS:
+        if CASE_LINE not in plan:
+            errs.append(f"PLAN.md is missing '{CASE_LINE}' (rubric C1)")
+        if not (vdir / "research" / "evidence-ledger.yaml").is_file():
+            errs.append("research/evidence-ledger.yaml not found (case scout, rubric C1)")
     # Every voice line must come from voice_build.py and start and end on silence (B17).
     errs += voice_check(vdir)
     # The music bed sits well under the voice (owner, 16 Oct 2026: "the voiceover is still low").

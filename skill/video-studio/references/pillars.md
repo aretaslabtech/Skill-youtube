@@ -153,6 +153,58 @@ UI, launch films). Always prefer them over anything generated.
 - System design diagrams follow the ByteByteGo rule: a fixed structure (≤ 7 boxes per
   frame) with one moving flow.
 
+## crime-case — reconstructing a real criminal investigation, 16:9, 8–15 min
+
+A documentary deep dive into one real case: what happened, the method, how the
+investigation unfolded, and what broke it open. Cold and narrative, never sensationalist —
+this is the opposite craft brief from the teaching pillars above.
+
+- **Research first.** Run the [case scout](case-scout.md) before writing a single sentence.
+  Every claim in the script must trace to `research/evidence-ledger.yaml` with
+  `script_safe: true`. Gate **C1**, not A21 — the problem-scout rubric doesn't apply here.
+- **Tone:** documentary and cold. No horror stingers, no jump-scare cuts, no gore, no
+  dwelling on violence for its own sake. The point is the method and the investigation, not
+  shock. Never invent a perpetrator's or victim's thoughts, words or feelings — only what a
+  source actually attributes to someone.
+- **Arc:** cold open (0–20 s, a real factual detail — never a staged scare) → who/where/when,
+  sourced → chapters as a timeline: the crime as established, the early investigation
+  (including its real missteps), the method or pattern that emerged, the break in the case,
+  the capture, the aftermath — each ending on a one-line recap → the payoff around 70 % is
+  the piece of evidence or reasoning that actually cracked it → recap, full chronology →
+  one CTA (follow for the next case; no commercial tie-in by default).
+- **Visuals:** maps, timeline graphics, real documents and photos only when sourced and
+  appropriate (§ sourcing in `case-scout.md`); otherwise sober illustration, never a faked
+  "real footage" reenactment.
+- **Rules:**
+  - No claim in the script without a `confirmed`/`reported`/`alleged`-with-attribution
+    entry in the evidence ledger; `disputed` claims are named as disputed on screen rather
+    than silently resolved.
+  - No naming or exposing identifiable living minors or surviving victims beyond what the
+    source record already makes public.
+  - Respect `brand/pillars.md`'s house rules for the channel (audience, language, any
+    content lines the owner has drawn).
+- **Don't repeat a case or angle** already told (`ledger.py check`); don't retell the same
+  case a competitor's recent video is already known for unless the angle (a different
+  investigative failure, a different piece of method) is genuinely new.
+
+## case-files — one verified fact or turn from a case, 9:16, 35–60 s
+
+The Short-form, daily-cadence companion to `crime-case`: a single striking, *verified*
+fact, turning point or piece of method from one case — not a teaser trailer, a complete
+small story in itself.
+
+- **Research first**, same as `crime-case`: the [case scout](case-scout.md) and
+  `research/evidence-ledger.yaml` with `script_safe: true` for every claim used, gate C1.
+  A `case-files` short can draw on an already-built ledger for a case still being developed
+  into a future `crime-case` long-form, or research a small, self-contained angle of its own.
+- **Tone and visual rules:** identical to `crime-case` — documentary, cold, sourced, no
+  gore or horror-style shock cuts.
+- **Arc:** sentence 1 states the fact/turn plainly (the tension is in what it reveals, not
+  in a scare) → the sourced context that makes it matter → the one detail that lands it →
+  optional one-line "there's more to this case" pointer to the channel, never a hard sell.
+- **Rules:** same sourcing discipline as `crime-case`, scaled down — one well-sourced claim
+  is enough to carry 35–60 s; don't pad with `alleged` material to fill time.
+
 ## companion — the long-form's best idea as a 9:16 Short, 35–60 s
 
 Made on long-form days after the long-form is delivered: its own hook, the same research and

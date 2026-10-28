@@ -319,6 +319,30 @@ class Deliver(unittest.TestCase):
             (v / "PLAN.md").write_text("\n".join(deliver.PASS_LINES) + "\n")
             self.assertEqual(deliver.main([str(v), "--dry-run"]), 0)
 
+    def test_refuses_a_crime_video_without_a_case_scout(self):
+        with tempfile.TemporaryDirectory() as d:
+            v = Path(d)
+            voice(v)
+            render(v)
+            (v / "POST.json").write_text(json.dumps(post(pillar="crime-case")))
+            (v / "PLAN.md").write_text("\n".join(deliver.PASS_LINES) + "\n")
+            self.assertEqual(deliver.main([str(v), "--dry-run"]), 1)  # missing C1 line and ledger
+            (v / "PLAN.md").write_text("\n".join(deliver.PASS_LINES + (deliver.CASE_LINE,)) + "\n")
+            self.assertEqual(deliver.main([str(v), "--dry-run"]), 1)  # C1 line present, ledger still missing
+            (v / "research" / "evidence-ledger.yaml").write_text("- claim: x\n  status: confirmed\n  script_safe: true\n")
+            self.assertEqual(deliver.main([str(v), "--dry-run"]), 0)
+
+    def test_crime_pillar_needs_no_problem_scout(self):
+        with tempfile.TemporaryDirectory() as d:
+            v = Path(d)
+            voice(v)
+            render(v)
+            (v / "research" / "problems.md").unlink()  # the problem scout never runs for crime-case
+            (v / "research" / "evidence-ledger.yaml").write_text("- claim: x\n  status: confirmed\n  script_safe: true\n")
+            (v / "POST.json").write_text(json.dumps(post(pillar="crime-case")))
+            (v / "PLAN.md").write_text("\n".join(deliver.PASS_LINES + (deliver.CASE_LINE,)) + "\n")
+            self.assertEqual(deliver.main([str(v), "--dry-run"]), 0)
+
     def test_refuses_a_voice_line_cut_on_speech(self):
         with tempfile.TemporaryDirectory() as d:
             v = Path(d)

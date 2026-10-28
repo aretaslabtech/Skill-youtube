@@ -1,4 +1,4 @@
-# The 44 gates
+# The 45 gates
 
 Every video passes two gates. **Gate A** checks the plan, before any money is spent on voice.
 **Gate B** checks the build, before and after rendering. Each line is pass or fail; there is
@@ -12,8 +12,10 @@ which has the exact thresholds and the reviewer prompts. This page is the map.
 
 **Checked by `deliver.py`** (🔒): it refuses the video without them. For A16, A18, A19,
 A20 and A21 it requires the pass line in `PLAN.md` — which the skill says to write only on the
-reviewer's, linter's or scout's PASS — and for A22 the second opinion's `meta.json`. A23, A24, B17,
-B18 and B19 it measures itself, from the files, and so is the music level (`mix_check.py`).
+reviewer's, linter's or scout's PASS — and for A22 the second opinion's `meta.json`. For C1
+(documentary/crime pillars only) it requires the pass line plus `research/evidence-ledger.yaml`.
+A23, A24, B17, B18 and B19 it measures itself, from the files, and so is the music level
+(`mix_check.py`).
 
 ## Gate A — the plan
 
@@ -69,10 +71,20 @@ B18 and B19 it measures itself, from the files, and so is the music level (`mix_
 | B18 🔒 | A 9:16 Short fills its frame down to the bottom edge — `fill_check.py` | ✔ |
 | B19 🔒 | Voice first, at Reels level: the soundtrack is rebuilt from the stems so the voice comes up and the music doesn't; the file is −12 LUFS or louder — `remaster.py` | ✔ |
 
-**Totals:** 44 gates, 39 hard (A5, A17 and A21 only for teaching and long-form videos; A22
-only when a second-opinion model is set), 11 checked by `deliver.py` (5 of them measured from
-the files), plus the music-level check (`mix_check.py`: voice levelled to −16 LUFS, music
-≥ 20 dB under it), which `deliver.py` also enforces.
+## Gate C — documentary / crime pillars (`crime-case`, `case-files`)
+
+A separate, additive numbering so it never collides with the teaching-pillar gates above —
+`crime-case` and `case-files` don't run A21 (problem scout) at all.
+
+| Gate | Checks | Hard |
+|---|---|---|
+| C1 🔒 | Case scout: every claim used in the script traces to `research/evidence-ledger.yaml` with `script_safe: true` (`references/case-scout.md`); the plan carries `C1: PASS (case scout)` | ✔ |
+
+**Totals:** 45 gates, 40 hard (A5, A17 and A21 only for teaching and long-form videos; A22
+only when a second-opinion model is set; C1 only for `crime-case`/`case-files`), 12 checked
+by `deliver.py` (5 of them measured from the files), plus the music-level check
+(`mix_check.py`: voice levelled to −16 LUFS, music ≥ 20 dB under it), which `deliver.py`
+also enforces.
 
 ## Where the gates came from
 

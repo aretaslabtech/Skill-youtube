@@ -88,6 +88,10 @@ DEFAULTS = {
         "service": {"format": "short", "aspect": "1080x1920", "length": "30-50s"},
         "longform-ai": {"format": "longform", "aspect": "1920x1080", "length": "4-8min"},
         "longform-sd": {"format": "longform", "aspect": "1920x1080", "length": "4-8min"},
+        # Documentary/true-crime pillars (case-scout.md, gate C1) — same shape, unrelated
+        # craft brief: reconstructed from sourced evidence, not built-and-run code.
+        "crime-case": {"format": "longform", "aspect": "1920x1080", "length": "8-15min"},
+        "case-files": {"format": "short", "aspect": "1080x1920", "length": "35-60s"},
     },
     # Long-form days also make a 9:16 companion Short from the same research.
     "companion_pillars": ["longform-ai", "longform-sd"],
